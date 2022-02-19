@@ -13,7 +13,8 @@ class Homescreen extends StatelessWidget {
 
   AppBar buildAppBar() {
     return AppBar(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: kAppBarColor,
+      shadowColor: kAppBarColor,
       primary: false,
     );
   }
