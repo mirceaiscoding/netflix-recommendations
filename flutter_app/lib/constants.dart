@@ -17,3 +17,17 @@ const kMovieTitleStyle = TextStyle(
   fontFamily: "Work Sans",
   fontSize: 24.0,
 );
+
+const kIMDBRatingStyle = TextStyle(
+  fontFamily: "Work Sans",
+  fontSize: 14.0,
+  letterSpacing: 2.0,
+);
+
+const kMovieDescriptionStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 14.0,
+);
+
+// Debug mode
+const kDebugMode = true;
