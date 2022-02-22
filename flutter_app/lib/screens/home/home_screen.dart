@@ -29,6 +29,15 @@ class Homescreen extends StatelessWidget {
                 "Lightning McQueen sets out to prove to a new generation of racers that he's still the best race car in the world.",
             'poster' : "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
           }),
+          Body(movie: {
+            'title': 'Megamind',
+            'year': '2010',
+            'score': '7.3',
+            'number_of_reviews': '249k',
+            'description':
+                "Evil genius Megamind finally defeats his do-gooder nemesis, Metro Man, but is left without a purpose in a superhero-free world.",
+            'poster': "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
+          }),
         ],
       ),
       bottomNavigationBar: BottomActions(),

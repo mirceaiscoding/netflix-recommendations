@@ -55,7 +55,9 @@ class Body extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(
+                      // Standard scale for posters
                       width: 40.0,
+                      height: 27.0,
                       child: Image.asset("assets/icons/IMDB_logo.png"),
                     ), // IMDB logo
                     RichText(

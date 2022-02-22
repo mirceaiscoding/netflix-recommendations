@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 
-class BottomActions extends StatelessWidget {
-  const BottomActions({Key? key}) : super(key: key);
+class BottomActions extends StatefulWidget {
+  const BottomActions({ Key? key }) : super(key: key);
+
+  @override
+  _BottomActionsState createState() => _BottomActionsState();
+}
+
+class _BottomActionsState extends State<BottomActions> {
+
+  PageController pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +64,7 @@ class BottomActions extends StatelessWidget {
       ),
     );
   }
-
+    
   dislikeMovie() {
     // TODO
   }
@@ -76,4 +84,6 @@ class BottomActions extends StatelessWidget {
   addToWatchlist() {
     // TODO
   }
+
 }
+
