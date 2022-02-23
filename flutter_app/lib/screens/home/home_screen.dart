@@ -1,15 +1,32 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/components/body.dart';
 
 import 'components/bottom_actions.dart';
 
-class Homescreen extends StatelessWidget {
+class Homescreen extends StatefulWidget {
+
+  const Homescreen({ Key? key }) : super(key: key);
+
+  @override
+  _HomescreenState createState() => _HomescreenState();
+}
+
+class _HomescreenState extends State<Homescreen> {
+
+  int currentPage = 0;
+  PageController pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
       body: PageView(
+        controller: pageController,
+        onPageChanged: (int val) => setPage(val),
         children: const <Body>[
           Body(movie: {
             'title': 'Bumblebee',
@@ -40,7 +57,9 @@ class Homescreen extends StatelessWidget {
           }),
         ],
       ),
-      bottomNavigationBar: BottomActions(),
+      bottomNavigationBar: BottomActions(
+        onPageChanged: (int val) => changePage(val),
+      ),
     );
   }
 
@@ -63,5 +82,36 @@ class Homescreen extends StatelessWidget {
 
   openMenu() {
     // TODO: Open menu
+  }
+
+  // Changes the current page by val
+  // -1 if back or 1 if forward
+  changePage(int val) {
+    // print("Change page with $val");
+    setState(() {
+
+      // Check for negative page count
+      if (currentPage + val < 0) return;
+
+      // TODO: Check for greater page then existing ones and generate one if necesary
+
+      currentPage += val;
+    });
+
+    scrollToCurrentPage();  // Animate scrolling to new current page
+  }
+
+  // Scroll animation to the current page
+  scrollToCurrentPage() {
+    pageController.animateToPage(currentPage, duration: const Duration(milliseconds: 200), curve: Curves.bounceInOut);
+  }
+
+  // Sets the page to a specified value
+  // It is called by swiping so no animation is required
+  setPage(int val) {
+    // print("Set page to $val");
+    setState(() {
+      currentPage = val;
+    });
   }
 }

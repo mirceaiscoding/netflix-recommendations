@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 
-class BottomActions extends StatefulWidget {
-  const BottomActions({ Key? key }) : super(key: key);
+class BottomActions extends StatelessWidget {
 
-  @override
-  _BottomActionsState createState() => _BottomActionsState();
-}
+  final Function(int) onPageChanged;
 
-class _BottomActionsState extends State<BottomActions> {
-
-  PageController pageController = PageController(initialPage: 0);
+  const BottomActions({Key? key, required this.onPageChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +16,9 @@ class _BottomActionsState extends State<BottomActions> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           IconButton(
-            onPressed: nextMovie(),
+            onPressed: (){
+              onPageChanged(-1);
+            },
             iconSize: 40,
             icon: const Icon(
               Icons.arrow_back_ios_outlined,
@@ -53,7 +50,9 @@ class _BottomActionsState extends State<BottomActions> {
             ),
           ),
           IconButton(
-            onPressed: nextMovie(),
+            onPressed: (){
+              onPageChanged(1);
+            },
             iconSize: 40,
             icon: const Icon(
               Icons.arrow_forward_ios_outlined,
@@ -70,14 +69,6 @@ class _BottomActionsState extends State<BottomActions> {
   }
 
   likeMovie() {
-    // TODO
-  }
-
-  nextMovie() {
-    // TODO
-  }
-
-  previousMovie() {
     // TODO
   }
 
