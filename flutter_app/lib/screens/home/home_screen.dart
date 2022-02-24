@@ -1,61 +1,64 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/components/body.dart';
 
-class Homescreen extends StatelessWidget {
+import 'components/bottom_actions.dart';
+
+class Homescreen extends StatefulWidget {
+
+  const Homescreen({ Key? key }) : super(key: key);
+
+  @override
+  _HomescreenState createState() => _HomescreenState();
+}
+
+class _HomescreenState extends State<Homescreen> {
+
+  int currentPage = 0;
+  PageController pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Body(),
-      bottomNavigationBar: Container(
-        color: kPrimaryColor,
-        height: 80.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(
-              onPressed: nextMovie(),
-              iconSize: 40,
-              icon: const Icon(
-                Icons.arrow_back_ios_outlined,
-                color: kIconColor,
-              ),
-            ),
-            IconButton(
-              onPressed: dislikeMovie(),
-              iconSize: 40,
-              icon: const Icon(
-                Icons.sentiment_dissatisfied_outlined,
-                color: kIconColor,
-              ),
-            ),
-            IconButton(
-              onPressed: addToWatchlist(),
-              iconSize: 50,
-              icon: const Icon(
-                Icons.add_circle,
-                color: kIconColor,
-              ),
-            ),
-            IconButton(
-              onPressed: likeMovie(),
-              iconSize: 40,
-              icon: const Icon(
-                Icons.sentiment_satisfied_outlined,
-                color: kIconColor,
-              ),
-            ),
-            IconButton(
-              onPressed: nextMovie(),
-              iconSize: 40,
-              icon: const Icon(
-                Icons.arrow_forward_ios_outlined,
-                color: kIconColor,
-              ),
-            ),
-          ],
-        ),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (int val) => setPage(val),
+        children: const <Body>[
+          Body(movie: {
+            'title': 'Bumblebee',
+            'year': '2018',
+            'score': '6.7',
+            'number_of_reviews': '156k',
+            'description':
+                "On the run in the year 1987, Bumblebee finds refuge in a junkyard in a small California beach town. On the cusp of turning 18 and trying to find her place in the world, Charlie Watson discovers Bumblebee, battle-scarred and broken.",
+            'poster' : "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
+          }),
+          Body(movie: {
+            'title': 'Cars 3',
+            'year': '2017',
+            'score': '6.7',
+            'number_of_reviews': '91k',
+            'description':
+                "Lightning McQueen sets out to prove to a new generation of racers that he's still the best race car in the world.",
+            'poster' : "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
+          }),
+          Body(movie: {
+            'title': 'Megamind',
+            'year': '2010',
+            'score': '7.3',
+            'number_of_reviews': '249k',
+            'description':
+                "Evil genius Megamind finally defeats his do-gooder nemesis, Metro Man, but is left without a purpose in a superhero-free world.",
+            'poster': "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
+          }),
+        ],
+      ),
+      bottomNavigationBar: BottomActions(
+        onPageChanged: (int val) => changePage(val),
       ),
     );
   }
@@ -81,23 +84,34 @@ class Homescreen extends StatelessWidget {
     // TODO: Open menu
   }
 
-  dislikeMovie() {
-    // TODO
+  // Changes the current page by val
+  // -1 if back or 1 if forward
+  changePage(int val) {
+    // print("Change page with $val");
+    setState(() {
+
+      // Check for negative page count
+      if (currentPage + val < 0) return;
+
+      // TODO: Check for greater page then existing ones and generate one if necesary
+
+      currentPage += val;
+    });
+
+    scrollToCurrentPage();  // Animate scrolling to new current page
   }
 
-  likeMovie() {
-    // TODO
+  // Scroll animation to the current page
+  scrollToCurrentPage() {
+    pageController.animateToPage(currentPage, duration: const Duration(milliseconds: 200), curve: Curves.bounceInOut);
   }
 
-  nextMovie() {
-    // TODO
-  }
-
-  previousMovie() {
-    // TODO
-  }
-
-  addToWatchlist() {
-    // TODO
+  // Sets the page to a specified value
+  // It is called by swiping so no animation is required
+  setPage(int val) {
+    // print("Set page to $val");
+    setState(() {
+      currentPage = val;
+    });
   }
 }
