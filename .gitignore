@@ -3,3 +3,4 @@ Movie4U/.vs/Movie4U/xs
 Movie4U/bin/Debug
 *.cache
 Movie4U/obj/Debug
+appsettings.json
