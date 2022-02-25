@@ -29,5 +29,20 @@ const kMovieDescriptionStyle = TextStyle(
   fontSize: 14.0,
 );
 
+const kAuthStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: kTextColor,
+);
+
+const kButtonTextStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: kBackgroundColor,
+);
+
+const kFormFieldColor = kPrimaryColor;
+const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
+
 // Debug mode
 const kDebugMode = true;
