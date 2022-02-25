@@ -45,6 +45,17 @@ class _LoginFormState extends State<LoginForm> {
                 labelText: 'Email',
                 hintText: 'Enter your email',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field is requiered';
+                }
+                RegExp emailRegex = RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Enter a valid email';
+                }
+                return null;
+              },
             ),
           ),
 
@@ -85,6 +96,12 @@ class _LoginFormState extends State<LoginForm> {
                     )),
               ),
               obscureText: !_isPasswordVisible,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field is requiered';
+                }
+                return null;
+              },
             ),
           ),
 
