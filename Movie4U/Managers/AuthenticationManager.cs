@@ -44,7 +44,12 @@ namespace Movie4U.Managers
 
         public async Task<TokensModel> Login(LoginModel loginModel)
         {
-            var user = await userManager.FindByEmailAsync(loginModel.email);
+            User user;
+            if(loginModel.emailOrName.Contains("@"))
+                user = await userManager.FindByEmailAsync(loginModel.emailOrName);
+            else
+                user = await userManager.FindByNameAsync(loginModel.emailOrName);
+
             if (user != null)
             {
                 var result = await signInManager.CheckPasswordSignInAsync(user, loginModel.password, false);

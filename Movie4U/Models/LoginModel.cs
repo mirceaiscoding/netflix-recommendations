@@ -7,7 +7,7 @@ namespace Movie4U.Models
 {
     public class LoginModel
     {
-        public string email { get; set; }
+        public string emailOrName { get; set; }
         public string password { get; set; }
     }
 }
