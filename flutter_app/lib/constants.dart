@@ -29,6 +29,12 @@ const kMovieDescriptionStyle = TextStyle(
   fontSize: 14.0,
 );
 
+const kLinkStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 14.0,
+  color: Colors.grey,
+);
+
 const kAuthStyle = TextStyle(
   fontFamily: "Roboto",
   fontSize: 16.0,

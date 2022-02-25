@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/screens/home/home_screen.dart';
+import 'package:flutter_app/screens/login/login_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _RegisterFormState createState() => _RegisterFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   // global key for this form
   final _formKey = GlobalKey<FormState>();
 
@@ -117,12 +117,13 @@ class _LoginFormState extends State<LoginForm> {
                   // Check if the form is valid
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Logging in...')),
+                      const SnackBar(content: Text('Signing up...')),
                     );
+                    // TODO: Call API
                   }
                 },
                 child: const Text(
-                  'LOGIN',
+                  'SIGN UP',
                   style: kButtonTextStyle,
                 ),
               ),
@@ -132,13 +133,13 @@ class _LoginFormState extends State<LoginForm> {
                   textStyle: kLinkStyle,
                 ),
                 child: const Text(
-                  "Don't have an account? Sign up here",
+                  "Already have an account? Login here",
                   style: kLinkStyle,
                 ),
                 onPressed: () {
-                  // Go to register page
+                  // Go to login page
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => RegisterScreen()));
+                      MaterialPageRoute(builder: (_) => LoginScreen()));
                 },
               )
             ],
