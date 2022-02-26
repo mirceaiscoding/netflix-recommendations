@@ -47,6 +47,12 @@ const kButtonTextStyle = TextStyle(
   color: kBackgroundColor,
 );
 
+const kMenuItemTextStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 18.0,
+  color: kPrimaryColor,
+);
+
 const kFormFieldColor = kPrimaryColor;
 const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
 

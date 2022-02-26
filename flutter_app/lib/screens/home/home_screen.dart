@@ -8,22 +8,81 @@ import 'package:flutter_app/screens/home/components/body.dart';
 import 'components/bottom_actions.dart';
 
 class Homescreen extends StatefulWidget {
-
-  const Homescreen({ Key? key }) : super(key: key);
+  const Homescreen({Key? key}) : super(key: key);
 
   @override
   _HomescreenState createState() => _HomescreenState();
 }
 
 class _HomescreenState extends State<Homescreen> {
-
   int currentPage = 0;
   PageController pageController = PageController(initialPage: 0);
+
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      drawerEdgeDragWidth: 0,
+      key: _scaffoldKey,
       appBar: buildAppBar(),
+      endDrawer: Drawer(
+        backgroundColor: kBackgroundColor,
+        // ListView allows scrolling inside the drawer
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const SizedBox(
+              height: 50,
+            ),
+            ListTile(
+              title: const Center(
+                  child: Text(
+                'ACCOUNT',
+                style: kMenuItemTextStyle,
+              )),
+              onTap: () {
+                // Update the state of the app
+                
+
+                // Close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Center(
+                  child: Text(
+                'WATCHLIST',
+                style: kMenuItemTextStyle,
+              )),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Center(
+                  child: Text(
+                'LIKES',
+                style: kMenuItemTextStyle,
+              )),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Center(
+                  child: Text(
+                'DISLIKES',
+                style: kMenuItemTextStyle,
+              )),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: PageView(
         controller: pageController,
         onPageChanged: (int val) => setPage(val),
@@ -35,7 +94,8 @@ class _HomescreenState extends State<Homescreen> {
             'number_of_reviews': '156k',
             'description':
                 "On the run in the year 1987, Bumblebee finds refuge in a junkyard in a small California beach town. On the cusp of turning 18 and trying to find her place in the world, Charlie Watson discovers Bumblebee, battle-scarred and broken.",
-            'poster' : "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
+            'poster':
+                "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
           }),
           Body(movie: {
             'title': 'Cars 3',
@@ -44,7 +104,8 @@ class _HomescreenState extends State<Homescreen> {
             'number_of_reviews': '91k',
             'description':
                 "Lightning McQueen sets out to prove to a new generation of racers that he's still the best race car in the world.",
-            'poster' : "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
+            'poster':
+                "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
           }),
           Body(movie: {
             'title': 'Megamind',
@@ -53,7 +114,8 @@ class _HomescreenState extends State<Homescreen> {
             'number_of_reviews': '249k',
             'description':
                 "Evil genius Megamind finally defeats his do-gooder nemesis, Metro Man, but is left without a purpose in a superhero-free world.",
-            'poster': "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
+            'poster':
+                "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
           }),
         ],
       ),
@@ -67,21 +129,11 @@ class _HomescreenState extends State<Homescreen> {
     return AppBar(
       backgroundColor: kAppBarColor,
       shadowColor: Colors.black,
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: kPrimaryColor,
-          ),
-          iconSize: 40.0,
-          onPressed: openMenu(),
-        )
-      ],
+      iconTheme: const IconThemeData(
+        color: kPrimaryColor,
+        size: 40,
+      ),
     );
-  }
-
-  openMenu() {
-    // TODO: Open menu
   }
 
   // Changes the current page by val
@@ -89,7 +141,6 @@ class _HomescreenState extends State<Homescreen> {
   changePage(int val) {
     // print("Change page with $val");
     setState(() {
-
       // Check for negative page count
       if (currentPage + val < 0) return;
 
@@ -98,12 +149,13 @@ class _HomescreenState extends State<Homescreen> {
       currentPage += val;
     });
 
-    scrollToCurrentPage();  // Animate scrolling to new current page
+    scrollToCurrentPage(); // Animate scrolling to new current page
   }
 
   // Scroll animation to the current page
   scrollToCurrentPage() {
-    pageController.animateToPage(currentPage, duration: const Duration(milliseconds: 200), curve: Curves.bounceInOut);
+    pageController.animateToPage(currentPage,
+        duration: const Duration(milliseconds: 200), curve: Curves.bounceInOut);
   }
 
   // Sets the page to a specified value
