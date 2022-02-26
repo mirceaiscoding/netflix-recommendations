@@ -22,9 +22,9 @@ namespace Movie4U.Controllers
         [HttpPost("Signup")]
         public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
         {
-            await manager.Signup(registerModel);
+            var response = await manager.Signup(registerModel);
 
-            return Ok();
+            return Ok(response);
         }
 
         [HttpPost("Login")]

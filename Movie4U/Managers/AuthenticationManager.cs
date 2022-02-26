@@ -25,7 +25,7 @@ namespace Movie4U.Managers
             this.watchersManager = watchersManager;
         }
 
-        public async Task Signup(RegisterModel registerModel)
+        public async Task<bool> Signup(RegisterModel registerModel)
         {
             User user = new User
             {
@@ -39,7 +39,9 @@ namespace Movie4U.Managers
             {
                 await userManager.AddToRoleAsync(user, registerModel.role);
                 await watchersManager.Create(user.UserName, user.Id);
+                return true;
             }
+            return false;
         }
 
         public async Task<TokensModel> Login(LoginModel loginModel)
