@@ -66,9 +66,13 @@ namespace Movie4U
                 });
             });
 
-            services.AddDbContext<Movie4UContext>(options => options
-            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))  
-            .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=Movie4U;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+            services.AddDbContext<Movie4UContext>(opt =>
+                                   opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            //services.AddDbContext<Movie4UContext>(options => options
+            //.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+            //.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=Movie4U;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
 
             // since we have added IdentityDbContext, we add this to specify we use the user and role defined by us
