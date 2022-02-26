@@ -4,3 +4,4 @@ Movie4U/bin/Debug
 *.cache
 Movie4U/obj/Debug
 appsettings.json
+Movie4U/obj
