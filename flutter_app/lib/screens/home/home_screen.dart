@@ -1,9 +1,7 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/components/body.dart';
+import 'package:flutter_app/screens/home/components/menu_drawer.dart';
 
 import 'components/bottom_actions.dart';
 
@@ -27,62 +25,7 @@ class _HomescreenState extends State<Homescreen> {
       drawerEdgeDragWidth: 0,
       key: _scaffoldKey,
       appBar: buildAppBar(),
-      endDrawer: Drawer(
-        backgroundColor: kBackgroundColor,
-        // ListView allows scrolling inside the drawer
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const SizedBox(
-              height: 50,
-            ),
-            ListTile(
-              title: const Center(
-                  child: Text(
-                'ACCOUNT',
-                style: kMenuItemTextStyle,
-              )),
-              onTap: () {
-                // Update the state of the app
-                
-
-                // Close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Center(
-                  child: Text(
-                'WATCHLIST',
-                style: kMenuItemTextStyle,
-              )),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Center(
-                  child: Text(
-                'LIKES',
-                style: kMenuItemTextStyle,
-              )),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Center(
-                  child: Text(
-                'DISLIKES',
-                style: kMenuItemTextStyle,
-              )),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      endDrawer: const MenuDrawer(),
       body: PageView(
         controller: pageController,
         onPageChanged: (int val) => setPage(val),
