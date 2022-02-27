@@ -52,3 +52,6 @@ const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
 
 // Debug mode
 const kDebugMode = true;
+
+// API
+const kAuthRequestURL = "https://localhost:5003/api/Authentication/Login";

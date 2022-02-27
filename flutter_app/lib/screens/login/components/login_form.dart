@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -17,6 +20,10 @@ class _LoginFormState extends State<LoginForm> {
   // if the password is visible or not
   bool _isPasswordVisible = false;
 
+  // controllers for form fields
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // Screen size
@@ -31,6 +38,8 @@ class _LoginFormState extends State<LoginForm> {
             children: <Widget>[
               // Email field
               TextFormField(
+                controller: emailController,
+                autocorrect: false,
                 decoration: const InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -65,6 +74,8 @@ class _LoginFormState extends State<LoginForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
                 child: TextFormField(
+                  controller: passwordController,
+                  autocorrect: false,
                   // Form field aspect
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
@@ -116,6 +127,26 @@ class _LoginFormState extends State<LoginForm> {
                 onPressed: () {
                   // Check if the form is valid
                   if (_formKey.currentState!.validate()) {
+                    // Call API
+                    http
+                        .post(
+                          Uri.parse(kAuthRequestURL),
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode(<String, String>{
+                            'email': emailController.text,
+                            'password': passwordController.text,
+                          }),
+                        )
+                        .then((value) => {
+                              print(value.body)
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (_) => Homescreen()))
+                            });
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Logging in...')),
                     );
@@ -146,5 +177,13 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
