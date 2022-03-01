@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_app/services/auth_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -23,6 +23,9 @@ class _LoginFormState extends State<LoginForm> {
   // controllers for form fields
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  // service for calling the API
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -128,17 +131,8 @@ class _LoginFormState extends State<LoginForm> {
                   // Check if the form is valid
                   if (_formKey.currentState!.validate()) {
                     // Call API
-                    http
-                        .post(
-                          Uri.parse(kAuthRequestURL),
-                          headers: <String, String>{
-                            'Content-Type': 'application/json; charset=UTF-8',
-                          },
-                          body: jsonEncode(<String, String>{
-                            'email': emailController.text,
-                            'password': passwordController.text,
-                          }),
-                        )
+                    authService
+                        .login(emailController.text, passwordController.text)
                         .then((value) => {
                               print(value.body)
                               // Navigator.push(
