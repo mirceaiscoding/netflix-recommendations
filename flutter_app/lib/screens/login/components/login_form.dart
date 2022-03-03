@@ -141,10 +141,7 @@ class _LoginFormState extends State<LoginForm> {
 
                     print(res.statusCode);
                     if (res.statusCode == 200) {
-                      // Shows a bottom bar until navigating to the homepage
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Logging in...')),
-                      );
+                      // TODO: Show a progress indicator?
 
                       var response = jsonDecode(res.body);
                       var authModel = AuthModel.fromJson(response);
@@ -155,7 +152,7 @@ class _LoginFormState extends State<LoginForm> {
                           "accessToken", authModel.accessToken);
 
                       // TODO: Go to homepage
-
+                      Navigator.pushNamed(context, "/home");
                     } else {
                       displayDialog("Login error",
                           "Please make sure your email and password are correct.");
@@ -178,8 +175,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 onPressed: () {
                   // Go to register page
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => RegisterScreen()));
+                  Navigator.pushNamed(context, "/register");
                 },
               )
             ],

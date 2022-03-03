@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/login/login_screen.dart';
+import 'package:flutter_app/screens/register/register_screen.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -23,7 +24,13 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(),
+
+      initialRoute: '/login', // Route when the app opens
+      routes: {
+        '/home': (context) => const Homescreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+      },
     );
   }
 }

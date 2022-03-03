@@ -138,8 +138,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 onPressed: () {
                   // Go to login page
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()));
+                  Navigator.pushNamed(context, "/login");
                 },
               )
             ],
