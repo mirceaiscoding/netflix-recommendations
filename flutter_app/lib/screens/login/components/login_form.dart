@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/models/auth_model.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
 import 'package:flutter_app/services/auth_service.dart';
+import 'package:flutter_app/services/secure_storage.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -21,11 +23,14 @@ class _LoginFormState extends State<LoginForm> {
   bool _isPasswordVisible = false;
 
   // controllers for form fields
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   // service for calling the API
-  final AuthService authService = AuthService();
+  final AuthService _authService = AuthService();
+
+  // service for secure storage
+  final SecureStorage _secureStorage = SecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +46,7 @@ class _LoginFormState extends State<LoginForm> {
             children: <Widget>[
               // Email field
               TextFormField(
-                controller: emailController,
+                controller: _emailController,
                 autocorrect: false,
                 decoration: const InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -77,7 +82,7 @@ class _LoginFormState extends State<LoginForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
                 child: TextFormField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   autocorrect: false,
                   // Form field aspect
                   decoration: InputDecoration(
@@ -127,23 +132,34 @@ class _LoginFormState extends State<LoginForm> {
                   primary: kPrimaryColor,
                   enableFeedback: true,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   // Check if the form is valid
                   if (_formKey.currentState!.validate()) {
                     // Call API
-                    authService
-                        .login(emailController.text, passwordController.text)
-                        .then((value) => {
-                              print(value.body)
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (_) => Homescreen()))
-                            });
+                    var res = await _authService.login(
+                        _emailController.text, _passwordController.text);
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Logging in...')),
-                    );
+                    print(res.statusCode);
+                    if (res.statusCode == 200) {
+                      // Shows a bottom bar until navigating to the homepage
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Logging in...')),
+                      );
+
+                      var response = jsonDecode(res.body);
+                      var authModel = AuthModel.fromJson(response);
+
+                      // Update in secure storage
+                      print(authModel.accessToken);
+                      _secureStorage.writeSecureData(
+                          "accessToken", authModel.accessToken);
+
+                      // TODO: Go to homepage
+
+                    } else {
+                      displayDialog("Login error",
+                          "Please make sure your email and password are correct.");
+                    }
                   }
                 },
                 child: const Text(
@@ -176,8 +192,31 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
+
+  void displayDialog(String title, String description) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // closes dialog
+                },
+                child: const Text(
+                  "OK",
+                ))
+          ],
+          title: Text(
+            title,
+            style: kDialogTitle,
+          ),
+          content: Text(
+            description,
+            style: kDialogDescription,
+          ),
+        ),
+      );
 }

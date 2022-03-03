@@ -47,6 +47,18 @@ const kButtonTextStyle = TextStyle(
   color: kBackgroundColor,
 );
 
+const kDialogTitle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 20.0,
+  color: Colors.black,
+);
+
+const kDialogDescription = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: Colors.black,
+);
+
 const kFormFieldColor = kPrimaryColor;
 const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
 
