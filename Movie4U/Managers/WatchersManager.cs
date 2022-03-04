@@ -1,4 +1,6 @@
-﻿using Movie4U.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Movie4U.Entities;
 using Movie4U.Models;
 using Movie4U.Repositories;
 using System;
@@ -11,10 +13,14 @@ namespace Movie4U.Managers
     public class WatchersManager: IWatchersManager
     {
         private readonly IWatchersRepository repo;
-        
-        public WatchersManager(IWatchersRepository repo)
+        private readonly UserManager<User> userManager;
+        private readonly ITokensManager tokensManager;
+
+        public WatchersManager(IWatchersRepository repo, UserManager<User> userManager, ITokensManager tokensManager)
         {
             this.repo = repo;
+            this.userManager = userManager;
+            this.tokensManager = tokensManager;
         }
 
         public List<WatcherModel> GetAll()
@@ -39,7 +45,43 @@ namespace Movie4U.Managers
             await repo.Create(newWatcher);
         }
 
+        public async Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
+        {
+            Watcher watcher = repo.GetDbWatcher(watcherName);
+            
+            watcher.refreshToken = refreshToken;
+            watcher.refreshTokenExpiryTime = refTokExpTime;
 
+            await repo.Update(watcher);
+        }
+
+        public async Task<TokensModel> UpdateRefreshToken(WatcherModel watcher)
+        {
+            User user =
+                await
+                userManager
+                .FindByNameAsync(watcher.userId);
+                
+            var accessToken =
+                tokensManager
+                .GenerateAccessToken(user)
+                .Result;
+            var refreshToken =
+                tokensManager
+                .GenerateRefreshToken();
+
+            Watcher dbWatcher = repo.GetDbWatcher(watcher.watcher_name);
+            dbWatcher.refreshToken = refreshToken;
+
+            await repo.Update(dbWatcher);
+
+            TokensModel tokensModel = new TokensModel
+            {
+                accessToken = accessToken,
+                refreshToken = refreshToken
+            };
+            return tokensModel;
+        }
 
         public async Task Delete(string name)
         {
@@ -48,5 +90,6 @@ namespace Movie4U.Managers
             if (watcher != null)
                 await repo.Delete(watcher);
         }
+
     }
 }

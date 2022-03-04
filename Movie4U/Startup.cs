@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +15,6 @@ using Movie4U.Managers;
 using Movie4U.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,12 +22,13 @@ namespace Movie4U
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,7 +69,7 @@ namespace Movie4U
 
             services.AddDbContext<Movie4UContext>(options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))  
-            .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=Movie4U;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+            .UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
 
 
             // since we have added IdentityDbContext, we add this to specify we use the user and role defined by us
@@ -171,12 +172,21 @@ namespace Movie4U
 
             app.UseCors("_allowSpecificOrigins");
 
-            app.UseHttpsRedirection();
+            app.UseHttpsRedirection();        // http requests redirected to https
             /*app.UseStaticFiles();*/
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            /*app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = "MyCookieMiddlewareInstance",
+                LoginPath = new PathString("/Account/Unauthorized/"),
+                AccessDeniedPath = new PathString("/Account/Forbidden/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });*/
 
             app.UseEndpoints(endpoints =>
             {

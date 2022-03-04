@@ -8,7 +8,7 @@ namespace Movie4U.Managers
 {
     public interface IAuthenticationManager
     {
-        Task Signup(RegisterModel registerModel);
+        Task<bool> Signup(RegisterModel registerModel);
         Task<TokensModel> Login(LoginModel loginModel);
     }
 }

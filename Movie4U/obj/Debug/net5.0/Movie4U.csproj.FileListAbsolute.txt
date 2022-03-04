@@ -1,3 +1,10 @@
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.csproj.AssemblyReference.cache
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.AssemblyInfoInputs.cache
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.AssemblyInfo.cs
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.csproj.CoreCompileInputs.cache
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\appsettings.json
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\Movie4U.exe
@@ -131,13 +138,6 @@ C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\runtimes\win-arm\l
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.csproj.AssemblyReference.cache
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.AssemblyInfoInputs.cache
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.AssemblyInfo.cs
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.csproj.CoreCompileInputs.cache
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\Movie4U.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\staticwebassets\Movie4U.StaticWebAssets.Manifest.cache
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\staticwebassets\Movie4U.StaticWebAssets.xml
 C:\Users\Stefan\source\repos\MSDteam\Movie4U\obj\Debug\net5.0\scopedcss\bundle\Movie4U.styles.css

@@ -3,7 +3,6 @@ using Movie4U.Managers;
 using Movie4U.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers
@@ -22,20 +21,29 @@ namespace Movie4U.Controllers
         [HttpPost("Signup")]
         public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
         {
-            await manager.Signup(registerModel);
+            if (registerModel == null  || NullChecker.hasNulls(registerModel))
+                return BadRequest("Invalid client request");
+            
+            var result = await manager.Signup(registerModel);
 
-            return Ok();
+            if(result)
+                return Ok("Signup succedeed");
+
+            return BadRequest("Failed to signup");
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
+            if (loginModel == null || NullChecker.hasNulls(loginModel))
+                return BadRequest("Invalid client request");
+
             var tokens = await manager.Login(loginModel);
 
             if (tokens != null)
                 return Ok(tokens);
 
-            return BadRequest("Failed to login");
+            return Unauthorized("Failed to login");
         }
     }
 }

@@ -12,20 +12,19 @@ namespace Movie4U.Managers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly ITokensManager tokenManager;
-
+        private readonly ITokensManager tokensManager;
         private readonly IWatchersManager watchersManager;
 
-        public AuthenticationManager(UserManager<User> userManager, SignInManager<User> signInManager, ITokensManager tokenManager, IWatchersManager watchersManager)
+        public AuthenticationManager(UserManager<User> userManager, SignInManager<User> signInManager, ITokensManager tokensManager, IWatchersManager watchersManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.tokenManager = tokenManager;
+            this.tokensManager = tokensManager;
 
             this.watchersManager = watchersManager;
         }
 
-        public async Task Signup(RegisterModel registerModel)
+        public async Task<bool> Signup(RegisterModel registerModel)
         {
             User user = new User
             {
@@ -39,8 +38,13 @@ namespace Movie4U.Managers
             {
                 await userManager.AddToRoleAsync(user, registerModel.role);
                 await watchersManager.Create(user.UserName, user.Id);
+
+                return true;
             }
+            
+            return false;
         }
+
 
         public async Task<TokensModel> Login(LoginModel loginModel)
         {
@@ -55,11 +59,18 @@ namespace Movie4U.Managers
                 var result = await signInManager.CheckPasswordSignInAsync(user, loginModel.password, false);
                 if (result.Succeeded)
                 {
-                    var token = await tokenManager.GenerateToken(user);
+                    var accessToken = await tokensManager.GenerateAccessToken(user);
+                    var refreshToken = tokensManager.GenerateRefreshToken();
+                    DateTime refTokExpTime = DateTime.Now.AddDays(7);
+
+                    await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
+
+                    WatcherModel watcher = watchersManager.GetWatcher(user.UserName);
 
                     return new TokensModel
                     {
-                        accessToken = token
+                        accessToken = accessToken,
+                        refreshToken = refreshToken
                     };
                 }
             }

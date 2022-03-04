@@ -13,6 +13,10 @@ namespace Movie4U.Entities
 
         public DateTime register_date { get; set; }
 
+        public string refreshToken { get; set; }
+
+        public DateTime refreshTokenExpiryTime { get; set; }
+
         [Required]
         public string userId { get; set; }
 
