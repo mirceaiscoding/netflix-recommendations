@@ -141,7 +141,7 @@ class _LoginFormState extends State<LoginForm> {
 
                     print(res.statusCode);
                     if (res.statusCode == 200) {
-                      // TODO: Show a progress indicator?
+                      // TODO: Show a progress indicator
 
                       var response = jsonDecode(res.body);
                       var authModel = AuthModel.fromJson(response);
