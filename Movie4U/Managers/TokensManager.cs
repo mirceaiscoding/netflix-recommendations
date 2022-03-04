@@ -90,10 +90,10 @@ namespace Movie4U.Managers
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidationParams, out securityToken);
                             // out modifier: argument passed by refference; may be unitialized before it is passed; may have its value modified
-            
+
             var jwtSecurityToken = securityToken as JwtSecurityToken;
                             // as operator: cast between compatible refference types or Nullable types; shortcut from using "is" operator; returns null when fails to cast
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512Signature, StringComparison.InvariantCultureIgnoreCase))
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
                             // algorithm check
 

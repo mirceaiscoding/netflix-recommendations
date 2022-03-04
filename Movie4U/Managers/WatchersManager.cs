@@ -60,8 +60,8 @@ namespace Movie4U.Managers
             User user =
                 await
                 userManager
-                .FindByNameAsync(watcher.userId);
-                
+                .FindByNameAsync(watcher.watcher_name);
+            
             var accessToken =
                 tokensManager
                 .GenerateAccessToken(user)
