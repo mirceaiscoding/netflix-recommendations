@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Movie4U.Entities;
 
 namespace Movie4U.Migrations
 {
     [DbContext(typeof(Movie4UContext))]
-    partial class Movie4UContextModelSnapshot : ModelSnapshot
+    [Migration("20220303235338_AddedRefreshTokenSystem")]
+    partial class AddedRefreshTokenSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

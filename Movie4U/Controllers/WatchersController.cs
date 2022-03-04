@@ -21,7 +21,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetAllWatchers")]
-        [Authorize(Policy = "BasicUserPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetAll()
         {
             var watchers = manager.GetAll();
@@ -33,7 +33,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetWatcherByName/{name}")]
-        [Authorize(Policy = "BasicUserPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByName([FromRoute] string name)
         {
             WatcherModel watcher = manager.GetWatcher(name);

@@ -1,7 +1,6 @@
 ﻿using Movie4U.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -14,8 +13,10 @@ namespace Movie4U.Managers
 
         Task Create(string watcherName, string UserId);
 
-        /*Task Update();   // update will be implemented when more specific needs are detailed  */
+        Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime);
 
+        Task<TokensModel> UpdateRefreshToken(WatcherModel watcher);
+        
         Task Delete(string name);
     }
 }
