@@ -43,7 +43,7 @@ namespace Movie4U.Controllers
             if (tokens != null)
                 return Ok(tokens);
 
-            return Unauthorized("Failed to login");
+            return BadRequest("Failed to login");
         }
     }
 }
