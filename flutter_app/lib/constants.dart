@@ -29,5 +29,47 @@ const kMovieDescriptionStyle = TextStyle(
   fontSize: 14.0,
 );
 
+const kLinkStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 14.0,
+  color: Colors.grey,
+);
+
+const kAuthStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: kTextColor,
+);
+
+const kButtonTextStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: kBackgroundColor,
+);
+
+const kDialogTitle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 20.0,
+  color: Colors.black,
+);
+
+const kDialogDescription = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 16.0,
+  color: Colors.black,
+);
+
+const kMenuItemTextStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 18.0,
+  color: kPrimaryColor,
+);
+
+const kFormFieldColor = kPrimaryColor;
+const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
+
 // Debug mode
 const kDebugMode = true;
+
+// API
+const kAuthRequestURL = "https://localhost:5003/api/Authentication/";
