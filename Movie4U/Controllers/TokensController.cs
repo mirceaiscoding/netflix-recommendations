@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Movie4U.Entities;
 using Movie4U.Managers;
 using Movie4U.Models;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Movie4U.Controllers
         [HttpPost("Refresh")]
         public IActionResult Refresh(TokensModel tokensModel)
         {
-            if (tokensModel == null || NullChecker.hasNulls(tokensModel))
+            if (tokensModel == null || NullCheckerUtility.hasNulls(tokensModel))
             {
                 return BadRequest("Invalid client request");
             }

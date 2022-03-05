@@ -21,5 +21,20 @@ namespace Movie4U.Entities
         public string userId { get; set; }
 
         public virtual User user { get; set; }
+        public virtual List<WatcherTitle> watcherTitles {get; set;}
+
+
+        // contructors:
+        public Watcher(string watcher_name, DateTime register_date, string refreshToken, DateTime refreshTokenExpiryTime, string userId)
+        {
+            this.watcher_name = watcher_name;
+            this.register_date = register_date;
+            this.refreshToken = refreshToken;
+            this.refreshTokenExpiryTime = refreshTokenExpiryTime;
+            this.userId = userId;
+        }
+
+        public Watcher() { }
+
     }
 }

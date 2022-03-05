@@ -4,11 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Movie4U.Models
+namespace Movie4U.Utilities
 {
-    public class NullChecker
+    public static class NullCheckerUtility
     {
-
         //counts null or empty (for strings) fields of given object
         public static int nullCount(object obj)
         {
