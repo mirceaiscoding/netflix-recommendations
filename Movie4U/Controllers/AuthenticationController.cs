@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Movie4U.Managers;
 using Movie4U.Models;
 using System;
@@ -18,15 +19,32 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpPost("Signup")]
-        public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
+        [HttpPost("SignupUser")]
+        public async Task<IActionResult> SignupUser([FromBody] RegisterModel registerModel)
         {
+            registerModel.role = "BasicUser";
+
             if (registerModel == null  || NullChecker.hasNulls(registerModel))
                 return BadRequest("Invalid client request");
             
             var result = await manager.Signup(registerModel);
 
             if(result)
+                return Ok("Signup succedeed");
+
+            return BadRequest("Failed to signup");
+        }
+
+        [HttpPost("Signup")]
+        // TODO: Add this in production: [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
+        {
+            if (registerModel == null || NullChecker.hasNulls(registerModel))
+                return BadRequest("Invalid client request");
+
+            var result = await manager.Signup(registerModel);
+
+            if (result)
                 return Ok("Signup succedeed");
 
             return BadRequest("Failed to signup");
