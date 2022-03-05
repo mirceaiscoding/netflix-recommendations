@@ -1,10 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/models/auth_model.dart';
-import 'package:flutter_app/screens/home/home_screen.dart';
-import 'package:flutter_app/screens/register/register_screen.dart';
 import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/secure_storage.dart';
 
@@ -44,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Email field
+              // Email or username field
               TextFormField(
                 controller: _emailController,
                 autocorrect: false,
@@ -62,17 +61,12 @@ class _LoginFormState extends State<LoginForm> {
                   border: OutlineInputBorder(),
                   labelStyle: kAuthStyle,
                   hintStyle: kAuthStyle,
-                  labelText: 'Email',
-                  hintText: 'Enter your email',
+                  labelText: 'Email or username',
+                  hintText: 'Enter your email or username',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* requiered';
-                  }
-                  RegExp emailRegex = RegExp(
-                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-                  if (!emailRegex.hasMatch(value)) {
-                    return 'Enter a valid email';
                   }
                   return null;
                 },
@@ -139,7 +133,9 @@ class _LoginFormState extends State<LoginForm> {
                     var res = await _authService.login(
                         _emailController.text, _passwordController.text);
 
-                    print(res.statusCode);
+                    if (kDebugMode) {
+                      print(res.statusCode);
+                    }
                     if (res.statusCode == 200) {
                       // TODO: Show a progress indicator
 
@@ -147,11 +143,12 @@ class _LoginFormState extends State<LoginForm> {
                       var authModel = AuthModel.fromJson(response);
 
                       // Update in secure storage
-                      print(authModel.accessToken);
-                      _secureStorage.writeSecureData(
-                          "accessToken", authModel.accessToken);
+                      if (kDebugMode) {
+                        print(inspect(authModel));
+                      }
+                      _secureStorage.writeAuthModel(authModel);
 
-                      // TODO: Go to homepage
+                      // Go to homepage
                       Navigator.pushNamed(context, "/home");
                     } else {
                       displayDialog("Login error",
@@ -198,12 +195,13 @@ class _LoginFormState extends State<LoginForm> {
         builder: (context) => AlertDialog(
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // closes dialog
-                },
-                child: const Text(
-                  "OK",
-                ))
+              onPressed: () {
+                Navigator.pop(context); // closes dialog
+              },
+              child: const Text(
+                "OK",
+              ),
+            )
           ],
           title: Text(
             title,
