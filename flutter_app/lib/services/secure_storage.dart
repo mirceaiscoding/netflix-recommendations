@@ -1,3 +1,4 @@
+import 'package:flutter_app/models/auth_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -16,5 +17,16 @@ class SecureStorage {
   Future deleteSecureData(String key) async {
     var deleteData = await _storage.delete(key: key);
     return deleteData;
+  }
+
+  Future writeAuthModel(AuthModel authModel) async {
+    await writeSecureData("accessToken", authModel.accessToken);
+    await writeSecureData("refreshToken", authModel.refreshToken);
+  }
+
+  Future<AuthModel> readAuthModel() async {
+    var accessToken = await readSecureData("accessToken");
+    var refreshToken = await readSecureData("refreshToken");
+    return AuthModel(accessToken: accessToken, refreshToken: refreshToken);
   }
 }

@@ -18,14 +18,14 @@ class AuthService {
     return res;
   }
 
-  Future<http.Response> login(String email, String password) async {
+  Future<http.Response> login(String emailOrUsername, String password) async {
     var res = await http.post(
       Uri.parse(kAuthRequestURL + "Login"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'email': email,
+        'emailOrName': emailOrUsername,
         'password': password,
       }),
     );
