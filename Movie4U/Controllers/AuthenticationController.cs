@@ -25,7 +25,7 @@ namespace Movie4U.Controllers
         {
             registerModel.role = "BasicUser";
 
-            if (registerModel == null  || NullChecker.hasNulls(registerModel))
+            if (registerModel == null  || NullCheckerUtility.hasNulls(registerModel))
                 return BadRequest("Invalid client request");
             
             var result = await manager.Signup(registerModel);
