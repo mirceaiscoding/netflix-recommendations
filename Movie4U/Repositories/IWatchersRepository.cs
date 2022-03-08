@@ -9,10 +9,8 @@ namespace Movie4U.Repositories
 {
     public interface IWatchersRepository : IGenericRepository<Watcher>
     {
-        Task<List<WatcherModel>> GetAllAsync();
+        Task<List<WatcherModel>> GetAllWatcherModelsAsync();
 
-        Task<Watcher> GetDbWatcherAsync(string name);
-
-        Task<WatcherModel> GetWatcherAsync (string name);
+        Task<WatcherModel> GetWatcherModelByNameAsync (string name);
     }
 }

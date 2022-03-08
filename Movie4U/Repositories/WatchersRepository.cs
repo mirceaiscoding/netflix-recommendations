@@ -19,7 +19,7 @@ namespace Movie4U.Repositories
             this.db = db;
         }
 
-        public async Task<List<WatcherModel>> GetAllAsync()
+        public async Task<List<WatcherModel>> GetAllWatcherModelsAsync()
         {
             var watchers = await db.Watchers.ToListAsync();
 
@@ -35,16 +35,9 @@ namespace Movie4U.Repositories
             return watcherModels;
         }
 
-        public async Task<Watcher> GetDbWatcherAsync(string name)
+        public async Task<WatcherModel> GetWatcherModelByNameAsync(string name)
         {
-            var watcher = await db.Watchers.FirstOrDefaultAsync(watcher => watcher.watcher_name == name);
-
-            return watcher;
-        }
-
-        public async Task<WatcherModel> GetWatcherAsync(string name)
-        {
-            var watcher = await GetDbWatcherAsync(name);
+            var watcher = await GetByIdAsync(name);
 
             if(watcher != null)
             {
