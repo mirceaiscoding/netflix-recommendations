@@ -11,6 +11,6 @@ namespace Movie4U.Managers
         Task<string> GenerateAccessToken(User user);
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
-        Task<string> ExtractUserName(string tokenHeader);
+        string ExtractUserName(string tokenHeader);
     }
 }

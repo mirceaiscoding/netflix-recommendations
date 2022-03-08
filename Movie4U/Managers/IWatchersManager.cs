@@ -7,9 +7,9 @@ namespace Movie4U.Managers
 {
     public interface IWatchersManager
     {
-        List<WatcherModel> GetAll();
+        Task<List<WatcherModel>> GetAllAsync();
 
-        WatcherModel GetWatcher(string name);
+        Task<WatcherModel> GetWatcherAsync(string name);
 
         Task Create(string watcherName, string UserId);
 

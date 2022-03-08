@@ -26,7 +26,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpPost("Refresh")]
-        public IActionResult Refresh(TokensModel tokensModel)
+        public async Task<IActionResult> RefreshAsync(TokensModel tokensModel)
         {
             if (tokensModel == null || NullCheckerUtility.hasNulls(tokensModel))
             {
@@ -39,7 +39,7 @@ namespace Movie4U.Controllers
             var principal = manager.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;      // mapped to the Name claim by default
 
-            WatcherModel watcher = watchersManager.GetWatcher(userName);
+            WatcherModel watcher = await watchersManager.GetWatcherAsync(userName);
             if (watcher == null || watcher.refreshToken != refreshToken || watcher.refreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Invalid client request");
 
@@ -56,9 +56,9 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Revoke([FromHeader] string Authorization)
         {
-            var watcherName = await manager.ExtractUserName(Authorization);
+            var watcherName = manager.ExtractUserName(Authorization);
 
-            var dbWatcher = watchersManager.GetWatcher(watcherName);
+            var dbWatcher = await watchersManager.GetWatcherAsync(watcherName);
             if (dbWatcher == null)
                 return BadRequest("The watcher couldn not be found");
 

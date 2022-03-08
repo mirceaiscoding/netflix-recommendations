@@ -22,9 +22,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllWatchers")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var watchers = manager.GetAll();
+            var watchers = await manager.GetAllAsync();
 
             if (watchers.Count == 0)
                 return NotFound("There are no watchers stored in the database");
@@ -36,7 +36,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByName([FromRoute] string name)
         {
-            WatcherModel watcher = manager.GetWatcher(name);
+            WatcherModel watcher = await manager.GetWatcherAsync(name);
 
             if (watcher == null)
                 return NotFound("There is no watcher with the given name stored in the database");

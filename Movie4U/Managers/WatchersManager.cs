@@ -23,15 +23,11 @@ namespace Movie4U.Managers
             this.tokensManager = tokensManager;
         }
 
-        public List<WatcherModel> GetAll()
+        public async Task<List<WatcherModel>> GetAllAsync()
         {
-            return repo.GetAll();
+            return await repo.GetAllAsync();
         }
 
-        public WatcherModel GetWatcher(string name)
-        {
-            return repo.GetWatcher(name);
-        }
 
         public async Task Create(string watcherName, string UserId)
         {
@@ -47,7 +43,7 @@ namespace Movie4U.Managers
 
         public async Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
         {
-            Watcher watcher = repo.GetDbWatcher(watcherName);
+            Watcher watcher = await repo.GetDbWatcherAsync(watcherName);
             
             watcher.refreshToken = refreshToken;
             watcher.refreshTokenExpiryTime = refTokExpTime;
@@ -70,7 +66,7 @@ namespace Movie4U.Managers
                 tokensManager
                 .GenerateRefreshToken();
 
-            Watcher dbWatcher = repo.GetDbWatcher(watcher.watcher_name);
+            Watcher dbWatcher = await repo.GetDbWatcherAsync(watcher.watcher_name);
             dbWatcher.refreshToken = refreshToken;
 
             await repo.Update(dbWatcher);
@@ -85,11 +81,15 @@ namespace Movie4U.Managers
 
         public async Task Delete(string name)
         {
-            Watcher watcher = repo.GetDbWatcher(name);
+            Watcher watcher = await repo.GetDbWatcherAsync(name);
 
             if (watcher != null)
                 await repo.Delete(watcher);
         }
 
+        public async Task<WatcherModel> GetWatcherAsync(string name)
+        {
+            return await repo.GetWatcherAsync(name);
+        }
     }
 }

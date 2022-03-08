@@ -9,11 +9,11 @@ namespace Movie4U.Repositories
 {
     public interface IWatchersRepository
     {
-        List<WatcherModel> GetAll();
+        Task<List<WatcherModel>> GetAllAsync();
 
-        Watcher GetDbWatcher(string name);
+        Task<Watcher> GetDbWatcherAsync(string name);
 
-        WatcherModel GetWatcher (string name);
+        Task<WatcherModel> GetWatcherAsync (string name);
 
         Task Create(Watcher watcher);
 

@@ -1,4 +1,5 @@
-﻿using Movie4U.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie4U.Entities;
 using Movie4U.Models;
 using System;
 using System.Collections.Generic;
@@ -18,34 +19,32 @@ namespace Movie4U.Repositories
             this.db = db;
         }
 
-        public List<WatcherModel> GetAll()
+        public async Task<List<WatcherModel>> GetAllAsync()
         {
-            var watchers = db.Watchers.ToList();
+            var watchers = await db.Watchers.ToListAsync();
 
             var watcherModels = new List<WatcherModel> { };
             foreach (var watcher in watchers)
             {
-                var watcherModel = new WatcherModel
-                {
-                    watcher_name = watcher.watcher_name,
-                    register_date = watcher.register_date
-                };
+                var watcherModel = new WatcherModel();
+                watcherModel.copy(watcher);
+
                 watcherModels.Add(watcherModel);
             }
 
             return watcherModels;
         }
 
-        public Watcher GetDbWatcher(string name)
+        public async Task<Watcher> GetDbWatcherAsync(string name)
         {
-            var watcher = db.Watchers.FirstOrDefault(watcher => watcher.watcher_name == name);
+            var watcher = await db.Watchers.FirstOrDefaultAsync(watcher => watcher.watcher_name == name);
 
             return watcher;
         }
 
-        public WatcherModel GetWatcher(string name)
+        public async Task<WatcherModel> GetWatcherAsync(string name)
         {
-            var watcher = GetDbWatcher(name);
+            var watcher = await GetDbWatcherAsync(name);
 
             if(watcher != null)
             {
