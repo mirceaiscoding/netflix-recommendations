@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
-    public class WatchersRepository: IWatchersRepository
+    public class WatchersRepository: GenericRepository<Watcher>, IWatchersRepository
     {
         // the context
         private readonly Movie4UContext db;
 
         // the constructor
-        public WatchersRepository(Movie4UContext db)
+        public WatchersRepository(Movie4UContext db) : base(db)
         {
             this.db = db;
         }
@@ -57,25 +57,5 @@ namespace Movie4U.Repositories
             return null;
         }
 
-        public async Task Create(Watcher watcher)
-        {
-            await db.Watchers.AddAsync(watcher);
-
-            await db.SaveChangesAsync();
-        }
-
-        public async Task Update(Watcher watcher)
-        {
-            db.Watchers.Update(watcher);
-
-            await db.SaveChangesAsync();
-        }
-
-        public async Task Delete(Watcher watcher)
-        {
-            db.Watchers.Remove(watcher);
-
-            await db.SaveChangesAsync();
-        }
     }
 }

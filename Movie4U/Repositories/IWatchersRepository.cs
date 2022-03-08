@@ -7,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
-    public interface IWatchersRepository
+    public interface IWatchersRepository : IGenericRepository<Watcher>
     {
         Task<List<WatcherModel>> GetAllAsync();
 
         Task<Watcher> GetDbWatcherAsync(string name);
 
         Task<WatcherModel> GetWatcherAsync (string name);
-
-        Task Create(Watcher watcher);
-
-        Task Update(Watcher watcher);
-
-        Task Delete(Watcher watcher);
     }
 }
