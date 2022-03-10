@@ -10,16 +10,20 @@ namespace Movie4U.Repositories
 {
     public class WatchersRepository: GenericRepository<Watcher>, IWatchersRepository
     {
-        // the context
+        /**<summary>
+         * The context.
+         * </summary>*/
         private readonly Movie4UContext db;
 
-        // the constructor
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatchersRepository(Movie4UContext db) : base(db)
         {
             this.db = db;
         }
 
-        public async Task<List<WatcherModel>> GetAllWatcherModelsAsync()
+        public async Task<List<WatcherModel>> GetAllAsync()
         {
             var watchers = await db.Watchers.ToListAsync();
 
@@ -27,7 +31,7 @@ namespace Movie4U.Repositories
             foreach (var watcher in watchers)
             {
                 var watcherModel = new WatcherModel();
-                watcherModel.copy(watcher);
+                watcherModel.Copy(watcher);
 
                 watcherModels.Add(watcherModel);
             }
@@ -35,14 +39,14 @@ namespace Movie4U.Repositories
             return watcherModels;
         }
 
-        public async Task<WatcherModel> GetWatcherModelByNameAsync(string name)
+        public async Task<WatcherModel> GetOneByNameAsync(string name)
         {
-            var watcher = await GetByIdAsync(name);
+            var watcher = await GetOneDbByIdAsync(name);
 
             if(watcher != null)
             {
                 var watcherModel = new WatcherModel { };
-                watcherModel.copy(watcher);
+                watcherModel.Copy(watcher);
 
                 return watcherModel;
             }

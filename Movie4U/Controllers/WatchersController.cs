@@ -15,6 +15,9 @@ namespace Movie4U.Controllers
     {
         private readonly IWatchersManager manager;
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatchersController(IWatchersManager manager)
         {
             this.manager = manager;
@@ -36,7 +39,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByName([FromRoute] string name)
         {
-            WatcherModel watcher = await manager.GetWatcherAsync(name);
+            WatcherModel watcher = await manager.GetOneByNameAsync(name);
 
             if (watcher == null)
                 return NotFound("There is no watcher with the given name stored in the database");

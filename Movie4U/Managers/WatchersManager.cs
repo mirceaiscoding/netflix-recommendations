@@ -16,6 +16,9 @@ namespace Movie4U.Managers
         private readonly UserManager<User> userManager;
         private readonly ITokensManager tokensManager;
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatchersManager(IWatchersRepository repo, UserManager<User> userManager, ITokensManager tokensManager)
         {
             this.repo = repo;
@@ -25,9 +28,13 @@ namespace Movie4U.Managers
 
         public async Task<List<WatcherModel>> GetAllAsync()
         {
-            return await repo.GetAllWatcherModelsAsync();
+            return await repo.GetAllAsync();
         }
 
+        public async Task<WatcherModel> GetOneByNameAsync(string name)
+        {
+            return await repo.GetOneByNameAsync(name);
+        }
 
         public async Task Create(string watcherName, string UserId)
         {
@@ -43,7 +50,7 @@ namespace Movie4U.Managers
 
         public async Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
         {
-            Watcher watcher = await repo.GetByIdAsync(watcherName);
+            Watcher watcher = await repo.GetOneDbByIdAsync(watcherName);
             
             watcher.refreshToken = refreshToken;
             watcher.refreshTokenExpiryTime = refTokExpTime;
@@ -66,7 +73,7 @@ namespace Movie4U.Managers
                 tokensManager
                 .GenerateRefreshToken();
 
-            Watcher dbWatcher = await repo.GetByIdAsync(watcher.watcher_name);
+            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcher.watcher_name);
             dbWatcher.refreshToken = refreshToken;
 
             await repo.UpdateAsync(dbWatcher);
@@ -81,15 +88,11 @@ namespace Movie4U.Managers
 
         public async Task Delete(string name)
         {
-            Watcher watcher = await repo.GetByIdAsync(name);
+            Watcher watcher = await repo.GetOneDbByIdAsync(name);
 
             if (watcher != null)
                 await repo.DeleteAsync(watcher);
         }
 
-        public async Task<WatcherModel> GetWatcherAsync(string name)
-        {
-            return await repo.GetWatcherModelByNameAsync(name);
-        }
     }
 }

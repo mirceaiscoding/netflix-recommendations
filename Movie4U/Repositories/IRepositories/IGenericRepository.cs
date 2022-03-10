@@ -13,14 +13,15 @@ namespace Movie4U.Repositories
         Task<List<TEntity>> GetAllDbAsync();
 
         TEntity GetByID(object id);
-        Task<TEntity> GetByIdAsync(object id);
+        Task<TEntity> GetOneDbByIdAsync(object id);
 
         void Insert(TEntity entity);
         Task<TEntity> InsertAsync(TEntity entity);
 
+        Task UpdateAsync(TEntity entity);
+
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(object id);
 
-        Task UpdateAsync(TEntity entity);
     }
 }

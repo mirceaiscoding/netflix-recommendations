@@ -6,24 +6,29 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class Genres
+    public class Genre
     {
         public string genre { get; set; }
 
         [Required, Key]
         public int genre_id { get; set; }
 
-        virtual public List<TitleGenres> titleGenres { get; set; }
+        virtual public List<TitleGenre> titleGenres { get; set; }
 
 
-        // contructors:
-        public Genres(string genre, int genre_id)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Genre(string genre, int genre_id)
         {
             this.genre = genre;
             this.genre_id = genre_id;
         }
 
-        public Genres() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Genre() { }
 
     }
 }

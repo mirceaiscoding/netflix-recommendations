@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class Countries
+    public class Country
     {
         public string country { get; set; }
 
@@ -23,11 +23,13 @@ namespace Movie4U.Entities
 
         public int tvids { get; set; }
 
-        virtual public List<TitleCountries> titleCountries { get; set; }
+        virtual public List<TitleCountry> titleCountries { get; set; }
 
 
-        // constructors: 
-        public Countries(string country, string country_code, int expiring, int nl7, int tmovs, int tseries, int tvids)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Country(string country, string country_code, int expiring, int nl7, int tmovs, int tseries, int tvids)
         {
             this.country = country;
             this.country_code = country_code;
@@ -38,7 +40,10 @@ namespace Movie4U.Entities
             this.tvids = tvids;
         }
 
-        public Countries() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Country() { }
 
     }
 }

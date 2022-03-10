@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class TitleCountries
+    public class TitleCountry
     {
         public string audio { get; set; }
 
@@ -26,12 +26,14 @@ namespace Movie4U.Entities
 
         public string subtitle { get; set; }
 
-        virtual public Countries Country { get; set; }
-        virtual public TitleDetails title { get; set; }
+        virtual public Country Country { get; set; }
+        virtual public Title title { get; set; }
 
 
-        // contructors:
-        public TitleCountries(string audio, string country, string country_code, string expire_date, string netflix_id, string new_date, string season_detail, string subtitle)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleCountry(string audio, string country, string country_code, string expire_date, string netflix_id, string new_date, string season_detail, string subtitle)
         {
             this.audio = audio;
             this.country = country;
@@ -43,7 +45,10 @@ namespace Movie4U.Entities
             this.subtitle = subtitle;
         }
 
-        public TitleCountries() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleCountry() { }
 
     }
 }

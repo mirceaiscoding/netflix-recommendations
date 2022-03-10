@@ -22,15 +22,19 @@ namespace Movie4U
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration configuration { get; }
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /**<summary>
+         * This method gets called by the runtime. Use this method to add services to the container.
+         * </summary>*/ 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -69,7 +73,7 @@ namespace Movie4U
 
             services.AddDbContext<Movie4UContext>(options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))  
-            .UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            .UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
 
 
             // since we have added IdentityDbContext, we add this to specify we use the user and role defined by us
@@ -85,7 +89,7 @@ namespace Movie4U
                 {
                     options.SaveToken = true;
                     var secret =
-                        Configuration
+                        configuration
                         .GetSection("Jwt")
                         .GetSection("SecretKey")
                         .Get<string>();
@@ -154,7 +158,9 @@ namespace Movie4U
             services.AddScoped<IWatchersManager, WatchersManager>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /**<summary>
+         * This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+         * </summary>*/
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -178,15 +184,6 @@ namespace Movie4U
             app.UseRouting();
 
             app.UseAuthorization();
-
-            /*app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = "MyCookieMiddlewareInstance",
-                LoginPath = new PathString("/Account/Unauthorized/"),
-                AccessDeniedPath = new PathString("/Account/Forbidden/"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });*/
 
             app.UseEndpoints(endpoints =>
             {

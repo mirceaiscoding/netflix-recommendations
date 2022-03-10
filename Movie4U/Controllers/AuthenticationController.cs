@@ -15,6 +15,9 @@ namespace Movie4U.Controllers
     {
         private readonly IAuthenticationManager manager;
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public AuthenticationController(IAuthenticationManager manager)
         {
             this.manager = manager;
@@ -25,7 +28,7 @@ namespace Movie4U.Controllers
         {
             registerModel.role = "BasicUser";
 
-            if (registerModel == null  || NullCheckerUtility.hasNulls(registerModel))
+            if (registerModel == null  || NullCheckerUtility.HasNulls(registerModel))
                 return BadRequest("Invalid client request");
             
             var result = await manager.Signup(registerModel);
@@ -40,7 +43,7 @@ namespace Movie4U.Controllers
         // TODO: Add this in production: [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
         {
-            if (registerModel == null  || NullCheckerUtility.hasNulls(registerModel))
+            if (registerModel == null  || NullCheckerUtility.HasNulls(registerModel))
                 return BadRequest("Invalid client request");
 
             var result = await manager.Signup(registerModel);
@@ -54,7 +57,7 @@ namespace Movie4U.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            if (loginModel == null || NullCheckerUtility.hasNulls(loginModel))
+            if (loginModel == null || NullCheckerUtility.HasNulls(loginModel))
                 return BadRequest("Invalid client request");
 
             var tokens = await manager.Login(loginModel);

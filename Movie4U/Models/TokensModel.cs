@@ -10,7 +10,7 @@ namespace Movie4U.Models
         public string accessToken { get; set; }
         public string refreshToken { get; set; }
 
-        public void copy(TokensModel source)
+        public void Copy(TokensModel source)
         {
             this.accessToken = source.accessToken;
             this.refreshToken = source.refreshToken;

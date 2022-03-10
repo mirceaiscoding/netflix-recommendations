@@ -8,13 +8,19 @@ namespace Movie4U.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        internal Movie4UContext _context;
+        /**<summary>
+         * The context.
+         * </summary>*/
+        internal Movie4UContext db;
         internal DbSet<TEntity> entities;
 
-        public GenericRepository(Movie4UContext context)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public GenericRepository(Movie4UContext db)
         {
-            this._context = context;
-            entities = _context.Set<TEntity>();
+            this.db = db;
+            entities = db.Set<TEntity>();
         }
 
         public virtual IQueryable<TEntity> GetQueryable()
@@ -27,14 +33,38 @@ namespace Movie4U.Repositories
             return entities;
         }
 
+        public async Task<List<TEntity>> GetAllDbAsync()
+        {
+            return await entities.AsNoTracking().ToListAsync();
+        }
+
         public virtual TEntity GetByID(object id)
         {
             return entities.Find(id);
         }
 
+        public async Task<TEntity> GetOneDbByIdAsync(object id)
+        {
+            return await entities.FindAsync(id);
+        }
+
         public virtual void Insert(TEntity entity)
         {
             entities.Add(entity);
+        }
+
+        public async Task<TEntity> InsertAsync(TEntity entity)
+        {
+            await entities.AddAsync(entity);
+            await db.SaveChangesAsync();
+            return entity;
+        }
+
+        public virtual async Task UpdateAsync(TEntity entityToUpdate)
+        {
+            entities.Attach(entityToUpdate);
+            db.Entry(entityToUpdate).State = EntityState.Modified;
+            await db.SaveChangesAsync();
         }
 
         public virtual async Task DeleteAsync(object id)
@@ -45,36 +75,11 @@ namespace Movie4U.Repositories
 
         public virtual async Task DeleteAsync(TEntity entityToDelete)
         {
-            if (_context.Entry(entityToDelete).State == EntityState.Detached)
-            {
+            if (db.Entry(entityToDelete).State == EntityState.Detached)
                 entities.Attach(entityToDelete);
-            }
+
             entities.Remove(entityToDelete);
-            await _context.SaveChangesAsync();
-        }
-
-        public virtual async Task UpdateAsync(TEntity entityToUpdate)
-        {
-            entities.Attach(entityToUpdate);
-            _context.Entry(entityToUpdate).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<List<TEntity>> GetAllDbAsync()
-        {
-            return await entities.AsNoTracking().ToListAsync();
-        }
-
-        public async Task<TEntity> GetByIdAsync(object id)
-        {
-            return await entities.FindAsync(id);
-        }
-
-        public async Task<TEntity> InsertAsync(TEntity entity)
-        {
-            await entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            await db.SaveChangesAsync();
         }
 
     }

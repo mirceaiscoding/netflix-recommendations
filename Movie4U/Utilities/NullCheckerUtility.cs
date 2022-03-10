@@ -8,8 +8,12 @@ namespace Movie4U.Utilities
 {
     public static class NullCheckerUtility
     {
-        //counts null or empty (for strings) fields of given object
-        public static int nullCount(object obj)
+        /** <summary>
+         * Counts null or empty (for strings) fields of given object.
+         * <param> obj object to be checked. </param>
+         * <return> counter (integer). </return> 
+         * </summary> **/
+        public static int NullCount(object obj)
         {
             int counter = 0;
             foreach (PropertyInfo pi in obj.GetType().GetProperties())
@@ -22,9 +26,11 @@ namespace Movie4U.Utilities
             }
             return counter;
         }
-        
-        // checks wether the given object has null or empty (for strings) fields
-        public static bool hasNulls(object obj)
+
+        /** <summary>
+         * Checks wether the given object has null or empty (for strings) fields
+         * </summary> */
+        public static bool HasNulls(object obj)
         {
             foreach (PropertyInfo pi in obj.GetType().GetProperties())
             {

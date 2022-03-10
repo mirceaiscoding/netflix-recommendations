@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class TitleDetails
+    public class Title
     {
         public string alt_id { get; set; }
 
@@ -53,14 +53,16 @@ namespace Movie4U.Entities
 
         public string year { get; set; }
 
-        virtual public List<TitleCountries> titleCountries { get; set; }
-        virtual public List<TitleGenres> titleGenres { get; set; }
-        virtual public List<TitleImages> titleImages { get; set; }
+        virtual public List<TitleCountry> titleCountries { get; set; }
+        virtual public List<TitleGenre> titleGenres { get; set; }
+        virtual public List<TitleImage> titleImages { get; set; }
         public virtual List<WatcherTitle> watcherTitles { get; set; }
 
 
-        // constructors:
-        public TitleDetails(string alt_id, string alt_image, string alt_metascore, string alt_plot, string alt_runtime, string alt_votes, string awards, string default_image, string large_image, string latest_date, string maturity_label, string maturity_level, string netflix_id, string origin_country, string poster, string rating, string runtime, string start_date, string synopsis, string title, string title_type, string year)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Title(string alt_id, string alt_image, string alt_metascore, string alt_plot, string alt_runtime, string alt_votes, string awards, string default_image, string large_image, string latest_date, string maturity_label, string maturity_level, string netflix_id, string origin_country, string poster, string rating, string runtime, string start_date, string synopsis, string title, string title_type, string year)
         {
             this.alt_id = alt_id;
             this.alt_image = alt_image;
@@ -86,7 +88,10 @@ namespace Movie4U.Entities
             this.year = year;
         }
 
-        public TitleDetails() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public Title() { }
 
     }
 }

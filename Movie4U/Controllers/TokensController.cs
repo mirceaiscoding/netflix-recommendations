@@ -19,6 +19,9 @@ namespace Movie4U.Controllers
         private readonly ITokensManager manager;
         private readonly IWatchersManager watchersManager;
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public TokensController(ITokensManager manager, IWatchersManager watchersManager)
         {
             this.manager = manager;
@@ -28,7 +31,7 @@ namespace Movie4U.Controllers
         [HttpPost("Refresh")]
         public async Task<IActionResult> RefreshAsync(TokensModel tokensModel)
         {
-            if (tokensModel == null || NullCheckerUtility.hasNulls(tokensModel))
+            if (tokensModel == null || NullCheckerUtility.HasNulls(tokensModel))
             {
                 return BadRequest("Invalid client request");
             }
@@ -39,12 +42,12 @@ namespace Movie4U.Controllers
             var principal = manager.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;      // mapped to the Name claim by default
 
-            WatcherModel watcher = await watchersManager.GetWatcherAsync(userName);
+            WatcherModel watcher = await watchersManager.GetOneByNameAsync(userName);
             if (watcher == null || watcher.refreshToken != refreshToken || watcher.refreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Invalid client request");
 
             // generate new tokens and update watcher in the database
-            tokensModel.copy(
+            tokensModel.Copy(
                 watchersManager
                 .UpdateRefreshToken(watcher)
                 .Result);
@@ -58,7 +61,7 @@ namespace Movie4U.Controllers
         {
             var watcherName = manager.ExtractUserName(Authorization);
 
-            var dbWatcher = await watchersManager.GetWatcherAsync(watcherName);
+            var dbWatcher = await watchersManager.GetOneByNameAsync(watcherName);
             if (dbWatcher == null)
                 return BadRequest("The watcher couldn not be found");
 

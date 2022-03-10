@@ -65,7 +65,7 @@ namespace Movie4U.Managers
 
                     await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
 
-                    WatcherModel watcher = await watchersManager.GetWatcherAsync(user.UserName);
+                    WatcherModel watcher = await watchersManager.GetOneByNameAsync(user.UserName);
 
                     return new TokensModel
                     {

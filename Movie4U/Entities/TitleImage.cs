@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class TitleImages
+    public class TitleImage
     {
         public string image_type { get; set; }
 
@@ -16,18 +16,23 @@ namespace Movie4U.Entities
         [Required, Key]
         public string url { get; set; }        // "filmid as netflixid,url,itype"
 
-        virtual public TitleDetails title { get; set; }
+        virtual public Title title { get; set; }
 
 
-        // contructors:
-        public TitleImages(string image_type, string netflix_id, string url)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleImage(string image_type, string netflix_id, string url)
         {
             this.image_type = image_type;
             this.netflix_id = netflix_id;
             this.url = url;
         }
 
-        public TitleImages() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleImage() { }
 
     }
 }

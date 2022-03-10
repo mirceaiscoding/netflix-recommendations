@@ -24,7 +24,9 @@ namespace Movie4U.Entities
         public virtual List<WatcherTitle> watcherTitles {get; set;}
 
 
-        // contructors:
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public Watcher(string watcher_name, DateTime register_date, string refreshToken, DateTime refreshTokenExpiryTime, string userId)
         {
             this.watcher_name = watcher_name;
@@ -34,6 +36,9 @@ namespace Movie4U.Entities
             this.userId = userId;
         }
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public Watcher() { }
 
     }

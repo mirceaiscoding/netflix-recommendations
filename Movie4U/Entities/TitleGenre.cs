@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Entities
 {
-    public class TitleGenres
+    public class TitleGenre
     {
         public string genre { get; set; }
 
@@ -16,19 +16,24 @@ namespace Movie4U.Entities
         [Required]
         public string netflix_id { get; set; }
 
-        virtual public Genres Genre { get; set; }
-        virtual public TitleDetails title { get; set; }
+        virtual public Genre Genre { get; set; }
+        virtual public Title title { get; set; }
 
 
-        // contructors:
-        public TitleGenres(string genre, int genre_id, string netflix_id)
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleGenre(string genre, int genre_id, string netflix_id)
         {
             this.genre = genre;
             this.genre_id = genre_id;
             this.netflix_id = netflix_id;
         }
 
-        public TitleGenres() { }
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public TitleGenre() { }
 
     }
 }

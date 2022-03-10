@@ -18,7 +18,7 @@ namespace Movie4U.Models
 
         public string userId { get; set; }
 
-        public void copy(Watcher source)
+        public void Copy(Watcher source)
         {
             this.watcher_name = source.watcher_name;
             this.register_date = source.register_date;

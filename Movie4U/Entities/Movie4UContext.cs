@@ -13,11 +13,20 @@ namespace Movie4U.Entities
         <User, Role, string, IdentityUserClaim<string>,
         UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
-        // the constructor
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public Movie4UContext(DbContextOptions<Movie4UContext> options) : base(options) { }
 
         // entities
         public DbSet<Watcher> Watchers { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Title> Titles { get; set; }
+        public DbSet<TitleCountry> TitleCountries { get; set; }
+        public DbSet<TitleGenre> TitleGenres { get; set; }
+        public DbSet<TitleImage> TitleImages { get; set; }
+        public DbSet<WatcherTitle> WatcherTitles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,18 +37,18 @@ namespace Movie4U.Entities
 
             // entities:
             modelBuilder.Entity<Watcher>().ToTable("Watchers");
-            modelBuilder.Entity<Countries>().ToTable("Countries");
-            modelBuilder.Entity<Genres>().ToTable("Genres");
-            modelBuilder.Entity<TitleDetails>().ToTable("Title_Details");
-            modelBuilder.Entity<TitleCountries>().ToTable("Title_Countries");
-            modelBuilder.Entity<TitleGenres>().ToTable("Title_Genres");
-            modelBuilder.Entity<TitleImages>().ToTable("Title_Images");
+            modelBuilder.Entity<Country>().ToTable("Countries");
+            modelBuilder.Entity<Genre>().ToTable("Genres");
+            modelBuilder.Entity<Title>().ToTable("Title_Details");
+            modelBuilder.Entity<TitleCountry>().ToTable("Title_Countries");
+            modelBuilder.Entity<TitleGenre>().ToTable("Title_Genres");
+            modelBuilder.Entity<TitleImage>().ToTable("Title_Images");
             modelBuilder.Entity<WatcherTitle>().ToTable("Watcher_Titles");
 
 
             // composite keys for relational entities:
-            modelBuilder.Entity<TitleCountries>().HasKey(tc => new { tc.netflix_id, tc.country_code });
-            modelBuilder.Entity<TitleGenres>().HasKey(tg => new { tg.netflix_id, tg.genre_id });
+            modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.netflix_id, tc.country_code });
+            modelBuilder.Entity<TitleGenre>().HasKey(tg => new { tg.netflix_id, tg.genre_id });
             modelBuilder.Entity<WatcherTitle>().HasKey(wt => new { wt.watcher_name, wt.netflix_id });
 
 
@@ -59,27 +68,27 @@ namespace Movie4U.Entities
                 .WithMany(title => title.watcherTitles)
                 .HasForeignKey(wt => wt.netflix_id);
 
-            modelBuilder.Entity<TitleCountries>()
+            modelBuilder.Entity<TitleCountry>()
                 .HasOne(tc => tc.Country)
                 .WithMany(country => country.titleCountries)
                 .HasForeignKey(tc => tc.country_code);
 
-            modelBuilder.Entity<TitleCountries>()
+            modelBuilder.Entity<TitleCountry>()
                 .HasOne(tc => tc.title)
                 .WithMany(title => title.titleCountries)
                 .HasForeignKey(tc => tc.netflix_id);
 
-            modelBuilder.Entity<TitleGenres>()
+            modelBuilder.Entity<TitleGenre>()
                 .HasOne(tg => tg.Genre)
                 .WithMany(Genre => Genre.titleGenres)
                 .HasForeignKey(tg => tg.genre_id);
 
-            modelBuilder.Entity<TitleGenres>()
+            modelBuilder.Entity<TitleGenre>()
                 .HasOne(tg => tg.title)
                 .WithMany(title => title.titleGenres)
                 .HasForeignKey(tg => tg.netflix_id);
 
-            modelBuilder.Entity<TitleImages>()
+            modelBuilder.Entity<TitleImage>()
                 .HasOne(ti => ti.title)
                 .WithMany(title => title.titleImages)
                 .HasForeignKey(ti => ti.netflix_id);

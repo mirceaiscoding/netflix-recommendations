@@ -9,8 +9,8 @@ namespace Movie4U.Managers
     {
         Task<List<WatcherModel>> GetAllAsync();
 
-        Task<WatcherModel> GetWatcherAsync(string name);
-
+        Task<WatcherModel> GetOneByNameAsync(string name);
+        
         Task Create(string watcherName, string UserId);
 
         Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime);

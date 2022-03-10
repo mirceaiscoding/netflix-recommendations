@@ -22,13 +22,11 @@ namespace Movie4U.Models
 
         DateTime watchLaterLastSetTime { get; set; }
 
-        TitleDetails title { get; set; }
+        //TitleDetailsModel title { get; set; }
 
-        //List<Genres> genres;
-        //List<Countries> countries;
-        //List<TitleImages> titleImages;
-
-        // contructors:
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatcherTitleModel() { }
 
         public void Copy(WatcherTitle source)
@@ -39,7 +37,6 @@ namespace Movie4U.Models
             this.prefLastSetTime = prefLastSetTime;
             this.watchLater = watchLater;
             this.watchLaterLastSetTime = watchLaterLastSetTime;
-            this.title = source.title;
         }
 
     }

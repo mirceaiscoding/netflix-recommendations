@@ -31,10 +31,12 @@ namespace Movie4U.Entities
         DateTime watchLaterLastSetTime { get; set; }
 
         virtual public Watcher watcher { get; set; }
-        virtual public TitleDetails title { get; set; }
+        virtual public Title title { get; set; }
 
 
-        // contructors:
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatcherTitle(string watcher_name, string netflix_id, Prefferences prefference, DateTime prefLastSetTime, bool watchLater, DateTime watchLaterLastSetTime)
         {
             this.watcher_name = watcher_name;
@@ -45,6 +47,9 @@ namespace Movie4U.Entities
             this.watchLaterLastSetTime = watchLaterLastSetTime;
         }
 
+        /**<summary>
+         * Constructor.
+         * </summary>*/
         public WatcherTitle() { }
 
     }
