@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Movie4U.Managers;
+using Movie4U.Managers.IManagers;
 using Movie4U.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers
@@ -25,7 +22,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllWatchers")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllWatchersAsync()
         {
             var watchers = await manager.GetAllAsync();
 
@@ -39,7 +36,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByName([FromRoute] string name)
         {
-            WatcherModel watcher = await manager.GetOneByNameAsync(name);
+            WatcherModel watcher = await manager.GetOneByIdAsync(name);
 
             if (watcher == null)
                 return NotFound("There is no watcher with the given name stored in the database");

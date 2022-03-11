@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Movie4U.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,6 +30,12 @@ namespace Movie4U.Entities
          * Constructor.
          * </summary>*/
         public Genre() { }
+
+        public void Copy(GenreModel source)
+        {
+            this.genre = source.genre;
+            this.genre_id = source.genre_id;
+        }
 
     }
 }

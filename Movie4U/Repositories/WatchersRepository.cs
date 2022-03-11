@@ -1,20 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Movie4U.Entities;
 using Movie4U.Models;
-using System;
+using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
     public class WatchersRepository: GenericRepository<Watcher>, IWatchersRepository
     {
-        /**<summary>
-         * The context.
-         * </summary>*/
-        private readonly Movie4UContext db;
-
         /**<summary>
          * Constructor.
          * </summary>*/
@@ -39,7 +33,7 @@ namespace Movie4U.Repositories
             return watcherModels;
         }
 
-        public async Task<WatcherModel> GetOneByNameAsync(string name)
+        public async Task<WatcherModel> GetOneByIdAsync(string name)
         {
             var watcher = await GetOneDbByIdAsync(name);
 

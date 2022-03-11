@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Movie4U.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -44,6 +45,17 @@ namespace Movie4U.Entities
          * Constructor.
          * </summary>*/
         public Country() { }
+
+        public void Copy(CountryModel source)
+        {
+            this.country = source.country;
+            this.country_code = source.country_code;
+            this.expiring = source.expiring;
+            this.nl7 = source.nl7;
+            this.tmovs = source.tmovs;
+            this.tseries = source.tseries;
+            this.tvids = source.tvids;
+        }
 
     }
 }

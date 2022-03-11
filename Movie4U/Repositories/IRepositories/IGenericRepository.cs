@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Movie4U.Repositories
+namespace Movie4U.Repositories.IRepositories
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
@@ -12,7 +12,7 @@ namespace Movie4U.Repositories
         IEnumerable<TEntity> GetAllDb();
         Task<List<TEntity>> GetAllDbAsync();
 
-        TEntity GetByID(object id);
+        TEntity GetOneDbById(object id);
         Task<TEntity> GetOneDbByIdAsync(object id);
 
         void Insert(TEntity entity);

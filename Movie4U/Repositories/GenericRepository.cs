@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Movie4U.Entities;
+using Movie4U.Repositories.IRepositories;
 
 namespace Movie4U.Repositories
 {
@@ -38,7 +39,7 @@ namespace Movie4U.Repositories
             return await entities.AsNoTracking().ToListAsync();
         }
 
-        public virtual TEntity GetByID(object id)
+        public virtual TEntity GetOneDbById(object id)
         {
             return entities.Find(id);
         }

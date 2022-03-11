@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Movie4U.Managers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Movie4U.Managers.IManagers;
 using Movie4U.Models;
 using Movie4U.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers

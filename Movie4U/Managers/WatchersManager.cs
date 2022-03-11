@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Movie4U.Entities;
+using Movie4U.Managers.IManagers;
 using Movie4U.Models;
-using Movie4U.Repositories;
+using Movie4U.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -31,9 +30,9 @@ namespace Movie4U.Managers
             return await repo.GetAllAsync();
         }
 
-        public async Task<WatcherModel> GetOneByNameAsync(string name)
+        public async Task<WatcherModel> GetOneByIdAsync(string name)
         {
-            return await repo.GetOneByNameAsync(name);
+            return await repo.GetOneByIdAsync(name);
         }
 
         public async Task Create(string watcherName, string UserId)
@@ -88,10 +87,10 @@ namespace Movie4U.Managers
 
         public async Task Delete(string name)
         {
-            Watcher watcher = await repo.GetOneDbByIdAsync(name);
+            Watcher delWatcher = await repo.GetOneDbByIdAsync(name);
 
-            if (watcher != null)
-                await repo.DeleteAsync(watcher);
+            if (delWatcher != null)
+                await repo.DeleteAsync(delWatcher);
         }
 
     }

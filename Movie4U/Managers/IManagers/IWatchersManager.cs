@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Movie4U.Managers
+namespace Movie4U.Managers.IManagers
 {
     public interface IWatchersManager
     {
         Task<List<WatcherModel>> GetAllAsync();
 
-        Task<WatcherModel> GetOneByNameAsync(string name);
+        Task<WatcherModel> GetOneByIdAsync(string name);
         
         Task Create(string watcherName, string UserId);
 

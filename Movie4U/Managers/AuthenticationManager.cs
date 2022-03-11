@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Movie4U.Entities;
+using Movie4U.Managers.IManagers;
 using Movie4U.Models;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace Movie4U.Managers
 
                     await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
 
-                    WatcherModel watcher = await watchersManager.GetOneByNameAsync(user.UserName);
+                    WatcherModel watcher = await watchersManager.GetOneByIdAsync(user.UserName);
 
                     return new TokensModel
                     {

@@ -12,7 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Movie4U.Entities;
 using Movie4U.Managers;
+using Movie4U.Managers.IManagers;
 using Movie4U.Repositories;
+using Movie4U.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -156,6 +158,12 @@ namespace Movie4U
 
             services.AddScoped<IWatchersRepository, WatchersRepository>();
             services.AddScoped<IWatchersManager, WatchersManager>();
+
+            services.AddScoped<IGenresRepository, GenresRepository>();
+            services.AddScoped<IGenresManager, GenresManager>();
+
+            services.AddScoped<ICountriesRepository, CountriesRepository>();
+            services.AddScoped<ICountriesManager, CountriesManager>();
         }
 
         /**<summary>

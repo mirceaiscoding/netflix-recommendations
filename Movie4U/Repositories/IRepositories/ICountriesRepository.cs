@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories.IRepositories
 {
-    public interface IWatchersRepository : IGenericRepository<Watcher>
+    public interface ICountriesRepository : IGenericRepository<Country>
     {
-        Task<List<WatcherModel>> GetAllAsync();
+        Task<List<CountryModel>> GetAllAsync();
 
-        Task<WatcherModel> GetOneByIdAsync (string name);
+        Task<CountryModel> GetOneByIdAsync(string country_code);
     }
 }

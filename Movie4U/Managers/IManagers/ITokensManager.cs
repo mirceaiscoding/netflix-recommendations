@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Movie4U.Managers
+namespace Movie4U.Managers.IManagers
 {
     public interface ITokensManager
     {

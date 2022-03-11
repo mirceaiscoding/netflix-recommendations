@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Movie4U.Entities;
-using Movie4U.Managers;
+using Movie4U.Managers.IManagers;
 using Movie4U.Models;
 using Movie4U.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers
@@ -42,7 +38,7 @@ namespace Movie4U.Controllers
             var principal = manager.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;      // mapped to the Name claim by default
 
-            WatcherModel watcher = await watchersManager.GetOneByNameAsync(userName);
+            WatcherModel watcher = await watchersManager.GetOneByIdAsync(userName);
             if (watcher == null || watcher.refreshToken != refreshToken || watcher.refreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Invalid client request");
 
@@ -61,7 +57,7 @@ namespace Movie4U.Controllers
         {
             var watcherName = manager.ExtractUserName(Authorization);
 
-            var dbWatcher = await watchersManager.GetOneByNameAsync(watcherName);
+            var dbWatcher = await watchersManager.GetOneByIdAsync(watcherName);
             if (dbWatcher == null)
                 return BadRequest("The watcher couldn not be found");
 
