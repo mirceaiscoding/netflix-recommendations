@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers
@@ -32,9 +29,9 @@ namespace Movie4U.Controllers
             return Ok(countries);
         }
 
-        [HttpGet("GetCountryById/{country_code}")]
+        [HttpGet("GetCountryByCode/{country_code}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetCountryByName([FromRoute] string country_code)
+        public async Task<IActionResult> GetCountryByCode([FromRoute] string country_code)
         {
             CountryModel country = await manager.GetOneByIdAsync(country_code);
 

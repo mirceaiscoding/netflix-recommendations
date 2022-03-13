@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers

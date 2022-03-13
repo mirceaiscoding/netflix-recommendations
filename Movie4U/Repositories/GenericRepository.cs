@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Movie4U.Entities;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.Repositories.IRepositories;
 
 namespace Movie4U.Repositories

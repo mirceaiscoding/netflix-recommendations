@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Movie4U.ExtensionMethods;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Movie4U.Entities
+namespace Movie4U.EntitiesModels.Entities
 {
     public class Movie4UContext : IdentityDbContext
         <User, Role, string, IdentityUserClaim<string>,
@@ -27,6 +24,7 @@ namespace Movie4U.Entities
         public DbSet<TitleGenre> TitleGenres { get; set; }
         public DbSet<TitleImage> TitleImages { get; set; }
         public DbSet<WatcherTitle> WatcherTitles { get; set; }
+        public DbSet<WatcherGenre> WatcherGenres { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,13 +42,13 @@ namespace Movie4U.Entities
             modelBuilder.Entity<TitleGenre>().ToTable("Title_Genres");
             modelBuilder.Entity<TitleImage>().ToTable("Title_Images");
             modelBuilder.Entity<WatcherTitle>().ToTable("Watcher_Titles");
-
+            modelBuilder.Entity<WatcherGenre>().ToTable("Watcher_Genres");
 
             // composite keys for relational entities:
             modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.netflix_id, tc.country_code });
             modelBuilder.Entity<TitleGenre>().HasKey(tg => new { tg.netflix_id, tg.genre_id });
             modelBuilder.Entity<WatcherTitle>().HasKey(wt => new { wt.watcher_name, wt.netflix_id });
-
+            modelBuilder.Entity<WatcherGenre>().HasKey(wg => new { wg.watcher_name, wg.genre_id });
 
             // relationships:
             modelBuilder.Entity<Watcher>()
@@ -67,6 +65,16 @@ namespace Movie4U.Entities
                 .HasOne(wt => wt.title)
                 .WithMany(title => title.watcherTitles)
                 .HasForeignKey(wt => wt.netflix_id);
+
+            modelBuilder.Entity<WatcherGenre>()
+                .HasOne(wg => wg.watcher)
+                .WithMany(watcher => watcher.watcherGenres)
+                .HasForeignKey(wg => wg.watcher_name);
+
+            modelBuilder.Entity<WatcherGenre>()
+                .HasOne(wg => wg.genre)
+                .WithMany(genre => genre.watcherGenres)
+                .HasForeignKey(wg => wg.genre_id);
 
             modelBuilder.Entity<TitleCountry>()
                 .HasOne(tc => tc.Country)

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Movie4U.Entities;
-using Movie4U.Models;
+using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,25 +15,14 @@ namespace Movie4U.Repositories
         /**<summary>
          * Constructor.
          * </summary>*/
-        public GenresRepository(Movie4UContext db) : base(db)
-        {
-            this.db = db;
-        }
+        public GenresRepository(Movie4UContext db) : base(db) { }
+
 
         public async Task<List<GenreModel>> GetAllAsync()
         {
             var genres = await db.Genres.ToListAsync();
 
-            var genreModels = new List<GenreModel>();
-            foreach (var genre in genres)
-            {
-                var genreModel = new GenreModel();
-                genreModel.Copy(genre);
-
-                genreModels.Add(genreModel);
-            }
-
-            return genreModels;
+            return CastUtility.ToModels<Genre, GenreModel>(genres);
         }
 
         public async Task<GenreModel> GetOneByIdAsync(int genre_id)
@@ -40,12 +30,7 @@ namespace Movie4U.Repositories
             var genre = await GetOneDbByIdAsync(genre_id);
 
             if (genre != null)
-            {
-                var genreModel = new GenreModel();
-                genreModel.Copy(genre);
-
-                return genreModel;
-            }
+                return new GenreModel(genre);
 
             return null;
         }

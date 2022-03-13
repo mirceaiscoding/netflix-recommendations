@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Movie4U.Entities;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories;
@@ -164,6 +164,9 @@ namespace Movie4U
 
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<ICountriesManager, CountriesManager>();
+
+            services.AddScoped<ITitleImagesRepository, TitleImagesRepository>();
+            services.AddScoped<ITitleImagesManager, TitleImagesManager>();
         }
 
         /**<summary>

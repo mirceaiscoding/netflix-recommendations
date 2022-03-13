@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
 using Movie4U.Utilities;
 using System.Threading.Tasks;
 
@@ -19,6 +19,7 @@ namespace Movie4U.Controllers
         {
             this.manager = manager;
         }
+
 
         [HttpPost("SignupUser")]
         public async Task<IActionResult> SignupUser([FromBody] RegisterModel registerModel)

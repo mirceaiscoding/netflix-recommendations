@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
-using Movie4U.Entities;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,6 +11,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Movie4U.Managers.IManagers;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Entities;
 
 namespace Movie4U.Managers
 {

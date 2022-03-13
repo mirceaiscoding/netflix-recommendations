@@ -1,6 +1,6 @@
-﻿using Movie4U.Entities;
+﻿using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
 using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,8 +32,7 @@ namespace Movie4U.Managers
 
         public async Task Create(GenreModel genreModel)
         {
-            Genre newGenre = new Genre();
-            newGenre.Copy(genreModel);
+            Genre newGenre = new Genre(genreModel);
 
             await repo.InsertAsync(newGenre);
         }
@@ -41,8 +40,8 @@ namespace Movie4U.Managers
         public async Task Update(GenreModel genreModel)
         {
             Genre updateGenre = await repo.GetOneDbByIdAsync(genreModel.genre_id);
-
             updateGenre.Copy(genreModel);
+
             await repo.UpdateAsync(updateGenre);
         }
 
@@ -53,5 +52,6 @@ namespace Movie4U.Managers
             if (delGenre != null)
                 await repo.DeleteAsync(delGenre);
         }
+
     }
 }

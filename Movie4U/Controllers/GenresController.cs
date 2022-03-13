@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers
@@ -31,7 +31,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetGenreById/{genre_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetGenreByName([FromRoute] int genre_id)
+        public async Task<IActionResult> GetGenreById([FromRoute] int genre_id)
         {
             GenreModel genre = await manager.GetOneByIdAsync(genre_id);
 

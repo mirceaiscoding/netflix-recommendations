@@ -1,10 +1,8 @@
-﻿using Movie4U.Entities;
+﻿using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using Movie4U.Models;
 using Movie4U.Repositories.IRepositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -34,8 +32,7 @@ namespace Movie4U.Managers
 
         public async Task Create(CountryModel countryModel)
         {
-            Country newCountry = new Country();
-            newCountry.Copy(countryModel);
+            Country newCountry = new Country(countryModel);
 
             await repo.InsertAsync(newCountry);
         }
@@ -43,8 +40,8 @@ namespace Movie4U.Managers
         public async Task Update(CountryModel countryModel)
         {
             Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.country_code);
-
             updateCountry.Copy(countryModel);
+
             await repo.UpdateAsync(updateCountry);
         }
 

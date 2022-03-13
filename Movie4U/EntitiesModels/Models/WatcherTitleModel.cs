@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Movie4U.Entities;
+using Movie4U.EntitiesModels.Entities;
 
-namespace Movie4U.Models
+namespace Movie4U.EntitiesModels.Models
 {
     public class WatcherTitleModel
     {
 
-        [Required]
         public string watcher_name { get; set; }
 
-        [Required]
         public string netflix_id { get; set; }
 
         public WatcherTitle.Prefferences prefference { get; set; }
@@ -24,6 +21,7 @@ namespace Movie4U.Models
 
         //TitleDetailsModel title { get; set; }
 
+
         /**<summary>
          * Constructor.
          * </summary>*/
@@ -31,12 +29,12 @@ namespace Movie4U.Models
 
         public void Copy(WatcherTitle source)
         {
-            this.watcher_name = source.watcher_name;
-            this.netflix_id = netflix_id;
-            this.prefference = prefference;
-            this.prefLastSetTime = prefLastSetTime;
-            this.watchLater = watchLater;
-            this.watchLaterLastSetTime = watchLaterLastSetTime;
+            watcher_name = source.watcher_name;
+            netflix_id = netflix_id;
+            prefference = prefference;
+            prefLastSetTime = prefLastSetTime;
+            watchLater = watchLater;
+            watchLaterLastSetTime = watchLaterLastSetTime;
         }
 
     }
