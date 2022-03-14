@@ -31,7 +31,7 @@ namespace Movie4U.EntitiesModels.Models
          * </summary>*/
         public WatcherGenreModel(WatcherGenreModel source)
         {
-            Copy(source);
+            ShallowCopy(source);
         }
 
         /**<summary>
@@ -53,5 +53,10 @@ namespace Movie4U.EntitiesModels.Models
             watcherGenreScore = source.watcherGenreScore;
         }
 
+        override public void ShallowCopy(WatcherGenreModel source)
+        {
+            Copy(source);
+            genreModel = source.genreModel;
+        }
     }
 }

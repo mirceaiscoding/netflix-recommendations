@@ -129,5 +129,13 @@ namespace Movie4U.EntitiesModels.Models
             this.year = source.year;
         }
 
+        override public void ShallowCopy(TitleModel source)
+        {
+            Copy(source);
+            countryModels = source.countryModels;
+            genreModels = source.genreModels;
+            titleImageModels = source.titleImageModels;
+        }
+
     }
 }

@@ -34,7 +34,7 @@ namespace Movie4U.EntitiesModels.Models
          * </summary>*/
         public WatcherTitleModel(WatcherTitleModel source)
         {
-            Copy(source);
+            ShallowCopy(source);
         }
 
         /**<summary>
@@ -62,5 +62,10 @@ namespace Movie4U.EntitiesModels.Models
             watchLaterLastSetTime = source.watchLaterLastSetTime;
         }
 
+        override public void ShallowCopy(WatcherTitleModel source)
+        {
+            Copy(source);
+            titleModel = source.titleModel;
+        }
     }
 }

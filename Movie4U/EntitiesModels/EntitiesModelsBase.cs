@@ -24,7 +24,7 @@ namespace Movie4U.EntitiesModels
         * It should include reference values too.
         * However, it calls its Copy couterpart by default, as overriding it is not mandatory (objects might not have reference types).
         * </summary> */
-        public void ShallowCopy(ModelType source) 
+        virtual public void ShallowCopy(ModelType source) 
         {
             Copy(source);
         }
