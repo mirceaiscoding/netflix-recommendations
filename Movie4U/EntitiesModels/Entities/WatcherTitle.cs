@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Movie4U.EntitiesModels.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class WatcherTitle
+    public class WatcherTitle: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
     {
         public enum Prefferences
         {
@@ -23,9 +24,9 @@ namespace Movie4U.EntitiesModels.Entities
 
         public DateTime prefLastSetTime { get; set; }
 
-        bool watchLater { get; set; }
+        public bool watchLater { get; set; }
 
-        DateTime watchLaterLastSetTime { get; set; }
+        public DateTime watchLaterLastSetTime { get; set; }
 
         virtual public Watcher watcher { get; set; }
         virtual public Title title { get; set; }
@@ -34,20 +35,61 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitle(string watcher_name, string netflix_id, Prefferences prefference, DateTime prefLastSetTime, bool watchLater, DateTime watchLaterLastSetTime)
+        public WatcherTitle(WatcherTitle source)
         {
-            this.watcher_name = watcher_name;
-            this.netflix_id = netflix_id;
-            this.prefference = prefference;
-            this.prefLastSetTime = prefLastSetTime;
-            this.watchLater = watchLater;
-            this.watchLaterLastSetTime = watchLaterLastSetTime;
+            Copy(source);
+        }
+
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public WatcherTitle(WatcherTitleModel source)
+        {
+            Copy(source);
+        }
+
+        /**<summary>
+         * Constructor.
+         * </summary>*/
+        public WatcherTitle(WatcherTitleModelParameter source)
+        {
+            Copy(source);
         }
 
         /**<summary>
          * Constructor.
          * </summary>*/
         public WatcherTitle() { }
+
+        override public void Copy(WatcherTitle source)
+        {
+            watcher_name = source.watcher_name;
+            netflix_id = source.netflix_id;
+            prefference = source.prefference;
+            prefLastSetTime = source.prefLastSetTime;
+            watchLater = source.watchLater;
+            watchLaterLastSetTime = source.watchLaterLastSetTime;
+        }
+
+        override public void Copy(WatcherTitleModel source)
+        {
+            watcher_name = source.watcher_name;
+            netflix_id = source.netflix_id;
+            prefference = source.prefference;
+            prefLastSetTime = source.prefLastSetTime;
+            watchLater = source.watchLater;
+            watchLaterLastSetTime = source.watchLaterLastSetTime;
+        }
+        
+        public void Copy(WatcherTitleModelParameter source)
+        {
+            watcher_name = source.watcher_name;
+            netflix_id = source.netflix_id;
+            prefference = source.prefference;
+            prefLastSetTime = source.prefLastSetTime;
+            watchLater = source.watchLater;
+            watchLaterLastSetTime = source.watchLaterLastSetTime;
+        }
 
     }
 }

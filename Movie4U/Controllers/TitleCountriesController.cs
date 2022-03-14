@@ -29,7 +29,7 @@ namespace Movie4U.Controllers
             return Ok(titleCountries);
         }
 
-        [HttpGet("GetTitleCountryById/{genre_id}/{netflix_id}")]
+        [HttpGet("GetTitleCountryById/{country_code}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetTitleCountryByIdAsync([FromRoute] string country_code, string netflix_id)
         {

@@ -1,27 +1,27 @@
-﻿
-using Movie4U.EntitiesModels.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Movie4U.EntitiesModels.Entities
+namespace Movie4U.EntitiesModels.Models
 {
-    public class WatcherGenre: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>
+    public class WatcherGenreModel: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>
     {
-        [Required]
         public string watcher_name { get; set; }
 
-        [Required]
         public int genre_id { get; set; }
 
         public double watcherGenreScore { get; set; }
 
-        virtual public Watcher watcher { get; set; }
-        virtual public Genre genre { get; set; }
+        public GenreModel genreModel { get; set; }
+
 
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre(WatcherGenre source)
+        public WatcherGenreModel(WatcherGenre source)
         {
             Copy(source);
         }
@@ -29,12 +29,7 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre(WatcherGenreModel source)
-        {
-            Copy(source);
-        }
-
-        public WatcherGenre(WatcherGenreModelParameter source)
+        public WatcherGenreModel(WatcherGenreModel source)
         {
             Copy(source);
         }
@@ -42,7 +37,7 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre() { }
+        public WatcherGenreModel() { }
 
         override public void Copy(WatcherGenre source)
         {
@@ -52,13 +47,6 @@ namespace Movie4U.EntitiesModels.Entities
         }
 
         override public void Copy(WatcherGenreModel source)
-        {
-            watcher_name = source.watcher_name;
-            genre_id = source.genre_id;
-            watcherGenreScore = source.watcherGenreScore;
-        }
-
-        public void Copy(WatcherGenreModelParameter source)
         {
             watcher_name = source.watcher_name;
             genre_id = source.genre_id;

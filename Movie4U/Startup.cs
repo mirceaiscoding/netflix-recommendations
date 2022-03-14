@@ -176,6 +176,12 @@ namespace Movie4U
 
             services.AddScoped<ITitlesRepository, TitlesRepository>();
             services.AddScoped<ITitlesManager, TitlesManager>();
+
+            services.AddScoped<IWatcherTitlesRepository, WatcherTitlesRepository>();
+            services.AddScoped<IWatcherTitlesManager, WatcherTitlesManager>();
+
+            services.AddScoped<IWatcherGenresRepository, WatcherGenresRepository>();
+            services.AddScoped<IWatcherGenresManager, WatcherGenresManager>();
         }
 
         /**<summary>
