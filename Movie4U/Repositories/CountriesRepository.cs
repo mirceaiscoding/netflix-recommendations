@@ -22,7 +22,7 @@ namespace Movie4U.Repositories
         {
             var countries = await db.Countries.ToListAsync();
 
-            return CastUtility.ToModels<Country, CountryModel>(countries);
+            return CastUtility.ToModelsList<Country, CountryModel>(countries);
         }
 
         public async Task<CountryModel> GetOneByIdAsync(string country_code)

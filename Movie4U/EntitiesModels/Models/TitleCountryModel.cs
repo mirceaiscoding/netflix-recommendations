@@ -1,24 +1,22 @@
-﻿using Movie4U.EntitiesModels.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Movie4U.EntitiesModels.Entities
+namespace Movie4U.EntitiesModels.Models
 {
-    public class TitleCountry: EntitiesModelsBase<TitleCountry, TitleCountryModel>
+    public class TitleCountryModel: EntitiesModelsBase<TitleCountry, TitleCountryModel>
     {
-        [Required]
-        public string country_code { get; set; }
+        public string country_code { get; set; }  // while getting from uNoGs, it's name might not contain '_' for this class 
 
-        [Required]
         public string netflix_id { get; set; }
 
-        virtual public Country Country { get; set; }
-        virtual public Title title { get; set; }
-
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleCountry(TitleCountry source)
+        public TitleCountryModel(TitleCountry source)
         {
             Copy(source);
         }
@@ -26,7 +24,7 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleCountry(TitleCountryModel source)
+        public TitleCountryModel(TitleCountryModel source)
         {
             Copy(source);
         }
@@ -34,7 +32,7 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleCountry() { }
+        public TitleCountryModel() { }
 
         override public void Copy(TitleCountry source)
         {

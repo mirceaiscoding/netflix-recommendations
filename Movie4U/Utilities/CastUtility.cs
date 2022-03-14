@@ -5,7 +5,7 @@ namespace Movie4U.Utilities
 {
     public static class CastUtility
     {
-        public static List<ModelType> ToModels<EntityType, ModelType> (List<EntityType> entities) 
+        public static List<ModelType> ToModelsList<EntityType, ModelType> (List<EntityType> entities) 
             where EntityType: EntitiesModelsBase<EntityType, ModelType>
             where ModelType: EntitiesModelsBase<EntityType, ModelType>, new()
         { 

@@ -38,7 +38,7 @@ namespace Movie4U.Controllers
             var principal = manager.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name;      // mapped to the Name claim by default
 
-            WatcherModel watcher = await watchersManager.GetOneByIdAsync(userName);
+            var watcher = await watchersManager.GetOneByIdAsync(userName);
             if (watcher == null || watcher.refreshToken != refreshToken || watcher.refreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Invalid client request");
 

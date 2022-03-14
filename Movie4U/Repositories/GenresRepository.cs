@@ -22,7 +22,7 @@ namespace Movie4U.Repositories
         {
             var genres = await db.Genres.ToListAsync();
 
-            return CastUtility.ToModels<Genre, GenreModel>(genres);
+            return CastUtility.ToModelsList<Genre, GenreModel>(genres);
         }
 
         public async Task<GenreModel> GetOneByIdAsync(int genre_id)

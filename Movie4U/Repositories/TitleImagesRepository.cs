@@ -24,17 +24,18 @@ namespace Movie4U.Repositories
         {
             var titleImages = await db.TitleImages.ToListAsync();
 
-            return CastUtility.ToModels<TitleImage,TitleImageModel>(titleImages);
+            return CastUtility.ToModelsList<TitleImage,TitleImageModel>(titleImages);
         }
 
-        public List<TitleImageModel> GetAllByNetflixIdAsync(string netflixId)
+        public async Task<List<TitleImageModel>> GetAllByNetflixIdAsync(string netflixId)
         {
+            var allDb = await GetAllDbAsync();
             var titleImages = 
-                GetAllDb()
+                allDb
                 .Where(ti => ti.netflix_id == netflixId)
                 .ToList();
 
-            return CastUtility.ToModels<TitleImage, TitleImageModel>(titleImages);
+            return CastUtility.ToModelsList<TitleImage, TitleImageModel>(titleImages);
         }
 
         public async Task<TitleImageModel> GetOneByIdAsync(string url)

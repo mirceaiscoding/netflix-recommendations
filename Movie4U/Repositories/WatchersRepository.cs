@@ -20,7 +20,7 @@ namespace Movie4U.Repositories
         {
             var watchers = await db.Watchers.ToListAsync();
 
-            return CastUtility.ToModels<Watcher,WatcherModel>(watchers);
+            return CastUtility.ToModelsList<Watcher,WatcherModel>(watchers);
         }
 
         public async Task<WatcherModel> GetOneByIdAsync(string name)

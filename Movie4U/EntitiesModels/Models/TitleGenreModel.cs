@@ -1,24 +1,24 @@
-﻿using Movie4U.EntitiesModels.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Movie4U.EntitiesModels.Entities
+namespace Movie4U.EntitiesModels.Models
 {
-    public class TitleGenre: EntitiesModelsBase<TitleGenre,TitleGenreModel>
+    public class TitleGenreModel: EntitiesModelsBase<TitleGenre, TitleGenreModel>
     {
-        [Required]
+        public string genre { get; set; }
+
         public int genre_id { get; set; }
 
-        [Required]
         public string netflix_id { get; set; }
-
-        virtual public Genre Genre { get; set; }
-        virtual public Title title { get; set; }
 
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleGenre(TitleGenre source)
+        public TitleGenreModel(TitleGenreModel source)
         {
             Copy(source);
         }
@@ -26,7 +26,7 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
         * Constructor.
         * </summary>*/
-        public TitleGenre(TitleGenreModel source)
+        public TitleGenreModel(TitleGenre source)
         {
             Copy(source);
         }
@@ -34,19 +34,20 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleGenre() { }
+        public TitleGenreModel() { }
 
         override public void Copy(TitleGenre source)
         {
+            this.genre = genre;
             this.genre_id = genre_id;
             this.netflix_id = netflix_id;
         }
 
         public override void Copy(TitleGenreModel source)
         {
+            this.genre = genre;
             this.genre_id = genre_id;
             this.netflix_id = netflix_id;
         }
-
     }
 }

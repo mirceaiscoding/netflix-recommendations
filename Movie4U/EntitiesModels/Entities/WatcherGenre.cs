@@ -1,10 +1,16 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace Movie4U.EntitiesModels.Entities
 {
     public class WatcherGenre
     {
+        [Required]
         public string watcher_name { get; set; }
+
+        [Required]
         public int genre_id { get; set; }
+
         public double score { get; set; }
 
         virtual public Watcher watcher { get; set; }

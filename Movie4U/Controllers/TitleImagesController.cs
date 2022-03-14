@@ -31,9 +31,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetTitleImageById/{genre_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetGenreById([FromRoute] string url)
+        public async Task<IActionResult> GetTitleImageByIdAsync([FromRoute] string url)
         {
-            TitleImageModel titleImage = await manager.GetOneByIdAsync(url);
+            var titleImage = await manager.GetOneByIdAsync(url);
 
             if (titleImage == null)
                 return NotFound("There is no title image with the given id stored in the database");
@@ -43,7 +43,7 @@ namespace Movie4U.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateTitleImage([FromBody] TitleImageModel titleImageModel)
+        public async Task<IActionResult> CreateTitleImageAsync([FromBody] TitleImageModel titleImageModel)
         {
             await manager.Create(titleImageModel);
             return Ok();
@@ -51,7 +51,7 @@ namespace Movie4U.Controllers
 
         [HttpPut]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateTitleImage([FromBody] TitleImageModel titleImageModel)
+        public async Task<IActionResult> UpdateTitleImageAsync([FromBody] TitleImageModel titleImageModel)
         {
             await manager.Update(titleImageModel);
             return Ok();
@@ -59,7 +59,7 @@ namespace Movie4U.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteTitleImage([FromBody] string url)
+        public async Task<IActionResult> DeleteTitleImageAsync([FromBody] string url)
         {
             await manager.Delete(url);
             return Ok();

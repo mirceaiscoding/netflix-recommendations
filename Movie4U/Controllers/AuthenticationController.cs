@@ -22,7 +22,7 @@ namespace Movie4U.Controllers
 
 
         [HttpPost("SignupUser")]
-        public async Task<IActionResult> SignupUser([FromBody] RegisterModel registerModel)
+        public async Task<IActionResult> SignupUserAsync([FromBody] RegisterModel registerModel)
         {
             registerModel.role = "BasicUser";
 
@@ -39,7 +39,7 @@ namespace Movie4U.Controllers
 
         [HttpPost("Signup")]
         // TODO: Add this in production: [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> Signup([FromBody] RegisterModel registerModel)
+        public async Task<IActionResult> SignupAsync([FromBody] RegisterModel registerModel)
         {
             if (registerModel == null  || NullCheckerUtility.HasNulls(registerModel))
                 return BadRequest("Invalid client request");
@@ -53,7 +53,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModel loginModel)
         {
             if (loginModel == null || NullCheckerUtility.HasNulls(loginModel))
                 return BadRequest("Invalid client request");

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.Repositories.IRepositories;
 
@@ -44,9 +44,19 @@ namespace Movie4U.Repositories
             return entities.Find(id);
         }
 
+        public virtual TEntity GetOneDbById(object id1, object id2)
+        {
+            return entities.Find(id1, id2);
+        }
+
         public async Task<TEntity> GetOneDbByIdAsync(object id)
         {
             return await entities.FindAsync(id);
+        }
+
+        public async Task<TEntity> GetOneDbByIdAsync(object id1, object id2)
+        {
+            return await entities.FindAsync(id1, id2);
         }
 
         public virtual void Insert(TEntity entity)

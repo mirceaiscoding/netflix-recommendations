@@ -11,7 +11,7 @@ namespace Movie4U.Repositories.IRepositories
     {
         Task<List<TitleImageModel>> GetAllAsync();
 
-        List<TitleImageModel> GetAllByNetflixIdAsync(string netflixId);
+        Task<List<TitleImageModel>> GetAllByNetflixIdAsync(string netflixId);
 
         Task<TitleImageModel> GetOneByIdAsync(string url);
     }

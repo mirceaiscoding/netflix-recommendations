@@ -66,5 +66,6 @@ namespace Movie4U.EntitiesModels.Entities
             tseries = source.tseries;
             tvids = source.tvids;
         }
+
     }
 }

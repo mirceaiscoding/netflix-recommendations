@@ -25,6 +25,11 @@ namespace Movie4U.Managers
             return await repo.GetAllAsync();
         }
 
+        public async Task<List<TitleImageModel>> GetAllByNetflixIdAsync(string netflixId)
+        {
+            return await repo.GetAllByNetflixIdAsync(netflixId);
+        }
+
         public async Task<TitleImageModel> GetOneByIdAsync(string url)
         {
             return await repo.GetOneByIdAsync(url);

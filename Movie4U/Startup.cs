@@ -167,6 +167,15 @@ namespace Movie4U
 
             services.AddScoped<ITitleImagesRepository, TitleImagesRepository>();
             services.AddScoped<ITitleImagesManager, TitleImagesManager>();
+
+            services.AddScoped<ITitleGenresRepository, TitleGenresRepository>();
+            services.AddScoped<ITitleGenresManager, TitleGenresManager>();
+
+            services.AddScoped<ITitleCountriesRepository, TitleCountriesRepository>();
+            services.AddScoped<ITitleCountriesManager, TitleCountriesManager>();
+
+            services.AddScoped<ITitlesRepository, TitlesRepository>();
+            services.AddScoped<ITitlesManager, TitlesManager>();
         }
 
         /**<summary>

@@ -31,9 +31,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetCountryByCode/{country_code}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetCountryByCode([FromRoute] string country_code)
+        public async Task<IActionResult> GetCountryByCodeAsync([FromRoute] string country_code)
         {
-            CountryModel country = await manager.GetOneByIdAsync(country_code);
+            var country = await manager.GetOneByIdAsync(country_code);
 
             if (country == null)
                 return NotFound("There is no country with the given code stored in the database");
@@ -43,7 +43,7 @@ namespace Movie4U.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateCountry([FromBody] CountryModel countryModel)
+        public async Task<IActionResult> CreateCountryAsync([FromBody] CountryModel countryModel)
         {
             await manager.Create(countryModel);
             return Ok();
@@ -51,7 +51,7 @@ namespace Movie4U.Controllers
 
         [HttpPut]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateCountry([FromBody] CountryModel countryModel)
+        public async Task<IActionResult> UpdateCountryAsync([FromBody] CountryModel countryModel)
         {
             await manager.Update(countryModel);
             return Ok();
@@ -60,7 +60,7 @@ namespace Movie4U.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteCountry([FromBody] string country_code)
+        public async Task<IActionResult> DeleteCountryAsync([FromBody] string country_code)
         {
             await manager.Delete(country_code);
             return Ok();

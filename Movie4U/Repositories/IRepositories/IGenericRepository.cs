@@ -13,7 +13,9 @@ namespace Movie4U.Repositories.IRepositories
         Task<List<TEntity>> GetAllDbAsync();
 
         TEntity GetOneDbById(object id);
+        TEntity GetOneDbById(object id1, object id2);
         Task<TEntity> GetOneDbByIdAsync(object id);
+        Task<TEntity> GetOneDbByIdAsync(object id1, object id2);
 
         void Insert(TEntity entity);
         Task<TEntity> InsertAsync(TEntity entity);

@@ -34,9 +34,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetWatcherByName/{name}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetWatcherByName([FromRoute] string name)
+        public async Task<IActionResult> GetWatcherByNameAsync([FromRoute] string name)
         {
-            WatcherModel watcher = await manager.GetOneByIdAsync(name);
+            var watcher = await manager.GetOneByIdAsync(name);
 
             if (watcher == null)
                 return NotFound("There is no watcher with the given name stored in the database");
