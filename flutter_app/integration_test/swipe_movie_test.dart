@@ -9,8 +9,8 @@ import 'package:integration_test/integration_test.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('menu drawer tests', () {
-    testWidgets('open menu', (WidgetTester tester) async {
+  group('swipe movie tests', () {
+    testWidgets('press next button', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
         debugShowCheckedModeBanner: false, // Remove 'debug' label from app
         title: 'Netflix Recommendations',
@@ -29,19 +29,40 @@ void main() {
       await tester.pumpAndSettle();
       sleep(const Duration(seconds: 2));
 
-      // Search for the menu button
-      var menuButton = find.byIcon(Icons.menu);
-      await tester.pumpAndSettle();
-      expect(menuButton, findsOneWidget);
-      expect(find.text('ACCOUNT'), findsNothing);
+      // State of homescreen
+      final HomescreenState homescreenState =
+          tester.state(find.byType(Homescreen));
 
-      // Emulate a tap on the menu button
-      await tester.tap(menuButton);
+      // Check if current page index is 0
+      expect(0, homescreenState.currentPage);
+      if (kDebugMode) {
+        print("Page index: ${homescreenState.currentPage}");
+      }
+
+      // Search for the menu button
+      var nextButton = find.byIcon(Icons.arrow_forward_ios_outlined);
+      await tester.pumpAndSettle();
+      expect(nextButton, findsOneWidget);
+
+      // Emulate a tap on the next button
+      await tester.tap(nextButton);
       await tester.pumpAndSettle();
       sleep(const Duration(seconds: 2));
 
-      // Verify the menu is open
-      expect(find.text('ACCOUNT'), findsOneWidget);
+      expect(1, homescreenState.currentPage);
+      if (kDebugMode) {
+        print("Page index: ${homescreenState.currentPage}");
+      }
+
+      // Emulate a tap on the next button
+      await tester.tap(nextButton);
+      await tester.pumpAndSettle();
+      sleep(const Duration(seconds: 2));
+
+      expect(2, homescreenState.currentPage);
+      if (kDebugMode) {
+        print("Page index: ${homescreenState.currentPage}");
+      }
     });
   });
 }
