@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories.IRepositories
 {
-    public interface IWatchersRepository : IGenericRepository<Watcher>
+    public interface IWatchersRepository : IGenericRepository<Watcher, WatcherModel>
     {
         Task<List<WatcherModel>> GetAllAsync();
 

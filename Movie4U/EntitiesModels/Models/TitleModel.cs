@@ -69,7 +69,7 @@ namespace Movie4U.EntitiesModels.Models
          * </summary>*/
         public TitleModel(TitleModel source)
         {
-            Copy(source);
+            ShallowCopy(source);
         }
 
         /**<summary>

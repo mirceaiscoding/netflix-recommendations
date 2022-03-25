@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories.IRepositories
 {
-    public interface ITitlesRepository: IGenericRepository<Title>
+    public interface ITitlesRepository: IGenericRepository<Title, TitleModel>
     {
         Task<List<TitleModel>> GetAllAsync();
 

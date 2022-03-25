@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
-    public class WatcherTitlesRepository: GenericRepository<WatcherTitle>, IWatcherTitlesRepository
+    public class WatcherTitlesRepository: GenericRepository<WatcherTitle, WatcherTitleModel>, IWatcherTitlesRepository
     {
         /**<summary>
         * Constructor.

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
-    public class WatcherGenresRepository : GenericRepository<WatcherGenre>, IWatcherGenresRepository
+    public class WatcherGenresRepository : GenericRepository<WatcherGenre, WatcherGenreModel>, IWatcherGenresRepository
     {
 
         /**<summary>

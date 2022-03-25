@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories
 {
-    public class TitlesRepository : GenericRepository<Title>, ITitlesRepository
+    public class TitlesRepository : GenericRepository<Title, TitleModel>, ITitlesRepository
     {
         /**<summary>
          * Constructor.
