@@ -1,5 +1,4 @@
 ﻿using Movie4U.EntitiesModels.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace Movie4U.EntitiesModels.Models
 {

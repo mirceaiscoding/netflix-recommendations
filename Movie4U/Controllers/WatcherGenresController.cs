@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Controllers

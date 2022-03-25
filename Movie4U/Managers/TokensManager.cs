@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Cryptography;
 using Movie4U.Managers.IManagers;
-using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Entities;
 
 namespace Movie4U.Managers
