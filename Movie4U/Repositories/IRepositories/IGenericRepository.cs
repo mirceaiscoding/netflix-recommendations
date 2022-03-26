@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories.IRepositories
 {
-    public interface IGenericRepository<TEntity, TModel> 
+    public interface IGenericRepository<TEntity, TModel>
         where TEntity : EntitiesModelsBase<TEntity, TModel>
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {

@@ -9,15 +9,15 @@ using Movie4U.EntitiesModels;
 
 namespace Movie4U.Repositories
 {
-    public class GenericRepository<EntityType, ModelType> : IGenericRepository<EntityType, ModelType>
-        where EntityType : EntitiesModelsBase<EntityType, ModelType>
-        where ModelType : EntitiesModelsBase<EntityType, ModelType>, new()
+    public class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel>
+        where TEntity : EntitiesModelsBase<TEntity, TModel>
+        where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
         /**<summary>
          * The context.
          * </summary>*/
         internal Movie4UContext db;
-        internal DbSet<EntityType> entities;
+        internal DbSet<TEntity> entities;
 
         /**<summary>
          * Constructor.
@@ -25,99 +25,99 @@ namespace Movie4U.Repositories
         public GenericRepository(Movie4UContext db)
         {
             this.db = db;
-            entities = db.Set<EntityType>();
+            entities = db.Set<TEntity>();
         }
 
-        public virtual IQueryable<EntityType> GetAllDbQueryable()
+        public virtual IQueryable<TEntity> GetAllDbQueryable()
         {
             return entities;
         }
 
-        public virtual List<ModelType> GetAll()
+        public virtual List<TModel> GetAll()
         {
             var entitiesList = entities.AsNoTracking().ToList();
 
-            return CastUtility.ToModelsList<EntityType, ModelType>(entitiesList);
+            return CastUtility.ToModelsList<TEntity, TModel>(entitiesList);
         }
 
-        public virtual async Task<List<ModelType>> GetAllAsync()
+        public virtual async Task<List<TModel>> GetAllAsync()
         {
             var entitiesList = await entities.AsNoTracking().ToListAsync();
 
-            return CastUtility.ToModelsList<EntityType, ModelType>(entitiesList);
+            return CastUtility.ToModelsList<TEntity, TModel>(entitiesList);
         }
 
-        public virtual IEnumerable<EntityType> GetAllDb()
+        public virtual IEnumerable<TEntity> GetAllDb()
         {
             return entities;
         }
 
-        public async Task<List<EntityType>> GetAllDbAsync()
+        public virtual async Task<List<TEntity>> GetAllDbAsync()
         {
             return await entities.ToListAsync();
         }
 
-        public ModelType GetOneById(object id)
+        public virtual TModel GetOneById(object id)
         {
             var entity = entities.Find(id);
 
-            return CastUtility.ToModel<EntityType, ModelType>(entity);
+            return CastUtility.ToModel<TEntity, TModel>(entity);
         }
 
-        public virtual async Task<ModelType> GetOneByIdAsync(object id)
+        public virtual async Task<TModel> GetOneByIdAsync(object id)
         {
             var entity = await entities.FindAsync(id);
 
-            return CastUtility.ToModel<EntityType, ModelType>(entity);
+            return CastUtility.ToModel<TEntity, TModel>(entity);
         }
 
-        public ModelType GetOneById(object id1, object id2)
+        public virtual TModel GetOneById(object id1, object id2)
         {
             var entity = entities.Find(id1, id2);
 
-            return CastUtility.ToModel<EntityType, ModelType>(entity);
+            return CastUtility.ToModel<TEntity, TModel>(entity);
         }
 
-        public virtual async Task<ModelType> GetOneByIdAsync(object id1, object id2)
+        public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2)
         {
             var entity = await entities.FindAsync(id1, id2);
 
-            return CastUtility.ToModel<EntityType, ModelType>(entity);
+            return CastUtility.ToModel<TEntity, TModel>(entity);
         }
 
-        public virtual EntityType GetOneDbById(object id)
+        public virtual TEntity GetOneDbById(object id)
         {
             return entities.Find(id);
         }
 
-        public async Task<EntityType> GetOneDbByIdAsync(object id)
+        public virtual async Task<TEntity> GetOneDbByIdAsync(object id)
         {
             return await entities.FindAsync(id);
         }
 
-        public virtual EntityType GetOneDbById(object id1, object id2)
+        public virtual TEntity GetOneDbById(object id1, object id2)
         {
             return entities.Find(id1, id2);
         }
 
-        public async Task<EntityType> GetOneDbByIdAsync(object id1, object id2)
+        public virtual async Task<TEntity> GetOneDbByIdAsync(object id1, object id2)
         {
             return await entities.FindAsync(id1, id2);
         }
 
-        public virtual void Insert(EntityType entity)
+        public virtual void Insert(TEntity entity)
         {
             entities.Add(entity);
         }
 
-        public virtual async Task<EntityType> InsertAsync(EntityType entity)
+        public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
             await entities.AddAsync(entity);
             await db.SaveChangesAsync();
             return entity;
         }
 
-        public virtual async Task UpdateAsync(EntityType entityToUpdate)
+        public virtual async Task UpdateAsync(TEntity entityToUpdate)
         {
             entities.Attach(entityToUpdate);
             db.Entry(entityToUpdate).State = EntityState.Modified;
@@ -131,7 +131,7 @@ namespace Movie4U.Repositories
             await db.SaveChangesAsync();
         }
 
-        public virtual async Task DeleteAsync(EntityType entityToDelete)
+        public virtual async Task DeleteAsync(TEntity entityToDelete)
         {
             if (db.Entry(entityToDelete).State == EntityState.Detached)
                 entities.Attach(entityToDelete);

@@ -48,5 +48,10 @@ namespace Movie4U.EntitiesModels.Entities
             genre_id = source.genre_id;
         }
 
+        override public IdModel getId()
+        {
+            return new IdModel(1, genre_id);
+        }
+
     }
 }

@@ -67,5 +67,10 @@ namespace Movie4U.EntitiesModels.Entities
             tvids = source.tvids;
         }
 
+        override public IdModel getId()
+        {
+            return new IdModel(1,  country_code);
+        }
+
     }
 }

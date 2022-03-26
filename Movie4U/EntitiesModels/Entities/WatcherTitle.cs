@@ -91,5 +91,10 @@ namespace Movie4U.EntitiesModels.Entities
             watchLaterLastSetTime = source.watchLaterLastSetTime;
         }
 
+        override public IdModel getId()
+        {
+            return new IdModel ( 2, watcher_name, netflix_id );
+        }
+
     }
 }
