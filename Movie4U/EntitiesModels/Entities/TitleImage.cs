@@ -51,5 +51,10 @@ namespace Movie4U.EntitiesModels.Entities
             url = source.url;
         }
 
+        override public IdModel getId()
+        {
+            return new IdModel ( 1, url );
+        }
+
     }
 }

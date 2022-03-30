@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Repositories.IRepositories
 {
-    public interface ITitleGenresRepository: IGenericRepository<TitleGenre, TitleGenreModel>
+    public interface IWatcherTitlesRepository: IGenericRepository<WatcherTitle, WatcherTitleModel>
     {
-        Task<List<TitleGenreModel>> GetAllByNetflixIdAsync(string netflixId);
+        Task<List<WatcherTitleModel>> GetAllByWatcherIdAsync(string watcher_name);
 
     }
 }

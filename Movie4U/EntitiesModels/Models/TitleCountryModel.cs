@@ -1,8 +1,4 @@
 ﻿using Movie4U.EntitiesModels.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Movie4U.EntitiesModels.Models
 {
@@ -44,6 +40,11 @@ namespace Movie4U.EntitiesModels.Models
         {
             country_code = source.country_code;
             netflix_id = source.netflix_id;
+        }
+
+        override public IdModel getId()
+        {
+            return new IdModel(2, country_code, netflix_id);
         }
 
     }

@@ -165,5 +165,10 @@ namespace Movie4U.EntitiesModels.Entities
             this.year = source.year;
         }
 
+        override public IdModel getId()
+        {
+            return new IdModel(1, netflix_id );
+        }
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Movie4U.EntitiesModels.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace Movie4U.EntitiesModels.Models
 {
@@ -62,5 +61,11 @@ namespace Movie4U.EntitiesModels.Models
             tseries = source.tseries;
             tvids = source.tvids;
         }
+
+        override public IdModel getId()
+        {
+            return new IdModel(1, country_code);
+        }
+
     }
 }

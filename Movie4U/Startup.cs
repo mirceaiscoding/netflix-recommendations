@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +13,8 @@ using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories;
 using Movie4U.Repositories.IRepositories;
-using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Movie4U
 {
@@ -176,6 +172,12 @@ namespace Movie4U
 
             services.AddScoped<ITitlesRepository, TitlesRepository>();
             services.AddScoped<ITitlesManager, TitlesManager>();
+
+            services.AddScoped<IWatcherTitlesRepository, WatcherTitlesRepository>();
+            services.AddScoped<IWatcherTitlesManager, WatcherTitlesManager>();
+
+            services.AddScoped<IWatcherGenresRepository, WatcherGenresRepository>();
+            services.AddScoped<IWatcherGenresManager, WatcherGenresManager>();
         }
 
         /**<summary>

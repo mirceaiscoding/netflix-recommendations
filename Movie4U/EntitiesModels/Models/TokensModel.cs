@@ -1,4 +1,5 @@
-﻿namespace Movie4U.EntitiesModels.Models
+﻿
+namespace Movie4U.EntitiesModels.Models
 {
     public class TokensModel
     {

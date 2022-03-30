@@ -1,26 +1,23 @@
-﻿using Movie4U.EntitiesModels.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Movie4U.EntitiesModels.Entities;
 
-namespace Movie4U.EntitiesModels.Entities
+namespace Movie4U.EntitiesModels.Models
 {
-    public class WatcherGenre: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>
+    public class WatcherGenreModel: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>
     {
-        [Required]
         public string watcher_name { get; set; }
 
-        [Required]
         public int genre_id { get; set; }
 
         public double watcherGenreScore { get; set; }
 
-        virtual public Watcher watcher { get; set; }
-        virtual public Genre genre { get; set; }
+        public GenreModel genreModel { get; set; }
+
 
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre(WatcherGenre source)
+        public WatcherGenreModel(WatcherGenre source)
         {
             Copy(source);
         }
@@ -28,20 +25,15 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre(WatcherGenreModel source)
+        public WatcherGenreModel(WatcherGenreModel source)
         {
-            Copy(source);
-        }
-
-        public WatcherGenre(WatcherGenreModelParameter source)
-        {
-            Copy(source);
+            ShallowCopy(source);
         }
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenre() { }
+        public WatcherGenreModel() { }
 
         override public void Copy(WatcherGenre source)
         {
@@ -57,16 +49,15 @@ namespace Movie4U.EntitiesModels.Entities
             watcherGenreScore = source.watcherGenreScore;
         }
 
-        public void Copy(WatcherGenreModelParameter source)
+        override public void ShallowCopy(WatcherGenreModel source)
         {
-            watcher_name = source.watcher_name;
-            genre_id = source.genre_id;
-            watcherGenreScore = source.watcherGenreScore;
+            Copy(source);
+            genreModel = source.genreModel;
         }
 
         override public IdModel getId()
         {
-            return new IdModel ( 2, watcher_name, genre_id );
+            return new IdModel(2, watcher_name, genre_id);
         }
 
     }

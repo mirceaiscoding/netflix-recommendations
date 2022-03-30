@@ -1,8 +1,5 @@
 ﻿using Movie4U.EntitiesModels.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Movie4U.EntitiesModels.Models
 {
@@ -72,7 +69,7 @@ namespace Movie4U.EntitiesModels.Models
          * </summary>*/
         public TitleModel(TitleModel source)
         {
-            Copy(source);
+            ShallowCopy(source);
         }
 
         /**<summary>
@@ -130,6 +127,19 @@ namespace Movie4U.EntitiesModels.Models
             this.title = source.title;
             this.title_type = source.title_type;
             this.year = source.year;
+        }
+
+        override public void ShallowCopy(TitleModel source)
+        {
+            Copy(source);
+            countryModels = source.countryModels;
+            genreModels = source.genreModels;
+            titleImageModels = source.titleImageModels;
+        }
+
+        override public IdModel getId()
+        {
+            return new IdModel(1, netflix_id);
         }
 
     }

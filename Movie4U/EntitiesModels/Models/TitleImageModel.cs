@@ -44,5 +44,11 @@ namespace Movie4U.EntitiesModels.Models
             netflix_id = source.netflix_id;
             url = source.url;
         }
+
+        override public IdModel getId()
+        {
+            return new IdModel(1, url);
+        }
+
     }
 }

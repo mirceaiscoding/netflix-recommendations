@@ -2,9 +2,7 @@
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -76,5 +74,6 @@ namespace Movie4U.Managers
             if (delTitleCountry != null)
                 await repo.DeleteAsync(delTitleCountry);
         }
+
     }
 }
