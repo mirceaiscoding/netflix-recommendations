@@ -131,7 +131,7 @@ namespace Movie4U.EntitiesModels.Entities
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //    => optionsBuilder.UseCosmos(
-        //        "AccountEndpoint=https://movies4u.documents.azure.com:443/;AccountKey=4eOe6my1BGNK47falbFD5Ktm6eP7lR1ZgpSud2AeeyTwpTtwJ98rMGJgyB5HTskHmzAe2Q4IRq7wuMUutD1r4w==;",
+        //        "AccountEndpoint=...
         //        databaseName: "MoviesDB",
         //        options =>
         //        {
