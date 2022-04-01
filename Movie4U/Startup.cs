@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -70,13 +71,14 @@ namespace Movie4U
             });
 
             services.AddDbContext<Movie4UContext>(options => options
-            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))  
-            .UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
+            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+            .UseCosmos(configuration["ConnectionStrings:AccountEndpoint"], configuration["ConnectionStrings:AccountKey"], configuration["ConnectionStrings:DatabaseName"]));
 
 
             // since we have added IdentityDbContext, we add this to specify we use the user and role defined by us
             services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<Movie4UContext>();
+                .AddEntityFrameworkStores<Movie4UContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>
             {

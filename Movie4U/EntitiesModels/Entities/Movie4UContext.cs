@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Cosmos.Storage.Internal;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging;
 using Movie4U.ExtensionMethods;
 using System;
+using Microsoft.Azure.Cosmos;
+using System.Net;
 
 namespace Movie4U.EntitiesModels.Entities
 {
     public class Movie4UContext : IdentityDbContext
-        <User, Role, string, IdentityUserClaim<string>,
-        UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
+        <User>
     {
         /**<summary>
          * Constructor.
@@ -34,15 +38,33 @@ namespace Movie4U.EntitiesModels.Entities
             base.OnModelCreating(modelBuilder);
 
             // entities:
-            modelBuilder.Entity<Watcher>().ToTable("Watchers");
-            modelBuilder.Entity<Country>().ToTable("Countries");
-            modelBuilder.Entity<Genre>().ToTable("Genres");
-            modelBuilder.Entity<Title>().ToTable("Title_Details");
-            modelBuilder.Entity<TitleCountry>().ToTable("Title_Countries");
-            modelBuilder.Entity<TitleGenre>().ToTable("Title_Genres");
-            modelBuilder.Entity<TitleImage>().ToTable("Title_Images");
-            modelBuilder.Entity<WatcherTitle>().ToTable("Watcher_Titles");
-            modelBuilder.Entity<WatcherGenre>().ToTable("Watcher_Genres");
+            modelBuilder.HasDefaultContainer("Users");
+
+            modelBuilder.Entity<Watcher>().ToContainer("Watchers");
+            modelBuilder.Entity<Country>().ToContainer("Countries");
+            modelBuilder.Entity<Genre>().ToContainer("Genres");
+            modelBuilder.Entity<Title>().ToContainer("Title_Details");
+            modelBuilder.Entity<TitleCountry>().ToContainer("Title_Countries");
+            modelBuilder.Entity<TitleGenre>().ToContainer("Title_Genres");
+            modelBuilder.Entity<TitleImage>().ToContainer("Title_Images");
+            modelBuilder.Entity<WatcherTitle>().ToContainer("Watcher_Titles");
+            modelBuilder.Entity<WatcherGenre>().ToContainer("Watcher_Genres");
+            
+            // auth
+            modelBuilder.Entity<IdentityUser>().ToContainer("Users");
+            modelBuilder.Entity<User>().ToContainer("Users");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToContainer("UserRoles");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToContainer("UserLogins");
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToContainer("UserClaims");
+            modelBuilder.Entity<IdentityRole>().ToContainer("Roles");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToContainer("UserTokens");
+
+            modelBuilder.Entity<IdentityRole>()
+                .Property(b => b.ConcurrencyStamp)
+                .IsETagConcurrency();
+            modelBuilder.Entity<User>()
+                .Property(b => b.ConcurrencyStamp)
+                .IsETagConcurrency();
 
             // composite keys for relational entities:
             modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.netflix_id, tc.country_code });
@@ -106,6 +128,23 @@ namespace Movie4U.EntitiesModels.Entities
             modelBuilder.DeleteBehaviorConvention(DeleteBehavior.Cascade);
 
         }
-    }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder.UseCosmos(
+        //        "AccountEndpoint=https://movies4u.documents.azure.com:443/;AccountKey=4eOe6my1BGNK47falbFD5Ktm6eP7lR1ZgpSud2AeeyTwpTtwJ98rMGJgyB5HTskHmzAe2Q4IRq7wuMUutD1r4w==;",
+        //        databaseName: "MoviesDB",
+        //        options =>
+        //        {
+        //            options.ConnectionMode(ConnectionMode.Gateway);
+        //            options.WebProxy(new WebProxy());
+        //            options.LimitToEndpoint();
+        //            options.Region(Regions.NorthEurope);
+        //            options.GatewayModeMaxConnectionLimit(32);
+        //            options.MaxRequestsPerTcpConnection(8);
+        //            options.MaxTcpConnectionsPerEndpoint(16);
+        //            options.IdleTcpConnectionTimeout(TimeSpan.FromMinutes(1));
+        //            options.OpenTcpConnectionTimeout(TimeSpan.FromMinutes(1));
+        //            options.RequestTimeout(TimeSpan.FromMinutes(1));
+        //        });
+    }
 }

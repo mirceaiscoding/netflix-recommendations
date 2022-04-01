@@ -18,7 +18,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetAllCountries")]
-        [Authorize(Policy = "BasicUserPolicy")]
+        //[Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllCountriesAsync()
         {
             var countries = await manager.GetAllAsync();
