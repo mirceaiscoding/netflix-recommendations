@@ -1,8 +1,11 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -35,6 +38,15 @@ namespace Movie4U.Managers
             Genre newGenre = new Genre(genreModel);
 
             await repo.InsertAsync(newGenre);
+        }
+
+        public async Task CreateMultiple(GenreResponseModel[] models)
+        {
+            //Genre[] genres = (Genre[])models.Select(x => new Genre(x));
+
+            Genre[] genres = Array.ConvertAll(models, x => new Genre(x) );
+
+            await repo.InsertMultipleAsync(genres);
         }
 
         public async Task Update(GenreModel genreModel)

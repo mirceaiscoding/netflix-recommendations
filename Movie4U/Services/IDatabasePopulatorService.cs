@@ -5,6 +5,6 @@ namespace Movie4U.Services
 {
     public interface IDatabasePopulatorService
     {
-        public Task updateCountriesAsync();
+        public Task CreateGenresAsync();
     }
 }

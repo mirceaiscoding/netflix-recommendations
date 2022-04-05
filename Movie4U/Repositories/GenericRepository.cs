@@ -117,6 +117,13 @@ namespace Movie4U.Repositories
             return entity;
         }
 
+        public async Task<TEntity[]> InsertMultipleAsync(TEntity[] entities)
+        {
+            await this.entities.AddRangeAsync(entities);
+            await db.SaveChangesAsync();
+            return entities;
+        }
+
         public virtual async Task UpdateAsync(TEntity entityToUpdate)
         {
             entities.Attach(entityToUpdate);

@@ -18,11 +18,11 @@ namespace Movie4U.Controllers
             this.databasePopulatorService = databasePopulatorService;
         }
 
-        [HttpPost("UpdateCountries")]
+        [HttpPost("CreateGenres")]
         //[Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateCountries()
+        public async Task<IActionResult> CreateGenres()
         {
-            await databasePopulatorService.updateCountriesAsync();
+            await databasePopulatorService.CreateGenresAsync();
             return Ok();
         }
     }

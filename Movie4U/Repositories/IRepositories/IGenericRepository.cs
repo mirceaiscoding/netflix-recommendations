@@ -29,6 +29,7 @@ namespace Movie4U.Repositories.IRepositories
 
         void Insert(TEntity entity);
         Task<TEntity> InsertAsync(TEntity entity);
+        Task<TEntity[]> InsertMultipleAsync(TEntity[] entities);
 
         Task UpdateAsync(TEntity entity);
 

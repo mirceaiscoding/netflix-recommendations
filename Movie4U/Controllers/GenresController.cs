@@ -18,7 +18,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetAllGenres")]
-        [Authorize(Policy = "BasicUserPolicy")]
+        //[Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllGenresAsync()
         {
             var genres = await manager.GetAllAsync();

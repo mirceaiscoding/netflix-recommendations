@@ -1,25 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
+using Movie4U.Managers.IManagers;
 
 namespace Movie4U.Services
 {
     public class DatabasePopulatorService : IDatabasePopulatorService
     {
 
-        public DatabasePopulatorService(IConfiguration config)
-        {
-            Configuration = config;
-        }
-
         public IConfiguration Configuration { get; }
 
-        public async Task updateCountriesAsync()
+        internal Movie4UContext db;
+
+        private readonly IGenresManager genresManager;
+
+        public DatabasePopulatorService(IConfiguration config, IGenresManager genresManager, Movie4UContext db)
+        {
+            Configuration = config;
+            this.db = db;
+            this.genresManager = genresManager;
+        }
+
+        public async Task CreateGenresAsync()
         {
             HttpClient client = new HttpClient();
+
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -34,8 +48,42 @@ namespace Movie4U.Services
             try
             {
                 response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsAsync<IEnumerable<>>);
-                Console.WriteLine(body);
+                var bodySerialized = await response.Content.ReadAsStringAsync();
+                var genres = JsonSerializer.Deserialize<GenreResponseListModel>(bodySerialized);
+
+
+                db.Database.OpenConnection();
+                try
+                {
+                    // In order to be able to insert with a specified id
+                    db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres ON;");
+                    db.SaveChanges();
+
+                    //await db.Genres.AddRangeAsync(genres.results.Select(r => new Genre
+                    //{
+                    //    genre_id = r.netflix_id,
+                    //    genre = r.genre
+                    //}));
+
+                    await genresManager.CreateMultiple(genres.results);
+
+                    //foreach (GenreResponseModel result in genres.results)
+                    //{
+                    //    await genresManager.Create(new GenreModel
+                    //    {
+                    //        genre_id = result.netflix_id,
+                    //        genre = result.genre
+                    //    });
+                    //    break;
+                    //}
+
+                    db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres OFF;");
+                }
+                finally
+                {
+                    db.Database.CloseConnection();
+                }
+
             }
             catch (Exception e)
             {
@@ -43,30 +91,6 @@ namespace Movie4U.Services
                 Console.WriteLine("Error ({0})", e.Message);
 
             }
-
-            //client.BaseAddress = new Uri(URL);
-
-            //// Add an Accept header for JSON format.
-            //client.DefaultRequestHeaders.Accept.Add(
-            //new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //// List data response.
-            //HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    // Parse the response body.
-            //    var dataObjects = response.Content.ReadAsAsync<IEnumerable<DataObject>>().Result;  //Make sure to add a reference to System.Net.Http.Formatting.dll
-            //    foreach (var d in dataObjects)
-            //    {
-            //        Console.WriteLine("{0}", d.Name);
-            //    }
-            //}
-            //else
-            //{
-            //    Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            //}
-
-            // Make any other calls using HttpClient here.
 
             // Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
             client.Dispose();

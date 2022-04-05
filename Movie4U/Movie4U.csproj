@@ -31,8 +31,10 @@
     <None Remove="Microsoft.AspNet.WebApi" />
     <None Remove="Services\" />
     <None Remove="Microsoft.AspNet.WebApi.Client" />
+    <None Remove="EntitiesModels\Models\uNoGS\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="EntitiesModels\Models\uNoGS\" />
   </ItemGroup>
 </Project>
