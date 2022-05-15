@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/components/body.dart';
-import 'package:flutter_app/screens/home/components/menu_drawer.dart';
+import 'package:flutter_app/components/menu_drawer.dart';
 
 import 'components/bottom_actions.dart';
 

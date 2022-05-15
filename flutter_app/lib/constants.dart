@@ -73,3 +73,7 @@ const kDebugMode = true;
 
 // API
 const kAuthRequestURL = "https://localhost:5003/api/Authentication/";
+
+// Watchlist
+const kMoviesToLoad = 5;
+const kPixelsBeforeRenderingNewMovies = 1000;
