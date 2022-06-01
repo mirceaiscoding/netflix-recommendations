@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -19,9 +20,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllWatcherTitles")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllWatcherTitlesAsync()
+        public async Task<IActionResult> GetAllWatcherTitlesAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
         {
-            var watcherTitles = await manager.GetAllAsync();
+            var watcherTitles = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
 
             if (watcherTitles.Count == 0)
                 return NotFound("There are no watcher titles stored in the database");

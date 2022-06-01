@@ -10246,11 +10246,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Stefan\\source\\repos\\MSDteam\\Movie4U\\Movie4U.csproj",
+      "projectUniqueName": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\Movie4U.csproj",
       "projectName": "Movie4U",
-      "projectPath": "C:\\Users\\Stefan\\source\\repos\\MSDteam\\Movie4U\\Movie4U.csproj",
+      "projectPath": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\Movie4U.csproj",
       "packagesPath": "C:\\Users\\Stefan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Stefan\\source\\repos\\MSDteam\\Movie4U\\obj\\",
+      "outputPath": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -10363,7 +10363,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   },

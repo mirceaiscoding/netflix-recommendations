@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -19,9 +20,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllTitleGenres")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitleGenresAsync()
+        public async Task<IActionResult> GetAllTitleGenresAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
         {
-            var titleGenres = await manager.GetAllAsync();
+            var titleGenres = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
 
             if (titleGenres.Count == 0)
                 return NotFound("There are no title genres stored in the database");

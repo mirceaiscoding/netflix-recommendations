@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -21,9 +22,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllWatchers")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetAllWatchersAsync()
+        public async Task<IActionResult> GetAllWatchersAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
         {
-            var watchers = await manager.GetAllAsync();
+            var watchers = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
 
             if (watchers.Count == 0)
                 return NotFound("There are no watchers stored in the database");

@@ -9,13 +9,13 @@ namespace Movie4U.Repositories.IRepositories
         where TEntity : EntitiesModelsBase<TEntity, TModel>
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
-        IQueryable<TEntity> GetAllDbQueryable();
+        Task<IQueryable<TEntity>> GetAllDbQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
-        List<TModel> GetAll();
-        Task<List<TModel>> GetAllAsync();
+        List<TModel> GetAll(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<TModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
-        IEnumerable<TEntity> GetAllDb();
-        Task<List<TEntity>> GetAllDbAsync();
+        IEnumerable<TEntity> GetAllDb(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<TEntity>> GetAllDbAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
         TModel GetOneById(object id);
         Task<TModel> GetOneByIdAsync(object id);

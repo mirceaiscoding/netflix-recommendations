@@ -1,4 +1,7 @@
 ﻿
+using Movie4U.Enums;
+using System;
+
 namespace Movie4U.EntitiesModels
 {
     /**<summary>
@@ -33,9 +36,19 @@ namespace Movie4U.EntitiesModels
          * Gets an object containing the count of ids that form the primary key of the entity/model.
          * If the count is not 0, it is followed by the ids, named id1, id2... .
          * </summary>*/
-        virtual public IdModel getId()
+        virtual public IdModel GetId()
         {
             return new IdModel();
+        }
+
+        virtual public Func<TEntity, bool> GetFilter(int key)
+        {
+            return null;
+        }
+
+        virtual public Func<TEntity, object> GetOrderingCriteria(int key)
+        {
+            return null;
         }
 
     }

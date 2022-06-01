@@ -1,4 +1,5 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using Movie4U.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface ITitlesManager
     {
-        Task<List<TitleModel>> GetAllAsync();
+        Task<List<TitleModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
         Task<TitleModel> GetOneByIdAsync(string netflix_id);
 
