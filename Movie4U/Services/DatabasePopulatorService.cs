@@ -59,12 +59,12 @@ namespace Movie4U.Services
                 try
                 {
                     // In order to be able to insert with a specified id
-                    db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres ON;");
+                    //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres ON;");
                     db.SaveChanges();
 
                     await genresManager.CreateMultiple(genres.results);
 
-                    db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres OFF;");
+                    //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Genres OFF;");
                 }
                 finally
                 {
