@@ -18,7 +18,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetAllCountries")]
-        [Authorize(Policy = "BasicUserPolicy")]
+        //[Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllCountriesAsync()
         {
             var countries = await manager.GetAllAsync();
@@ -31,9 +31,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetCountryByCode/{country_code}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetCountryByCodeAsync([FromRoute] string country_code)
+        public async Task<IActionResult> GetCountryByIdAsync([FromRoute] int id)
         {
-            var country = await manager.GetOneByIdAsync(country_code);
+            var country = await manager.GetOneByIdAsync(id);
 
             if (country == null)
                 return NotFound("There is no country with the given code stored in the database");

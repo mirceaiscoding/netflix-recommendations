@@ -40,7 +40,7 @@ namespace Movie4U.Managers
             var countries = new List<CountryModel>();
             foreach (var titleCountry in titleCountries)
             {
-                var country = await countriesManager.GetOneByIdAsync(titleCountry.country_code);
+                var country = await countriesManager.GetOneByIdAsync(titleCountry.country_id);
                 countries.Add(country);
             }
 
@@ -61,7 +61,7 @@ namespace Movie4U.Managers
 
         public async Task Update(TitleCountryModel titleCountryModel)
         {
-            TitleCountry updateTitleCountry = await repo.GetOneDbByIdAsync(titleCountryModel.country_code, titleCountryModel.netflix_id);
+            TitleCountry updateTitleCountry = await repo.GetOneDbByIdAsync(titleCountryModel.country_id, titleCountryModel.netflix_id);
             updateTitleCountry.Copy(titleCountryModel);
 
             await repo.UpdateAsync(updateTitleCountry);

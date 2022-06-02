@@ -1,7 +1,9 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,9 +27,9 @@ namespace Movie4U.Managers
             return await repo.GetAllAsync();
         }
 
-        public async Task<CountryModel> GetOneByIdAsync(string country_code)
+        public async Task<CountryModel> GetOneByIdAsync(int id)
         {
-            return await repo.GetOneByIdAsync(country_code);
+            return await repo.GetOneByIdAsync(id);
         }
 
         public async Task Create(CountryModel countryModel)
@@ -37,9 +39,18 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newCountry);
         }
 
+        public async Task CreateMultiple(CountryResponseModel[] models)
+        {
+            //Genre[] genres = (Genre[])models.Select(x => new Genre(x));
+
+            Country[] countries = Array.ConvertAll(models, x => new Country(x));
+
+            await repo.InsertMultipleAsync(countries);
+        }
+
         public async Task Update(CountryModel countryModel)
         {
-            Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.country_code);
+            Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.countrycode);
             updateCountry.Copy(countryModel);
 
             await repo.UpdateAsync(updateCountry);

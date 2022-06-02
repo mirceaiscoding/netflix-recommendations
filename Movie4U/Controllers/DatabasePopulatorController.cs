@@ -25,5 +25,13 @@ namespace Movie4U.Controllers
             await databasePopulatorService.CreateGenresAsync();
             return Ok();
         }
+
+        [HttpPost("CreateCountries")]
+        //[Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> CreateCountries()
+        {
+            await databasePopulatorService.CreateCountriesAsync();
+            return Ok();
+        }
     }
 }

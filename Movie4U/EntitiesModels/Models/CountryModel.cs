@@ -4,9 +4,11 @@ namespace Movie4U.EntitiesModels.Models
 {
     public class CountryModel : EntitiesModelsBase<Country, CountryModel>
     {
+        public int id { get; set; }
+
         public string country { get; set; }
 
-        public string country_code { get; set; }  // while getting from uNoGs, it's name might not contain '_' for this class 
+        public string countrycode { get; set; }
 
         public int expiring { get; set; }
 
@@ -42,8 +44,9 @@ namespace Movie4U.EntitiesModels.Models
 
         override public void Copy(Country source)
         {
+            id = source.id;
             country = source.country;
-            country_code = source.country_code;
+            countrycode = source.countrycode;
             expiring = source.expiring;
             nl7 = source.nl7;
             tmovs = source.tmovs;
@@ -53,8 +56,9 @@ namespace Movie4U.EntitiesModels.Models
 
         override public void Copy(CountryModel source)
         {
+            id = source.id;
             country = source.country;
-            country_code = source.country_code;
+            countrycode = source.countrycode;
             expiring = source.expiring;
             nl7 = source.nl7;
             tmovs = source.tmovs;
@@ -64,7 +68,7 @@ namespace Movie4U.EntitiesModels.Models
 
         override public IdModel getId()
         {
-            return new IdModel(1, country_code);
+            return new IdModel(1, countrycode);
         }
 
     }

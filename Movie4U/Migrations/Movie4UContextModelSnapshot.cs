@@ -110,10 +110,13 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Country", b =>
                 {
-                    b.Property<string>("country_code")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("id")
+                        .HasColumnType("int");
 
                     b.Property<string>("country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("countrycode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("expiring")
@@ -131,7 +134,7 @@ namespace Movie4U.Migrations
                     b.Property<int>("tvids")
                         .HasColumnType("int");
 
-                    b.HasKey("country_code");
+                    b.HasKey("id");
 
                     b.ToTable("Countries");
                 });
@@ -139,9 +142,7 @@ namespace Movie4U.Migrations
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Genre", b =>
                 {
                     b.Property<int>("genre_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("genre")
                         .HasColumnType("nvarchar(max)");
@@ -256,12 +257,12 @@ namespace Movie4U.Migrations
                     b.Property<string>("netflix_id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("country_code")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("country_id")
+                        .HasColumnType("int");
 
-                    b.HasKey("netflix_id", "country_code");
+                    b.HasKey("netflix_id", "country_id");
 
-                    b.HasIndex("country_code");
+                    b.HasIndex("country_id");
 
                     b.ToTable("Title_Countries");
                 });
@@ -491,7 +492,7 @@ namespace Movie4U.Migrations
                 {
                     b.HasOne("Movie4U.EntitiesModels.Entities.Country", "Country")
                         .WithMany("titleCountries")
-                        .HasForeignKey("country_code")
+                        .HasForeignKey("country_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

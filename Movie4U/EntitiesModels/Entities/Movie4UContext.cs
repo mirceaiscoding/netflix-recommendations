@@ -45,7 +45,7 @@ namespace Movie4U.EntitiesModels.Entities
             modelBuilder.Entity<WatcherGenre>().ToTable("Watcher_Genres");
 
             // composite keys for relational entities:
-            modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.netflix_id, tc.country_code });
+            modelBuilder.Entity<TitleCountry>().HasKey(tc => new { tc.netflix_id, tc.country_id });
             modelBuilder.Entity<TitleGenre>().HasKey(tg => new { tg.netflix_id, tg.genre_id });
             modelBuilder.Entity<WatcherTitle>().HasKey(wt => new { wt.watcher_name, wt.netflix_id });
             modelBuilder.Entity<WatcherGenre>().HasKey(wg => new { wg.watcher_name, wg.genre_id });
@@ -79,7 +79,7 @@ namespace Movie4U.EntitiesModels.Entities
             modelBuilder.Entity<TitleCountry>()
                 .HasOne(tc => tc.Country)
                 .WithMany(country => country.titleCountries)
-                .HasForeignKey(tc => tc.country_code);
+                .HasForeignKey(tc => tc.country_id);
 
             modelBuilder.Entity<TitleCountry>()
                 .HasOne(tc => tc.title)

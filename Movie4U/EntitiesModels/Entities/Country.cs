@@ -1,15 +1,21 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Movie4U.EntitiesModels.Entities
 {
     public class Country: EntitiesModelsBase<Country, CountryModel>
     {
+        [Required, Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int id { get; set; }
+
         public string country { get; set; }
 
-        [Required, Key]
-        public string country_code { get; set; }  // while getting from uNoGs, it's name might not contain '_' for this class 
+        public string countrycode { get; set; }
 
         public int expiring { get; set; }
 
@@ -40,6 +46,11 @@ namespace Movie4U.EntitiesModels.Entities
             Copy(source);
         }
 
+        public Country(CountryResponseModel source)
+        {
+            Copy(source);
+        }
+
         /**<summary>
          * Constructor.
          * </summary>*/
@@ -47,8 +58,9 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public void Copy(Country source)
         {
+            id = source.id;
             country = source.country;
-            country_code = source.country_code;
+            countrycode = source.countrycode;
             expiring = source.expiring;
             nl7 = source.nl7;
             tmovs = source.tmovs;
@@ -58,8 +70,21 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public void Copy(CountryModel source)
         {
+            id = source.id;
             country = source.country;
-            country_code = source.country_code;
+            countrycode = source.countrycode;
+            expiring = source.expiring;
+            nl7 = source.nl7;
+            tmovs = source.tmovs;
+            tseries = source.tseries;
+            tvids = source.tvids;
+        }
+
+        private void Copy(CountryResponseModel source)
+        {
+            id = source.id;
+            country = source.country;
+            countrycode = source.countrycode;
             expiring = source.expiring;
             nl7 = source.nl7;
             tmovs = source.tmovs;
@@ -69,7 +94,7 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public IdModel getId()
         {
-            return new IdModel(1,  country_code);
+            return new IdModel(1,  countrycode);
         }
 
     }
