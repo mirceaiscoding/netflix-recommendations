@@ -20,7 +20,7 @@ namespace Movie4U.Repositories
 
         public async Task<List<TitleCountryModel>> GetAllByNetflixIdAsync(string netflixId)
         {
-                return await GetAllDbQueryableAsync()
+                return await GetAllDbFilteredQueryableAsync()
                 .Result
                 .Where(tg => tg.netflix_id == netflixId)
                 .Select(tg => EntitiesModelsFactory<TitleCountry, TitleCountryModel>.getModel(tg))

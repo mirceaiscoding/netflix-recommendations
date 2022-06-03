@@ -29,7 +29,7 @@ namespace Movie4U.Managers
 
         public async Task<List<WatcherModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            return await repo.GetAllAsync();
+            return await repo.GetAllFromPageAsync();
         }
 
         public async Task<WatcherModel> GetOneByIdAsync(string name)

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,12 +21,13 @@ namespace Movie4U.Utilities
         public bool HasPreviousPage => pageIndex > 1;
         public bool HasNextPage => pageIndex < totalPages;
 
-        public static async Task<PaginatedListFactory<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
-        {
-            var count = await source.CountAsync();
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginatedListFactory<T>(items, count, pageIndex, pageSize);
-        }
 
+        public static Task<PaginatedListFactory<T>> Create(List<T> source, int pageIndex, int pageSize)
+        {
+            var count = source.Count();
+
+            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            return Task.FromResult(new PaginatedListFactory<T>(items, count, pageIndex, pageSize));
+        }
     }
 }

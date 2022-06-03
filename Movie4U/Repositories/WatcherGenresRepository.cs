@@ -20,7 +20,7 @@ namespace Movie4U.Repositories
 
         public async Task<List<WatcherGenreModel>> GetAllByWatcherIdAsync(string watcher_name)
         {
-            return await GetAllDbQueryableAsync()
+            return await GetAllDbFilteredQueryableAsync()
                 .Result
                 .Where(wg => wg.watcher_name == watcher_name)
                 .Select(wg => EntitiesModelsFactory<WatcherGenre, WatcherGenreModel>.getModel(wg))

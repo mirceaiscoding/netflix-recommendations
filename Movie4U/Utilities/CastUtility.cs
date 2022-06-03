@@ -1,5 +1,6 @@
 ﻿using Movie4U.EntitiesModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Movie4U.Utilities
 {

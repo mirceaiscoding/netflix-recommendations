@@ -32,7 +32,7 @@ namespace Movie4U.Managers
 
         public async Task<List<WatcherGenreModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            var watcherGenreModels = await repo.GetAllAsync();
+            var watcherGenreModels = await repo.GetAllFromPageAsync();
 
             foreach (var watcherGenreModel in watcherGenreModels)
                 await FillModelsLists(watcherGenreModel);

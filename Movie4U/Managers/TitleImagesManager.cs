@@ -23,7 +23,7 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleImageModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            return await repo.GetAllAsync();
+            return await repo.GetAllFromPageAsync();
         }
 
         public async Task<List<TitleImageModel>> GetAllByNetflixIdAsync(string netflixId)
