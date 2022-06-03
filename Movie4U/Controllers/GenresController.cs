@@ -17,7 +17,7 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllGenresFromPage/{pageIndex}")]
+        [HttpGet("GetAllFromPage/{pageIndex}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllGenresFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
@@ -29,7 +29,7 @@ namespace Movie4U.Controllers
             return Ok(genres);
         }
 
-        [HttpGet("GetGenreById/{genre_id}")]
+        [HttpGet("GetOneById/{genre_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetGenreByIdAsync([FromRoute] int genre_id)
         {

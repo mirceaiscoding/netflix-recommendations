@@ -17,7 +17,7 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllWatcherTitlesFromPage/{pageIndex}")]
+        [HttpGet("GetAllFromPage/{pageIndex}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllWatcherTitlesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
@@ -29,7 +29,7 @@ namespace Movie4U.Controllers
             return Ok(watcherTitles);
         }
 
-        [HttpGet("GetWatcherTitleById/{watcher_name}/{netflix_id}")]
+        [HttpGet("GetOneById/{watcher_name}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetWatcherTitleByIdAsync([FromRoute] string watcher_name, string netflix_id)
         {

@@ -17,7 +17,7 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitleImagesFromPage/{pageIndex}")]
+        [HttpGet("GetAllFromPage/{pageIndex}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllTitleImagesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
@@ -29,11 +29,11 @@ namespace Movie4U.Controllers
             return Ok(titleImages);
         }
 
-        [HttpGet("GetTitleImageById/{genre_id}")]
+        [HttpGet("GetOneById/{imgurl}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetTitleImageByIdAsync([FromRoute] string url)
+        public async Task<IActionResult> GetTitleImageByIdAsync([FromRoute] string imgurl)
         {
-            var titleImage = await manager.GetOneByIdAsync(url);
+            var titleImage = await manager.GetOneByIdAsync(imgurl);
 
             if (titleImage == null)
                 return NotFound("There is no title image with the given id stored in the database");

@@ -19,7 +19,7 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllWatchersFromPage/{pageIndex}")]
+        [HttpGet("GetAllFromPage/{pageIndex}")]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetAllWatchersFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
@@ -31,7 +31,7 @@ namespace Movie4U.Controllers
             return Ok(watchers);
         }
 
-        [HttpGet("GetWatcherByName/{name}")]
+        [HttpGet("GetOneByName/{name}")]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByNameAsync([FromRoute] string name)
         {

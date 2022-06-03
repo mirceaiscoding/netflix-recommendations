@@ -17,7 +17,7 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitleCountriesFromPage/{pageIndex}")]
+        [HttpGet("GetAllFromPage/{pageIndex}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllTitleCountriesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
@@ -29,7 +29,7 @@ namespace Movie4U.Controllers
             return Ok(titleCountries);
         }
 
-        [HttpGet("GetTitleCountryById/{country_code}/{netflix_id}")]
+        [HttpGet("GetOneById/{country_code}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetTitleCountryByIdAsync([FromRoute] string country_code, string netflix_id)
         {
