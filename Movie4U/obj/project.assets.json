@@ -10171,24 +10171,33 @@
     ]
   },
   "packageFolders": {
-    "/Users/binamircea/.nuget/packages/": {}
+    "C:\\Users\\Stefan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/binamircea/netflix-recommendations/Movie4U/Movie4U.csproj",
+      "projectUniqueName": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\Movie4U.csproj",
       "projectName": "Movie4U",
-      "projectPath": "/Users/binamircea/netflix-recommendations/Movie4U/Movie4U.csproj",
-      "packagesPath": "/Users/binamircea/.nuget/packages/",
-      "outputPath": "/Users/binamircea/netflix-recommendations/Movie4U/obj/",
+      "projectPath": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\Movie4U.csproj",
+      "packagesPath": "C:\\Users\\Stefan\\.nuget\\packages\\",
+      "outputPath": "F:\\Projects\\Visual Studio Projects\\MSDteam\\Movie4U\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "/Users/binamircea/.config/NuGet/NuGet.Config"
+        "C:\\Users\\Stefan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -10286,7 +10295,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.403/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

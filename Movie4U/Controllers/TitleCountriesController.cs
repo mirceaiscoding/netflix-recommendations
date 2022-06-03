@@ -18,11 +18,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitleCountries")]
+        [HttpGet("GetAllTitleCountriesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitleCountriesAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllTitleCountriesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var titleCountries = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var titleCountries = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (titleCountries.Count == 0)
                 return NotFound("There are no title countries stored in the database");

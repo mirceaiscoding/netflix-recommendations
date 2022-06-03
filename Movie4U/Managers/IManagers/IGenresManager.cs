@@ -8,7 +8,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface IGenresManager
     {
-        Task<List<GenreModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<GenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
         Task<GenreModel> GetOneByIdAsync(int genre_id);
 

@@ -18,12 +18,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllGenres")]
-
+        [HttpGet("GetAllGenresFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllGenresAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllGenresFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var genres = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var genres = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (genres.Count == 0)
                 return NotFound("There are no genres stored in the database");

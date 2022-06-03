@@ -30,7 +30,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<WatcherGenreModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
+        public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
             var watcherGenreModels = await repo.GetAllFromPageAsync();
 

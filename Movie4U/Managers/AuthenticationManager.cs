@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
@@ -34,28 +33,30 @@ namespace Movie4U.Managers
 
             var result = await userManager.CreateAsync(user, registerModel.password);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
+                return false;
+
+            try
             {
+                await userManager.AddToRoleAsync(user, registerModel.role);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
                 try
                 {
-                    await userManager.AddToRoleAsync(user, registerModel.role);
-                } catch (Exception e)
-                {
-                    try
-                    {
-                        await userManager.AddToRoleAsync(user, "BasicUser");
-                    } catch (Exception e2)
-                    {
-                        return false;
-                    }
+                    await userManager.AddToRoleAsync(user, "BasicUser");
                 }
-
-                await watchersManager.Create(user.UserName, user.Id);
-
-                return true;
+                catch (Exception e2)
+                {
+                    Console.WriteLine(e2);
+                    return false;
+                }
             }
-            
-            return false;
+
+            await watchersManager.Create(user.UserName, user.Id);
+
+            return true;
         }
 
 
@@ -67,28 +68,24 @@ namespace Movie4U.Managers
             else
                 user = await userManager.FindByNameAsync(loginModel.emailOrName);
 
-            if (user != null)
+            if (user == null)
+                return null;
+
+            var result = await signInManager.CheckPasswordSignInAsync(user, loginModel.password, false);
+            if (!result.Succeeded)
+                return null;
+
+            var accessToken = await tokensManager.GenerateAccessToken(user);
+            var refreshToken = tokensManager.GenerateRefreshToken();
+            DateTime refTokExpTime = DateTime.Now.AddDays(7);
+
+            await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
+
+            return new TokensModel
             {
-                var result = await signInManager.CheckPasswordSignInAsync(user, loginModel.password, false);
-                if (result.Succeeded)
-                {
-                    var accessToken = await tokensManager.GenerateAccessToken(user);
-                    var refreshToken = tokensManager.GenerateRefreshToken();
-                    DateTime refTokExpTime = DateTime.Now.AddDays(7);
-
-                    await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
-
-                    WatcherModel watcher = await watchersManager.GetOneByIdAsync(user.UserName);
-
-                    return new TokensModel
-                    {
-                        accessToken = accessToken,
-                        refreshToken = refreshToken
-                    };
-                }
-            }
-
-            return null;
+                accessToken = accessToken,
+                refreshToken = refreshToken
+            };
         }
     }
 }

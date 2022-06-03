@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -18,11 +17,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllCountries")]
+        [HttpGet("GetAllCountriesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllCountriesAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllCountriesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var countries = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var countries = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (countries.Count == 0)
                 return NotFound("There are no countries stored in the database");

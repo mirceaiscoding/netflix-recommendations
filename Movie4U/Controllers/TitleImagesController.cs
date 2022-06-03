@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -18,11 +17,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitleImages")]
+        [HttpGet("GetAllTitleImagesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitleImagesAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllTitleImagesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var titleImages = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var titleImages = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (titleImages.Count == 0)
                 return NotFound("There are no title images stored in the database");

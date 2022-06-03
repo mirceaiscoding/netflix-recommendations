@@ -18,11 +18,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitleGenres")]
+        [HttpGet("GetAllTitleGenresFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitleGenresAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllTitleGenresFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var titleGenres = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var titleGenres = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (titleGenres.Count == 0)
                 return NotFound("There are no title genres stored in the database");
