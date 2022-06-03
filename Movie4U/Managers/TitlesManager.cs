@@ -39,7 +39,7 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var titleModels = await repo.GetAllFromPageAsync();
+            var titleModels = await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             foreach (var titleModel in titleModels)
                 await FillModelsLists(titleModel);
