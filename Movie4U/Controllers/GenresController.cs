@@ -19,6 +19,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpGet("GetAllGenres")]
+
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllGenresAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
         {

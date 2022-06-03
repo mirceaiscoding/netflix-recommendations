@@ -13,6 +13,7 @@ using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Services;
 using System.Collections.Generic;
 using System.Text;
 
@@ -178,6 +179,8 @@ namespace Movie4U
 
             services.AddScoped<IWatcherGenresRepository, WatcherGenresRepository>();
             services.AddScoped<IWatcherGenresManager, WatcherGenresManager>();
+
+            services.AddScoped<IDatabasePopulatorService, DatabasePopulatorService>();
         }
 
         /**<summary>

@@ -6,7 +6,7 @@ namespace Movie4U.EntitiesModels.Entities
     public class TitleCountry: EntitiesModelsBase<TitleCountry, TitleCountryModel>
     {
         [Required]
-        public string country_code { get; set; }
+        public int country_id { get; set; }
 
         [Required]
         public string netflix_id { get; set; }
@@ -38,19 +38,19 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public void Copy(TitleCountry source)
         {
-            country_code = source.country_code;
+            country_id = source.country_id;
             netflix_id = source.netflix_id;
         }
 
         override public void Copy(TitleCountryModel source)
         {
-            country_code = source.country_code;
+            country_id = source.country_id;
             netflix_id = source.netflix_id;
         }
 
         override public IdModel GetId()
         {
-            return new IdModel (2, country_code, netflix_id);
+            return new IdModel (2, country_id, netflix_id);
         }
 
     }

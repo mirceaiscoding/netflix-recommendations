@@ -10,8 +10,8 @@ using Movie4U.EntitiesModels.Entities;
 namespace Movie4U.Migrations
 {
     [DbContext(typeof(Movie4UContext))]
-    [Migration("20220305221815_AddedUnogsEntities")]
-    partial class AddedUnogsEntities
+    [Migration("20220602192642_changePK")]
+    partial class changePK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,12 +110,15 @@ namespace Movie4U.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Countries", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Country", b =>
                 {
-                    b.Property<string>("country_code")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("id")
+                        .HasColumnType("int");
 
                     b.Property<string>("country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("countrycode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("expiring")
@@ -133,17 +136,15 @@ namespace Movie4U.Migrations
                     b.Property<int>("tvids")
                         .HasColumnType("int");
 
-                    b.HasKey("country_code");
+                    b.HasKey("id");
 
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Genres", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Genre", b =>
                 {
                     b.Property<int>("genre_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("genre")
                         .HasColumnType("nvarchar(max)");
@@ -153,7 +154,7 @@ namespace Movie4U.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Role", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -180,40 +181,7 @@ namespace Movie4U.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleCountries", b =>
-                {
-                    b.Property<string>("netflix_id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("country_code")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("audio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("expire_date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("new_date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("season_detail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("subtitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("netflix_id", "country_code");
-
-                    b.HasIndex("country_code");
-
-                    b.ToTable("Title_Countries");
-                });
-
-            modelBuilder.Entity("Movie4U.Entities.TitleDetails", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Title", b =>
                 {
                     b.Property<string>("netflix_id")
                         .HasColumnType("nvarchar(450)");
@@ -286,16 +254,28 @@ namespace Movie4U.Migrations
                     b.ToTable("Title_Details");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleGenres", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleCountry", b =>
+                {
+                    b.Property<string>("netflix_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("country_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("netflix_id", "country_id");
+
+                    b.HasIndex("country_id");
+
+                    b.ToTable("Title_Countries");
+                });
+
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleGenre", b =>
                 {
                     b.Property<string>("netflix_id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("genre_id")
                         .HasColumnType("int");
-
-                    b.Property<string>("genre")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("netflix_id", "genre_id");
 
@@ -304,7 +284,7 @@ namespace Movie4U.Migrations
                     b.ToTable("Title_Genres");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleImages", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleImage", b =>
                 {
                     b.Property<string>("url")
                         .HasColumnType("nvarchar(450)");
@@ -323,7 +303,7 @@ namespace Movie4U.Migrations
                     b.ToTable("Title_Images");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.User", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -388,7 +368,7 @@ namespace Movie4U.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.UserRole", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.UserRole", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -403,7 +383,7 @@ namespace Movie4U.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Watcher", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Watcher", b =>
                 {
                     b.Property<string>("watcher_name")
                         .HasColumnType("nvarchar(450)");
@@ -429,7 +409,25 @@ namespace Movie4U.Migrations
                     b.ToTable("Watchers");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.WatcherTitle", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.WatcherGenre", b =>
+                {
+                    b.Property<string>("watcher_name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("genre_id")
+                        .HasColumnType("int");
+
+                    b.Property<double>("watcherGenreScore")
+                        .HasColumnType("float");
+
+                    b.HasKey("watcher_name", "genre_id");
+
+                    b.HasIndex("genre_id");
+
+                    b.ToTable("Watcher_Genres");
+                });
+
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.WatcherTitle", b =>
                 {
                     b.Property<string>("watcher_name")
                         .HasColumnType("nvarchar(450)");
@@ -443,6 +441,12 @@ namespace Movie4U.Migrations
                     b.Property<int>("prefference")
                         .HasColumnType("int");
 
+                    b.Property<bool>("watchLater")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("watchLaterLastSetTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("watcher_name", "netflix_id");
 
                     b.HasIndex("netflix_id");
@@ -452,7 +456,7 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Movie4U.Entities.Role", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -461,7 +465,7 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Movie4U.Entities.User", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -470,7 +474,7 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Movie4U.Entities.User", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -479,22 +483,22 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Movie4U.Entities.User", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleCountries", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleCountry", b =>
                 {
-                    b.HasOne("Movie4U.Entities.Countries", "Country")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Country", "Country")
                         .WithMany("titleCountries")
-                        .HasForeignKey("country_code")
+                        .HasForeignKey("country_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie4U.Entities.TitleDetails", "title")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Title", "title")
                         .WithMany("titleCountries")
                         .HasForeignKey("netflix_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -505,15 +509,15 @@ namespace Movie4U.Migrations
                     b.Navigation("title");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleGenres", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleGenre", b =>
                 {
-                    b.HasOne("Movie4U.Entities.Genres", "Genre")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Genre", "Genre")
                         .WithMany("titleGenres")
                         .HasForeignKey("genre_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie4U.Entities.TitleDetails", "title")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Title", "title")
                         .WithMany("titleGenres")
                         .HasForeignKey("netflix_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,9 +528,9 @@ namespace Movie4U.Migrations
                     b.Navigation("title");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleImages", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleImage", b =>
                 {
-                    b.HasOne("Movie4U.Entities.TitleDetails", "title")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Title", "title")
                         .WithMany("titleImages")
                         .HasForeignKey("netflix_id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -535,41 +539,60 @@ namespace Movie4U.Migrations
                     b.Navigation("title");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.UserRole", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.UserRole", b =>
                 {
-                    b.HasOne("Movie4U.Entities.Role", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie4U.Entities.User", null)
+                    b.HasOne("Movie4U.EntitiesModels.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Watcher", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Watcher", b =>
                 {
-                    b.HasOne("Movie4U.Entities.User", "user")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.User", "user")
                         .WithOne("watcher")
-                        .HasForeignKey("Movie4U.Entities.Watcher", "userId")
+                        .HasForeignKey("Movie4U.EntitiesModels.Entities.Watcher", "userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.WatcherTitle", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.WatcherGenre", b =>
                 {
-                    b.HasOne("Movie4U.Entities.TitleDetails", "title")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Genre", "genre")
+                        .WithMany("watcherGenres")
+                        .HasForeignKey("genre_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Watcher", "watcher")
+                        .WithMany("watcherGenres")
+                        .HasForeignKey("watcher_name")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("genre");
+
+                    b.Navigation("watcher");
+                });
+
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.WatcherTitle", b =>
+                {
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Title", "title")
                         .WithMany("watcherTitles")
                         .HasForeignKey("netflix_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Movie4U.Entities.Watcher", "watcher")
+                    b.HasOne("Movie4U.EntitiesModels.Entities.Watcher", "watcher")
                         .WithMany("watcherTitles")
                         .HasForeignKey("watcher_name")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -580,17 +603,19 @@ namespace Movie4U.Migrations
                     b.Navigation("watcher");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Countries", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Country", b =>
                 {
                     b.Navigation("titleCountries");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Genres", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Genre", b =>
                 {
                     b.Navigation("titleGenres");
+
+                    b.Navigation("watcherGenres");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.TitleDetails", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Title", b =>
                 {
                     b.Navigation("titleCountries");
 
@@ -601,13 +626,15 @@ namespace Movie4U.Migrations
                     b.Navigation("watcherTitles");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.User", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.User", b =>
                 {
                     b.Navigation("watcher");
                 });
 
-            modelBuilder.Entity("Movie4U.Entities.Watcher", b =>
+            modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Watcher", b =>
                 {
+                    b.Navigation("watcherGenres");
+
                     b.Navigation("watcherTitles");
                 });
 #pragma warning restore 612, 618

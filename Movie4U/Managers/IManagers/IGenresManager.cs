@@ -1,4 +1,5 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
 using Movie4U.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace Movie4U.Managers.IManagers
         Task Update(GenreModel genreModel);
 
         Task Create(GenreModel genreModel);
+
+        Task CreateMultiple(GenreResponseModel[] models);
 
         Task Delete(int genre_id);
     }

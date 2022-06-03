@@ -1,5 +1,6 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
@@ -27,9 +28,9 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync();
         }
 
-        public async Task<CountryModel> GetOneByIdAsync(string country_code)
+        public async Task<CountryModel> GetOneByIdAsync(int country_id)
         {
-            return await repo.GetOneByIdAsync(country_code);
+            return await repo.GetOneByIdAsync(country_id);
         }
 
         public async Task Create(CountryModel countryModel)
@@ -39,17 +40,26 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newCountry);
         }
 
+        public async Task CreateMultiple(CountryResponseModel[] models)
+        {
+            //Genre[] genres = (Genre[])models.Select(x => new Genre(x));
+
+            Country[] countries = Array.ConvertAll(models, x => new Country(x));
+
+            await repo.InsertMultipleAsync(countries);
+        }
+
         public async Task Update(CountryModel countryModel)
         {
-            Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.country_code);
+            Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.id);
             updateCountry.Copy(countryModel);
 
             await repo.UpdateAsync(updateCountry);
         }
 
-        public async Task Delete(string country_code)
+        public async Task Delete(int country_id)
         {
-            Country delCountry = await repo.GetOneDbByIdAsync(country_code);
+            Country delCountry = await repo.GetOneDbByIdAsync(country_id);
 
             if (delCountry != null)
                 await repo.DeleteAsync(delCountry);

@@ -10,8 +10,8 @@ using Movie4U.EntitiesModels.Entities;
 namespace Movie4U.Migrations
 {
     [DbContext(typeof(Movie4UContext))]
-    [Migration("20220314203138_AddedWatcherGenres")]
-    partial class AddedWatcherGenres
+    [Migration("20220602131448_reserDatabase")]
+    partial class reserDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -112,13 +112,16 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Country", b =>
                 {
-                    b.Property<string>("country_code")
+                    b.Property<string>("countrycode")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("expiring")
+                        .HasColumnType("int");
+
+                    b.Property<int>("id")
                         .HasColumnType("int");
 
                     b.Property<int>("nl7")
@@ -133,7 +136,7 @@ namespace Movie4U.Migrations
                     b.Property<int>("tvids")
                         .HasColumnType("int");
 
-                    b.HasKey("country_code");
+                    b.HasKey("countrycode");
 
                     b.ToTable("Countries");
                 });
@@ -141,9 +144,7 @@ namespace Movie4U.Migrations
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Genre", b =>
                 {
                     b.Property<int>("genre_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("genre")
                         .HasColumnType("nvarchar(max)");

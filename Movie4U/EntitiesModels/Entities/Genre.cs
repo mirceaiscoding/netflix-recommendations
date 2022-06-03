@@ -1,6 +1,8 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using Movie4U.EntitiesModels.Models.uNoGS;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Movie4U.EntitiesModels.Entities
 {
@@ -9,6 +11,7 @@ namespace Movie4U.EntitiesModels.Entities
         public string genre { get; set; }
 
         [Required, Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int genre_id { get; set; }
 
         virtual public List<TitleGenre> titleGenres { get; set; }
@@ -29,6 +32,12 @@ namespace Movie4U.EntitiesModels.Entities
         public Genre(GenreModel source)
         {
             Copy(source);
+        }
+
+        public Genre(GenreResponseModel source)
+        {
+            this.genre = source.genre;
+            this.genre_id = source.netflix_id;
         }
 
         /**<summary>
