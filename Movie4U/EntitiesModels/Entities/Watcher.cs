@@ -62,7 +62,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.userId = source.userId;
         }
 
-        override public IdModel getId()
+        override public IdModel GetId()
         {
             return new IdModel ( 1, watcher_name );
         }

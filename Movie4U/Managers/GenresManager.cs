@@ -1,11 +1,11 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.EntitiesModels.Models.uNoGS;
+using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -23,9 +23,9 @@ namespace Movie4U.Managers
         }
 
 
-        public async Task<List<GenreModel>> GetAllAsync()
+        public async Task<List<GenreModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            return await repo.GetAllAsync();
+            return await repo.GetAllFromPageAsync();
         }
 
         public async Task<GenreModel> GetOneByIdAsync(int genre_id)

@@ -6,11 +6,12 @@ using Movie4U.EntitiesModels.Entities;
 using Movie4U.Repositories.IRepositories;
 using Movie4U.Utilities;
 using Movie4U.EntitiesModels;
+using System;
 
 namespace Movie4U.Repositories
 {
     public class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel>
-        where TEntity : EntitiesModelsBase<TEntity, TModel>
+        where TEntity : EntitiesModelsBase<TEntity, TModel>, new()
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
         /**<summary>
@@ -28,52 +29,80 @@ namespace Movie4U.Repositories
             entities = db.Set<TEntity>();
         }
 
-        public virtual IQueryable<TEntity> GetAllDbQueryable()
+
+        public virtual async Task<IQueryable<TModel>> GetAllFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            return entities;
+            return (await GetAllDbFilteredQueryableAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber, true))
+                .Select(entity => EntitiesModelsFactory<TEntity, TModel>.getModel(entity));
         }
 
-        public virtual List<TModel> GetAll()
+        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1, bool asNoTracking = false)
         {
-            var entitiesList = entities.AsNoTracking().ToList();
+            var filterList = await GetFilterList(whereFlagsPacked);
 
-            return CastUtility.ToModelsList<TEntity, TModel>(entitiesList);
+            IQueryable<TEntity> result = entities;
+            foreach (var filter in filterList)
+                result = result.Where(entity => filter(entity));
+
+            if (asNoTracking)
+                return result
+                    .AsNoTracking();
+
+            return result;
         }
 
-        public virtual async Task<List<TModel>> GetAllAsync()
+        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            var entitiesList = await entities.AsNoTracking().ToListAsync();
-
-            return CastUtility.ToModelsList<TEntity, TModel>(entitiesList);
+            return CastUtility
+                .ToModelsList<TEntity, TModel>(
+                    await GetAllDbOrderedAsync(
+                        orderByFlagsPacked, whereFlagsPacked, pageNumber, true));
         }
 
-        public virtual IEnumerable<TEntity> GetAllDb()
+        public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1, bool asNoTracking = false)
         {
-            return entities;
+            var result = await GetAllDbFilteredQueryableAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            if (asNoTracking)
+                result = result
+                    .AsNoTracking();
+
+            var orderingCriteriaList = await GetOrderingCriteriaList(orderByFlagsPacked);
+            if (orderingCriteriaList.Count() == 0)
+                return await result
+                    .OrderBy(x => x)
+                    .ToListAsync();
+
+            IOrderedEnumerable<TEntity> resultOrdered = result.OrderBy(orderingCriteriaList[0]);
+            for (int i = 1; i < orderingCriteriaList.Count(); i++)
+                resultOrdered = resultOrdered.ThenBy(orderingCriteriaList[i]);
+
+            return resultOrdered
+                .ToList();
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbAsync()
+        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            return await entities.ToListAsync();
+            int pageIndex = 1, pageSize = 1;                    // ! change this to actual pageIndex and pageSize (probably coming from request or set somewhere in a static )
+            return await PaginatedListFactory<TModel>
+                .Create(
+                    await GetAllOrderedAsync(
+                        orderByFlagsPacked, whereFlagsPacked, pageNumber),
+                    pageIndex, pageSize);
         }
 
-        public virtual TModel GetOneById(object id)
+        public virtual async Task<List<TEntity>> GetAllDbFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            var entity = entities.Find(id);
-
-            return CastUtility.ToModel<TEntity, TModel>(entity);
+            int pageIndex = 1, pageSize = 1;                    // ! change this to actual pageIndex and pageSize (probably coming from request or set somewhere in a static )
+            return await PaginatedListFactory<TEntity>
+                .Create(
+                    await GetAllDbOrderedAsync(
+                        orderByFlagsPacked, whereFlagsPacked, pageNumber),
+                    pageIndex, pageSize);
         }
 
         public virtual async Task<TModel> GetOneByIdAsync(object id)
         {
             var entity = await entities.FindAsync(id);
-
-            return CastUtility.ToModel<TEntity, TModel>(entity);
-        }
-
-        public virtual TModel GetOneById(object id1, object id2)
-        {
-            var entity = entities.Find(id1, id2);
 
             return CastUtility.ToModel<TEntity, TModel>(entity);
         }
@@ -85,29 +114,14 @@ namespace Movie4U.Repositories
             return CastUtility.ToModel<TEntity, TModel>(entity);
         }
 
-        public virtual TEntity GetOneDbById(object id)
-        {
-            return entities.Find(id);
-        }
-
         public virtual async Task<TEntity> GetOneDbByIdAsync(object id)
         {
             return await entities.FindAsync(id);
         }
 
-        public virtual TEntity GetOneDbById(object id1, object id2)
-        {
-            return entities.Find(id1, id2);
-        }
-
         public virtual async Task<TEntity> GetOneDbByIdAsync(object id1, object id2)
         {
             return await entities.FindAsync(id1, id2);
-        }
-
-        public virtual void Insert(TEntity entity)
-        {
-            entities.Add(entity);
         }
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
@@ -144,6 +158,27 @@ namespace Movie4U.Repositories
                 entities.Attach(entityToDelete);
             entities.Remove(entityToDelete);
             await db.SaveChangesAsync();
+        }
+
+
+        private static Task<List<Func<TEntity, bool>>> GetFilterList(int whereFlagsPacked)
+        {
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
+            var filterList = new List<Func<TEntity, bool>>();
+            if (flagsUnpacked.Count > 0)
+                foreach (int flag in flagsUnpacked)
+                    filterList.Add(new TEntity().GetFilter(flag));
+            return Task.FromResult(filterList);
+        }
+
+        private static Task<List<Func<TEntity, object>>> GetOrderingCriteriaList(int orderByFlagsPacked)
+        {
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
+            var filterList = new List<Func<TEntity, object>>();
+            if (flagsUnpacked.Count > 0)
+                foreach (int flag in flagsUnpacked)
+                    filterList.Add(new TEntity().GetOrderingCriteria(flag));
+            return Task.FromResult(filterList);
         }
 
     }

@@ -9,25 +9,21 @@ namespace Movie4U.Repositories.IRepositories
         where TEntity : EntitiesModelsBase<TEntity, TModel>
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
-        IQueryable<TEntity> GetAllDbQueryable();
+        Task<IQueryable<TModel>> GetAllFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<IQueryable<TEntity>> GetAllDbFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1, bool asNoTracking = false);
+        Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1, bool asNoTracking = false);
 
-        List<TModel> GetAll();
-        Task<List<TModel>> GetAllAsync();
+        Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
-        IEnumerable<TEntity> GetAllDb();
-        Task<List<TEntity>> GetAllDbAsync();
+        Task<List<TEntity>> GetAllDbFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
 
-        TModel GetOneById(object id);
         Task<TModel> GetOneByIdAsync(object id);
-        TModel GetOneById(object id1, object id2);
         Task<TModel> GetOneByIdAsync(object id1, object id2);
 
-        TEntity GetOneDbById(object id);
         Task<TEntity> GetOneDbByIdAsync(object id);
-        TEntity GetOneDbById(object id1, object id2);
         Task<TEntity> GetOneDbByIdAsync(object id1, object id2);
 
-        void Insert(TEntity entity);
         Task<TEntity> InsertAsync(TEntity entity);
         Task<TEntity[]> InsertMultipleAsync(TEntity[] entities);
 

@@ -1,5 +1,6 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
@@ -36,9 +37,9 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<TitleModel>> GetAllAsync()
+        public async Task<List<TitleModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1)
         {
-            var titleModels = await repo.GetAllAsync();
+            var titleModels = await repo.GetAllFromPageAsync();
 
             foreach (var titleModel in titleModels)
                 await FillModelsLists(titleModel);

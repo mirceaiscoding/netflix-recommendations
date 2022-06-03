@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
 using Movie4U.Utilities;
@@ -19,13 +20,11 @@ namespace Movie4U.Repositories
 
         public async Task<List<TitleCountryModel>> GetAllByNetflixIdAsync(string netflixId)
         {
-            var allDb = await GetAllDbAsync();
-            var titleCountries =
-                allDb
+                return await GetAllDbFilteredQueryableAsync()
+                .Result
                 .Where(tg => tg.netflix_id == netflixId)
-                .ToList();
-
-            return CastUtility.ToModelsList<TitleCountry, TitleCountryModel>(titleCountries);
+                .Select(tg => EntitiesModelsFactory<TitleCountry, TitleCountryModel>.getModel(tg))
+                .ToListAsync();
         }
 
     }

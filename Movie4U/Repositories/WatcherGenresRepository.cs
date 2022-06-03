@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
 using Movie4U.Utilities;
@@ -19,13 +20,11 @@ namespace Movie4U.Repositories
 
         public async Task<List<WatcherGenreModel>> GetAllByWatcherIdAsync(string watcher_name)
         {
-            var allDb = await GetAllDbAsync();
-            var watcherGenres =
-                allDb
+            return await GetAllDbFilteredQueryableAsync()
+                .Result
                 .Where(wg => wg.watcher_name == watcher_name)
-                .ToList();
-
-            return CastUtility.ToModelsList<WatcherGenre, WatcherGenreModel>(watcherGenres);
+                .Select(wg => EntitiesModelsFactory<WatcherGenre, WatcherGenreModel>.getModel(wg))
+                .ToListAsync();
         }
 
     }

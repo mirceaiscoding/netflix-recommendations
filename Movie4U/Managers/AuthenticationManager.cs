@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
@@ -35,7 +36,20 @@ namespace Movie4U.Managers
 
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, registerModel.role);
+                try
+                {
+                    await userManager.AddToRoleAsync(user, registerModel.role);
+                } catch (Exception e)
+                {
+                    try
+                    {
+                        await userManager.AddToRoleAsync(user, "BasicUser");
+                    } catch (Exception e2)
+                    {
+                        return false;
+                    }
+                }
+
                 await watchersManager.Create(user.UserName, user.Id);
 
                 return true;
