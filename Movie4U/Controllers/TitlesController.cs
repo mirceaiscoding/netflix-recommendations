@@ -18,11 +18,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllTitles")]
+        [HttpGet("GetAllTitlesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitlesAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllTitlesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var titles = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var titles = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (titles.Count == 0)
                 return NotFound("There are no titles stored in the database");

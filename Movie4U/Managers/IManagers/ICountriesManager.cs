@@ -8,7 +8,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface ICountriesManager
     {
-        Task<List<CountryModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<CountryModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
         Task<CountryModel> GetOneByIdAsync(int country_id);
 

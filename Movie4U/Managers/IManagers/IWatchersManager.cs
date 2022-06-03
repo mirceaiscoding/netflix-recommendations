@@ -8,7 +8,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface IWatchersManager
     {
-        Task<List<WatcherModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<WatcherModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
         Task<WatcherModel> GetOneByIdAsync(string name);
         

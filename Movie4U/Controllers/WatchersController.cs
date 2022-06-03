@@ -20,11 +20,11 @@ namespace Movie4U.Controllers
             this.manager = manager;
         }
 
-        [HttpGet("GetAllWatchers")]
+        [HttpGet("GetAllWatchersFromPage")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> GetAllWatchersAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageNumber = 1)
+        public async Task<IActionResult> GetAllWatchersFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var watchers = await manager.GetAllAsync(orderByFlagsPacked, whereFlagsPacked, pageNumber);
+            var watchers = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 
             if (watchers.Count == 0)
                 return NotFound("There are no watchers stored in the database");

@@ -7,7 +7,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface ITitleCountriesManager
     {
-        Task<List<TitleCountryModel>> GetAllAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageNumber = 1);
+        Task<List<TitleCountryModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
         Task<List<TitleCountryModel>> GetAllByNetflixIdAsync(string netflixId);
 
