@@ -33,19 +33,29 @@ namespace Movie4U.Repositories
         }
 
 
-        public virtual async Task<IQueryable<TModel>> GetAllFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public virtual async Task<IQueryable<TModel>> GetAllFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
         {
-            return (await GetAllDbFilteredQueryableAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, true))
+            return 
+                (await GetAllDbFilteredQueryableAsync(
+                    orderByFlagsPacked,
+                    whereFlagsPacked,
+                    pageIndex,
+                    extraFilters,
+                    true))
                 .Select(entity => EntitiesModelsFactory<TEntity, TModel>.getModel(entity));
         }
 
-        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, bool asNoTracking = false)
+        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
         {
             var filterList = await GetFilterList(whereFlagsPacked);
 
             IQueryable<TEntity> result = entities;
             foreach (var filter in filterList)
                 result = result.Where(entity => filter(entity));
+
+            if (extraFilters != null)
+                foreach (var filter in extraFilters)
+                    result = result.Where(entity => filter(entity));
 
             if (asNoTracking)
                 return result
@@ -54,20 +64,26 @@ namespace Movie4U.Repositories
             return result;
         }
 
-        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
         {
             return CastUtility
                 .ToModelsList<TEntity, TModel>(
                     await GetAllDbOrderedAsync(
-                        orderByFlagsPacked, whereFlagsPacked, pageIndex, true));
+                        orderByFlagsPacked,
+                        whereFlagsPacked,
+                        pageIndex,
+                        extraFilters,
+                        true));
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, bool asNoTracking = false)
+        public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
         {
-            var result = await GetAllDbFilteredQueryableAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
-            if (asNoTracking)
-                result = result
-                    .AsNoTracking();
+            var result = await GetAllDbFilteredQueryableAsync(
+                orderByFlagsPacked,
+                whereFlagsPacked,
+                pageIndex,
+                extraFilters,
+                asNoTracking);
 
             var orderingCriteriaList = await GetOrderingCriteriaList(orderByFlagsPacked);
             if (orderingCriteriaList.Count() == 0)
@@ -83,21 +99,27 @@ namespace Movie4U.Repositories
                 .ToList();
         }
 
-        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
         {
             return await PaginatedListFactory<TModel>
                 .Create(
                     await GetAllOrderedAsync(
-                        orderByFlagsPacked, whereFlagsPacked, pageIndex),
+                        orderByFlagsPacked,
+                        whereFlagsPacked,
+                        pageIndex,
+                        extraFilters),
                     (int)pageIndex, pageSize);
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public virtual async Task<List<TEntity>> GetAllDbFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
         {
             return await PaginatedListFactory<TEntity>
                 .Create(
                     await GetAllDbOrderedAsync(
-                        orderByFlagsPacked, whereFlagsPacked, pageIndex),
+                        orderByFlagsPacked,
+                        whereFlagsPacked,
+                        pageIndex,
+                        extraFilters),
                     (int)pageIndex, pageSize);
         }
 
@@ -162,7 +184,7 @@ namespace Movie4U.Repositories
         }
 
 
-        private static Task<List<Func<TEntity, bool>>> GetFilterList(int whereFlagsPacked)
+        protected static Task<List<Func<TEntity, bool>>> GetFilterList(int whereFlagsPacked)
         {
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
             var filterList = new List<Func<TEntity, bool>>();
@@ -172,7 +194,7 @@ namespace Movie4U.Repositories
             return Task.FromResult(filterList);
         }
 
-        private static Task<List<Func<TEntity, object>>> GetOrderingCriteriaList(int orderByFlagsPacked)
+        protected static Task<List<Func<TEntity, object>>> GetOrderingCriteriaList(int orderByFlagsPacked)
         {
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
             var filterList = new List<Func<TEntity, object>>();

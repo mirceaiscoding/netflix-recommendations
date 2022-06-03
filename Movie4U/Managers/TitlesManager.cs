@@ -30,9 +30,9 @@ namespace Movie4U.Managers
         private async Task<bool> FillModelsLists(TitleModel titleModel)
         {
             var netflixId = titleModel.netflix_id;
-            titleModel.countryModels = await titleCountriesManager.GetAllCountriesByNetflixIdAsync(netflixId);
-            titleModel.genreModels = await titleGenresManager.GetAllGenresByNetflixIdAsync(netflixId);
-            titleModel.titleImageModels = await titleImagesManager.GetAllByNetflixIdAsync(netflixId);
+            titleModel.countryModels = await titleCountriesManager.GetAllCountriesByNetflixIdFromPageAsync(netflixId);
+            titleModel.genreModels = await titleGenresManager.GetAllGenresByNetflixIdFromPageAsync(netflixId);
+            titleModel.titleImageModels = await titleImagesManager.GetAllByNetflixIdFromPageAsync(netflixId);
 
             return true;
         }

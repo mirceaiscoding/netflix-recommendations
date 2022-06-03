@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -20,7 +19,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllWatcherTitlesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllWatcherTitlesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
+        public async Task<IActionResult> GetAllWatcherTitlesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
             var watcherTitles = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 

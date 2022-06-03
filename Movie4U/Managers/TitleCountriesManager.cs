@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,14 +30,17 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync();
         }
 
-        public async Task<List<TitleCountryModel>> GetAllByNetflixIdAsync(string netflixId)
+        public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            return await repo.GetAllByNetflixIdAsync(netflixId);
+            List<Func<TitleCountry, bool>> extraFilters = new List<Func<TitleCountry, bool>>();
+            extraFilters.Add(tc => tc.netflix_id == netflixId);
+
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
         }
 
-        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdAsync(string netflixId)
+        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var titleCountries = await GetAllByNetflixIdAsync(netflixId);
+            var titleCountries = await GetAllByNetflixIdFromPageAsync(netflixId);
 
             var countries = new List<CountryModel>();
             foreach (var titleCountry in titleCountries)

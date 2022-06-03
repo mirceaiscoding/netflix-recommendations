@@ -19,7 +19,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllCountriesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllCountriesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
+        public async Task<IActionResult> GetAllCountriesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
             var countries = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 

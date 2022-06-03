@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,9 +27,12 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync();
         }
 
-        public async Task<List<TitleImageModel>> GetAllByNetflixIdAsync(string netflixId)
+        public async Task<List<TitleImageModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            return await repo.GetAllByNetflixIdAsync(netflixId);
+            List<Func<TitleImage, bool>> extraFilters = new List<Func<TitleImage, bool>>();
+            extraFilters.Add(ti => ti.netflix_id == netflixId);
+
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
         }
 
         public async Task<TitleImageModel> GetOneByIdAsync(string url)

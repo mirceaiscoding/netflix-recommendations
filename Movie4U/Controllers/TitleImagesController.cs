@@ -19,7 +19,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetAllTitleImagesFromPage")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetAllTitleImagesFromPageAsync([FromRoute] int orderByFlagsPacked = 0, [FromRoute] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
+        public async Task<IActionResult> GetAllTitleImagesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
             var titleImages = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
 

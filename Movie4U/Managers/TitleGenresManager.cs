@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,14 +29,17 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync();
         }
 
-        public async Task<List<TitleGenreModel>> GetAllByNetflixIdAsync(string netflixId)
+        public async Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            return await repo.GetAllByNetflixIdAsync(netflixId);
+            List<Func<TitleGenre, bool>> extraFilters = new List<Func<TitleGenre, bool>>();
+            extraFilters.Add(tg => tg.netflix_id == netflixId);
+
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
         }
 
-        public async Task<List<GenreModel>> GetAllGenresByNetflixIdAsync(string netflixId)
+        public async Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var titleGenres = await GetAllByNetflixIdAsync(netflixId);
+            var titleGenres = await GetAllByNetflixIdFromPageAsync(netflixId);
 
             var genres = new List<GenreModel>();
             foreach(var titleGenre in titleGenres)
