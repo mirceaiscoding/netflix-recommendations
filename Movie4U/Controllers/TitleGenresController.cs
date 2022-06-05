@@ -31,7 +31,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetOneById/{genre_id}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetTitleGenreByIdAsync([FromRoute] int genre_id, string netflix_id)
+        public async Task<IActionResult> GetTitleGenreByIdAsync([FromRoute] int genre_id, int netflix_id)
         {
             var titleGenre = await manager.GetOneByIdAsync(genre_id, netflix_id);
 
@@ -59,7 +59,7 @@ namespace Movie4U.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteTitleGenreAsync([FromBody] int genre_id, string netflix_id)
+        public async Task<IActionResult> DeleteTitleGenreAsync([FromBody] int genre_id, int netflix_id)
         {
             await manager.Delete(genre_id, netflix_id);
             return Ok();

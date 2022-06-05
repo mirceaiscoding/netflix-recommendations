@@ -6,7 +6,7 @@ namespace Movie4U.EntitiesModels.Models
     {
         public int country_id { get; set; }  // while getting from uNoGs, it's name might not contain '_' for this class 
 
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
 
 
         /**<summary>

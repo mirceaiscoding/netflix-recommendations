@@ -33,5 +33,12 @@ namespace Movie4U.Controllers
             await databasePopulatorService.CreateCountriesAsync();
             return Ok();
         }
+
+        [HttpPost("CreateTitles/{pageIndex}")]
+        public async Task<IActionResult> CreateCountryTitles([FromHeader] int country_id = 400, [FromRoute] int pageIndex = 0)
+        {
+            await databasePopulatorService.CreateTitlesAsync(country_id, pageIndex);
+            return Ok();
+        }
     }
 }

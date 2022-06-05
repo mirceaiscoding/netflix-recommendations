@@ -5,7 +5,7 @@ namespace Movie4U.EntitiesModels.Models
     public class TitleImageModel : EntitiesModelsBase<TitleImage, TitleImageModel>
     {
         public string image_type { get; set; }
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
         public string url { get; set; }        // "filmid as netflixid,url,itype"
 
 

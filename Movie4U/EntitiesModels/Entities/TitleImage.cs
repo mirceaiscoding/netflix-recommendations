@@ -8,7 +8,7 @@ namespace Movie4U.EntitiesModels.Entities
         public string image_type { get; set; }
 
         [Required]
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
 
         [Required, Key]
         public string url { get; set; }        // "filmid as netflixid,url,itype"

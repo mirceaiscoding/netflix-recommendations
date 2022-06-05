@@ -9,12 +9,14 @@ namespace Movie4U.Managers.IManagers
     {
         Task<List<TitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
-        Task<TitleModel> GetOneByIdAsync(string netflix_id);
+        Task<TitleModel> GetOneByIdAsync(int netflix_id);
 
         Task Create(TitleModelParameter titleModelParam);
 
+        Task CreateMultiple(TitleModel[] models);
+
         Task Update(TitleModelParameter titleModelParam);
 
-        Task Delete(string netflix_id);
+        Task Delete(int netflix_id);
     }
 }

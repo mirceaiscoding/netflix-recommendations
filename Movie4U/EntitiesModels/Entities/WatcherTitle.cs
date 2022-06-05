@@ -33,7 +33,7 @@ namespace Movie4U.EntitiesModels.Entities
         public string watcher_name { get; set; }
 
         [Required]
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
 
         public Prefferences prefference { get; set; }
 

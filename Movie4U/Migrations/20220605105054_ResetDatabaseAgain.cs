@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Movie4U.Migrations
 {
-    public partial class reserDatabase : Migration
+    public partial class ResetDatabaseAgain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,9 +50,9 @@ namespace Movie4U.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    countrycode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false),
                     country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    countrycode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     expiring = table.Column<int>(type: "int", nullable: false),
                     nl7 = table.Column<int>(type: "int", nullable: false),
                     tmovs = table.Column<int>(type: "int", nullable: false),
@@ -61,7 +61,7 @@ namespace Movie4U.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Countries", x => x.countrycode);
+                    table.PrimaryKey("PK_Countries", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,28 +80,19 @@ namespace Movie4U.Migrations
                 name: "Title_Details",
                 columns: table => new
                 {
-                    netflix_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    alt_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    alt_image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    alt_metascore = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    alt_plot = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    alt_runtime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    alt_votes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    awards = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    default_image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    large_image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    latest_date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    maturity_label = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    maturity_level = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    origin_country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    poster = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    runtime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    start_date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    synopsis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    netflix_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    img = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     title_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    year = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    synopsis = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    year = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    runtime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    poster = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    top250 = table.Column<int>(type: "int", nullable: false),
+                    top250tv = table.Column<int>(type: "int", nullable: false),
+                    title_date = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,17 +230,17 @@ namespace Movie4U.Migrations
                 name: "Title_Countries",
                 columns: table => new
                 {
-                    country_code = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    netflix_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    country_id = table.Column<int>(type: "int", nullable: false),
+                    netflix_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Title_Countries", x => new { x.netflix_id, x.country_code });
+                    table.PrimaryKey("PK_Title_Countries", x => new { x.netflix_id, x.country_id });
                     table.ForeignKey(
-                        name: "FK_Title_Countries_Countries_country_code",
-                        column: x => x.country_code,
+                        name: "FK_Title_Countries_Countries_country_id",
+                        column: x => x.country_id,
                         principalTable: "Countries",
-                        principalColumn: "countrycode",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Title_Countries_Title_Details_netflix_id",
@@ -264,7 +255,7 @@ namespace Movie4U.Migrations
                 columns: table => new
                 {
                     genre_id = table.Column<int>(type: "int", nullable: false),
-                    netflix_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    netflix_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,7 +280,7 @@ namespace Movie4U.Migrations
                 {
                     url = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     image_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    netflix_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    netflix_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -332,7 +323,7 @@ namespace Movie4U.Migrations
                 columns: table => new
                 {
                     watcher_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    netflix_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    netflix_id = table.Column<int>(type: "int", nullable: false),
                     prefference = table.Column<int>(type: "int", nullable: false),
                     prefLastSetTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     watchLater = table.Column<bool>(type: "bit", nullable: false),
@@ -395,9 +386,9 @@ namespace Movie4U.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Title_Countries_country_code",
+                name: "IX_Title_Countries_country_id",
                 table: "Title_Countries",
-                column: "country_code");
+                column: "country_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Title_Genres_genre_id",

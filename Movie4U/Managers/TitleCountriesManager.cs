@@ -30,7 +30,7 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
         }
 
-        public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
             List<Func<TitleCountry, bool>> extraFilters = new List<Func<TitleCountry, bool>>();
             extraFilters.Add(tc => tc.netflix_id == netflixId);
@@ -38,7 +38,7 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
         }
 
-        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
             var titleCountries = await GetAllByNetflixIdFromPageAsync(netflixId);
 
@@ -52,9 +52,9 @@ namespace Movie4U.Managers
             return countries;
         }
 
-        public async Task<TitleCountryModel> GetOneByIdAsync(string country_code, string netflix_id)
+        public async Task<TitleCountryModel> GetOneByIdAsync(int country_id, int netflix_id)
         {
-            return await repo.GetOneByIdAsync(country_code, netflix_id);
+            return await repo.GetOneByIdAsync(country_id, netflix_id);
         }
 
         public async Task Create(TitleCountryModel titleCountryModel)
@@ -62,6 +62,13 @@ namespace Movie4U.Managers
             TitleCountry newTitleGenre = new TitleCountry(titleCountryModel);
 
             await repo.InsertAsync(newTitleGenre);
+        }
+
+        public async Task CreateMultiple(TitleCountryModel[] models)
+        {
+            TitleCountry[] titlesCountries = Array.ConvertAll(models, x => new TitleCountry(x));
+
+            await repo.InsertMultipleAsync(titlesCountries);
         }
 
         public async Task Update(TitleCountryModel titleCountryModel)
@@ -72,9 +79,9 @@ namespace Movie4U.Managers
             await repo.UpdateAsync(updateTitleCountry);
         }
 
-        public async Task Delete(string country_code, string netflix_id)
+        public async Task Delete(int country_id, int netflix_id)
         {
-            TitleCountry delTitleCountry = await repo.GetOneDbByIdAsync(country_code, netflix_id);
+            TitleCountry delTitleCountry = await repo.GetOneDbByIdAsync(country_id, netflix_id);
 
             if (delTitleCountry != null)
                 await repo.DeleteAsync(delTitleCountry);

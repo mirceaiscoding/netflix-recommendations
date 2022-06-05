@@ -9,7 +9,7 @@ namespace Movie4U.EntitiesModels.Entities
         public int country_id { get; set; }
 
         [Required]
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
 
         virtual public Country Country { get; set; }
         virtual public Title title { get; set; }

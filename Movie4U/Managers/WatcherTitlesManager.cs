@@ -25,7 +25,7 @@ namespace Movie4U.Managers
 
         private async Task<bool> FillModelsLists(WatcherTitleModel watcherTitleModel)
         {
-            watcherTitleModel.titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.watcher_name);
+            watcherTitleModel.titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
 
             return true;
         }

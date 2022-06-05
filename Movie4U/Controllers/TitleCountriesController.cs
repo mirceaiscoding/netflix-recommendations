@@ -31,9 +31,9 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetOneById/{country_code}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetTitleCountryByIdAsync([FromRoute] string country_code, string netflix_id)
+        public async Task<IActionResult> GetTitleCountryByIdAsync([FromRoute] int country_id, int netflix_id)
         {
-            var titleCountry = await manager.GetOneByIdAsync(country_code, netflix_id);
+            var titleCountry = await manager.GetOneByIdAsync(country_id, netflix_id);
 
             if (titleCountry == null)
                 return NotFound("There is no title country with the given id stored in the database");
@@ -59,9 +59,9 @@ namespace Movie4U.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteTitleCountryAsync([FromBody] string country_code, string netflix_id)
+        public async Task<IActionResult> DeleteTitleCountryAsync([FromBody] int country_id, int netflix_id)
         {
-            await manager.Delete(country_code, netflix_id);
+            await manager.Delete(country_id, netflix_id);
             return Ok();
         }
 

@@ -10,8 +10,8 @@ using Movie4U.EntitiesModels.Entities;
 namespace Movie4U.Migrations
 {
     [DbContext(typeof(Movie4UContext))]
-    [Migration("20220602192642_changePK")]
-    partial class changePK
+    [Migration("20220605105054_ResetDatabaseAgain")]
+    partial class ResetDatabaseAgain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,46 +183,12 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.Title", b =>
                 {
-                    b.Property<string>("netflix_id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("netflix_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("alt_id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("alt_image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("alt_metascore")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("alt_plot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("alt_runtime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("alt_votes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("awards")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("default_image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("large_image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("latest_date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("maturity_label")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("maturity_level")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("origin_country")
+                    b.Property<string>("img")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("poster")
@@ -234,17 +200,23 @@ namespace Movie4U.Migrations
                     b.Property<string>("runtime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("start_date")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("synopsis")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("title_date")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("title_type")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("top250")
+                        .HasColumnType("int");
+
+                    b.Property<int>("top250tv")
+                        .HasColumnType("int");
 
                     b.Property<string>("year")
                         .HasColumnType("nvarchar(max)");
@@ -256,8 +228,8 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleCountry", b =>
                 {
-                    b.Property<string>("netflix_id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("netflix_id")
+                        .HasColumnType("int");
 
                     b.Property<int>("country_id")
                         .HasColumnType("int");
@@ -271,8 +243,8 @@ namespace Movie4U.Migrations
 
             modelBuilder.Entity("Movie4U.EntitiesModels.Entities.TitleGenre", b =>
                 {
-                    b.Property<string>("netflix_id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("netflix_id")
+                        .HasColumnType("int");
 
                     b.Property<int>("genre_id")
                         .HasColumnType("int");
@@ -292,9 +264,8 @@ namespace Movie4U.Migrations
                     b.Property<string>("image_type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("netflix_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("netflix_id")
+                        .HasColumnType("int");
 
                     b.HasKey("url");
 
@@ -432,8 +403,8 @@ namespace Movie4U.Migrations
                     b.Property<string>("watcher_name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("netflix_id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("netflix_id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("prefLastSetTime")
                         .HasColumnType("datetime2");

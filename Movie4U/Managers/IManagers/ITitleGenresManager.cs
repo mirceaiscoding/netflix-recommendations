@@ -9,16 +9,16 @@ namespace Movie4U.Managers.IManagers
     {
         Task<List<TitleGenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
-        Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
+        Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
-        Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
+        Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
 
-        Task<TitleGenreModel> GetOneByIdAsync(int genre_id, string netflix_id);
+        Task<TitleGenreModel> GetOneByIdAsync(int genre_id, int netflix_id);
 
         Task Update(TitleGenreModel titleGenreModel);
 
         Task Create(TitleGenreModel titleGenreModel);
 
-        Task Delete(int genre_id, string netflix_id);
+        Task Delete(int genre_id, int netflix_id);
     }
 }

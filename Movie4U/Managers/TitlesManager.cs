@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace Movie4U.Managers
             return titleModels;
         }
 
-        public async Task<TitleModel> GetOneByIdAsync(string netflix_id)
+        public async Task<TitleModel> GetOneByIdAsync(int netflix_id)
         {
             var titleModel = await repo.GetOneByIdAsync(netflix_id);
             if(titleModel != null)
@@ -63,6 +64,13 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newTitle);
         }
 
+        public async Task CreateMultiple(TitleModel[] models)
+        {
+            Title[] titles = Array.ConvertAll(models, x => new Title(x));
+
+            await repo.InsertMultipleAsync(titles);
+        }
+
         public async Task Update(TitleModelParameter titleModelParam)
         {
             Title updateTitle = await repo.GetOneDbByIdAsync(titleModelParam.netflix_id);
@@ -71,7 +79,7 @@ namespace Movie4U.Managers
             await repo.UpdateAsync(updateTitle);
         }
 
-        public async Task Delete(string netflix_id)
+        public async Task Delete(int netflix_id)
         {
             Title delTitle = await repo.GetOneDbByIdAsync(netflix_id);
 

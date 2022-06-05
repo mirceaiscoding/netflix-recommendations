@@ -29,7 +29,7 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
         }
 
-        public async Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
             List<Func<TitleGenre, bool>> extraFilters = new List<Func<TitleGenre, bool>>();
             extraFilters.Add(tg => tg.netflix_id == netflixId);
@@ -37,7 +37,7 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
         }
 
-        public async Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(string netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
             var titleGenres = await GetAllByNetflixIdFromPageAsync(netflixId);
 
@@ -51,7 +51,7 @@ namespace Movie4U.Managers
             return genres;
         }
 
-        public async Task<TitleGenreModel> GetOneByIdAsync(int genre_id, string netflix_id)
+        public async Task<TitleGenreModel> GetOneByIdAsync(int genre_id, int netflix_id)
         {
             return await repo.GetOneByIdAsync(genre_id, netflix_id);
         }
@@ -71,7 +71,7 @@ namespace Movie4U.Managers
             await repo.UpdateAsync(updateTitleGenre);
         }
 
-        public async Task Delete(int genre_id, string netflix_id)
+        public async Task Delete(int genre_id, int netflix_id)
         {
             TitleGenre delTitleGenre = await repo.GetOneDbByIdAsync(genre_id, netflix_id);
 

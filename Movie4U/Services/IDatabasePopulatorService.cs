@@ -8,5 +8,8 @@ namespace Movie4U.Services
         public Task CreateGenresAsync();
 
         public Task CreateCountriesAsync();
+
+        // Will add to the database 100 titles from the specified country_id
+        public Task CreateTitlesAsync(int country_id, int page_number);
     }
 }
