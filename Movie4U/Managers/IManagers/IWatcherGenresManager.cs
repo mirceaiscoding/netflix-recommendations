@@ -13,6 +13,8 @@ namespace Movie4U.Managers.IManagers
 
         Task<WatcherGenreModel> GetOneByIdAsync(string watcher_name, int genre_id);
 
+        Task AddToScore(WatcherGenreModelParameter watcherGenreModelParam);
+
         Task Update(WatcherGenreModelParameter watcherGenreModelParam);
 
         Task Create(WatcherGenreModelParameter watcherGenreModelParam);
