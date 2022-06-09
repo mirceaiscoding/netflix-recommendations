@@ -71,7 +71,7 @@ namespace Movie4U.EntitiesModels.Models
             this.top250 = source.top250;
             this.top250tv = source.top250tv;
             this.title_date = source.title_date;
-            this.year = year;
+            this.year = source.year;
         }
 
         override public void Copy(TitleModel source)
@@ -87,7 +87,7 @@ namespace Movie4U.EntitiesModels.Models
             this.top250 = source.top250;
             this.top250tv = source.top250tv;
             this.title_date = source.title_date;
-            this.year = year;
+            this.year = source.year;
         }
 
         override public void ShallowCopy(TitleModel source)

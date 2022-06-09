@@ -82,7 +82,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.top250 = source.top250;
             this.top250tv = source.top250tv;
             this.title_date = source.title_date;
-            this.year = year;
+            this.year = source.year;
 
         }
 
@@ -99,7 +99,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.top250 = source.top250;
             this.top250tv = source.top250tv;
             this.title_date = source.title_date;
-            this.year = year;
+            this.year = source.year;
         }
 
         public void Copy(TitleModelParameter source)
@@ -115,7 +115,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.top250 = source.top250;
             this.top250tv = source.top250tv;
             this.title_date = source.title_date;
-            this.year = year;
+            this.year = source.year;
         }
 
         override public IdModel GetId()

@@ -34,16 +34,16 @@ namespace Movie4U.EntitiesModels.Models
 
         override public void Copy(TitleGenre source)
         {
-            this.genre = genre;
-            this.genre_id = genre_id;
-            this.netflix_id = netflix_id;
+            this.genre = source.genre;
+            this.genre_id = source.genre_id;
+            this.netflix_id = source.netflix_id;
         }
 
         public override void Copy(TitleGenreModel source)
         {
-            this.genre = genre;
-            this.genre_id = genre_id;
-            this.netflix_id = netflix_id;
+            this.genre = source.genre;
+            this.genre_id = source.genre_id;
+            this.netflix_id = source.netflix_id;
         }
 
         override public IdModel GetId()

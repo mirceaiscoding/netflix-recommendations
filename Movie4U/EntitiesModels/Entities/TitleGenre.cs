@@ -5,6 +5,8 @@ namespace Movie4U.EntitiesModels.Entities
 {
     public class TitleGenre: EntitiesModelsBase<TitleGenre,TitleGenreModel>
     {
+        public string genre { get; set; }
+
         [Required]
         public int genre_id { get; set; }
 
@@ -38,14 +40,16 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public void Copy(TitleGenre source)
         {
-            this.genre_id = genre_id;
-            this.netflix_id = netflix_id;
+            this.genre = source.genre;
+            this.genre_id = source.genre_id;
+            this.netflix_id = source.netflix_id;
         }
 
         public override void Copy(TitleGenreModel source)
         {
-            this.genre_id = genre_id;
-            this.netflix_id = netflix_id;
+            this.genre = source.genre;
+            this.genre_id = source.genre_id;
+            this.netflix_id = source.netflix_id;
         }
 
         override public IdModel GetId()
