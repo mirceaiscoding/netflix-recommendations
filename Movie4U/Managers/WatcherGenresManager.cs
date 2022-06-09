@@ -1,8 +1,8 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,9 +40,12 @@ namespace Movie4U.Managers
             return watcherGenreModels;
         }
 
-        public async Task<List<WatcherGenreModel>> GetAllByWatcherIdAsync(string watcher_name)
+        public async Task<List<WatcherGenreModel>> GetAllByWatcherIdFromPageAsync(string watcher_name, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var watcherGenreModels = await repo.GetAllByWatcherIdAsync(watcher_name);
+            List<Func<WatcherGenre, bool>> extraFilters = new List<Func<WatcherGenre, bool>>();
+            extraFilters.Add(wg => wg.watcher_name == watcher_name);
+
+            var watcherGenreModels = await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
 
             foreach (var watcherGenreModel in watcherGenreModels)
                 await FillModelsLists(watcherGenreModel);
