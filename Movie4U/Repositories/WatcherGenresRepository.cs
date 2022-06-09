@@ -18,13 +18,13 @@ namespace Movie4U.Repositories
         public WatcherGenresRepository(Movie4UContext db) : base(db) { }
 
 
-        public async Task<List<WatcherGenreModel>> GetAllByWatcherIdAsync(string watcher_name)
+        public Task<List<WatcherGenreModel>> GetAllByWatcherIdAsync(string watcher_name)
         {
-            return await GetAllDbFilteredQueryableAsync()
+            return Task.FromResult(GetAllDbFilteredAsync()
                 .Result
                 .Where(wg => wg.watcher_name == watcher_name)
                 .Select(wg => EntitiesModelsFactory<WatcherGenre, WatcherGenreModel>.getModel(wg))
-                .ToListAsync();
+                .ToList());
         }
 
     }

@@ -33,35 +33,39 @@ namespace Movie4U.Repositories
         }
 
 
-        public virtual async Task<IQueryable<TModel>> GetAllFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
+        public virtual async Task<List<TModel>> GetAllFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
         {
-            return 
-                (await GetAllDbFilteredQueryableAsync(
-                    orderByFlagsPacked,
-                    whereFlagsPacked,
-                    pageIndex,
-                    extraFilters,
-                    true))
-                .Select(entity => EntitiesModelsFactory<TEntity, TModel>.getModel(entity));
+            return
+                CastUtility.ToModelsList<TEntity, TModel>
+                    (await GetAllDbFilteredAsync(
+                        orderByFlagsPacked,
+                        whereFlagsPacked,
+                        pageIndex,
+                        extraFilters,
+                        true));
+                //.Select(entity => EntitiesModelsFactory<TEntity, TModel>.getModel(entity));
         }
 
-        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredQueryableAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
+        public virtual async Task<List<TEntity>> GetAllDbFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
         {
             var filterList = await GetFilterList(whereFlagsPacked);
 
             IQueryable<TEntity> result = entities;
+            if (asNoTracking)
+                result = result.AsNoTracking();
+
             foreach (var filter in filterList)
                 result = result.Where(entity => filter(entity));
 
+             var resultList = await result.ToListAsync();
+
             if (extraFilters != null)
                 foreach (var filter in extraFilters)
-                    result = result.Where(entity => filter(entity));
+                    resultList = resultList
+                        .Where(entity => filter(entity))
+                        .ToList();
 
-            if (asNoTracking)
-                return result
-                    .AsNoTracking();
-
-            return result;
+            return resultList;
         }
 
         public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
@@ -78,7 +82,7 @@ namespace Movie4U.Repositories
 
         public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
         {
-            var result = await GetAllDbFilteredQueryableAsync(
+            var result = await GetAllDbFilteredAsync(
                 orderByFlagsPacked,
                 whereFlagsPacked,
                 pageIndex,
@@ -87,9 +91,8 @@ namespace Movie4U.Repositories
 
             var orderingCriteriaList = await GetOrderingCriteriaList(orderByFlagsPacked);
             if (orderingCriteriaList.Count() == 0)
-                return await result
-                    .OrderBy(x => x)
-                    .ToListAsync();
+                return result;
+                    //.ToList();
 
             IOrderedEnumerable<TEntity> resultOrdered = result.OrderBy(orderingCriteriaList[0]);
             for (int i = 1; i < orderingCriteriaList.Count(); i++)
