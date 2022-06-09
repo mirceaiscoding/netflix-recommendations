@@ -8,7 +8,7 @@ namespace Movie4U.EntitiesModels.Models
 
         public int genre_id { get; set; }
 
-        public string netflix_id { get; set; }
+        public int netflix_id { get; set; }
 
 
         /**<summary>

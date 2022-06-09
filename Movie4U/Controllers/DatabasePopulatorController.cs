@@ -18,7 +18,7 @@ namespace Movie4U.Controllers
             this.databasePopulatorService = databasePopulatorService;
         }
 
-        [HttpPost("CreateGenres")]
+        [HttpPost("PopulateGenres")]
         //[Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateGenres()
         {
@@ -26,7 +26,7 @@ namespace Movie4U.Controllers
             return Ok();
         }
 
-        [HttpPost("CreateCountries")]
+        [HttpPost("PopulateCountries")]
         //[Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateCountries()
         {
@@ -34,10 +34,17 @@ namespace Movie4U.Controllers
             return Ok();
         }
 
-        [HttpPost("CreateTitles/{pageIndex}")]
-        public async Task<IActionResult> CreateCountryTitles([FromHeader] int country_id = 400, [FromRoute] int pageIndex = 0)
+        [HttpPost("PopulateTitlesForCountry/{country_id}/{pageIndex}")]
+        public async Task<IActionResult> CreateCountryTitles([FromRoute] int country_id = 400, [FromRoute] int pageIndex = 0)
         {
             await databasePopulatorService.CreateTitlesAsync(country_id, pageIndex);
+            return Ok();
+        }
+
+        [HttpPost("PopulateGenresForTitle/{netflix_id}")]
+        public async Task<IActionResult> CreateGenresForTitle([FromRoute] int netflix_id = 70076332)
+        {
+            await databasePopulatorService.CreateTitleGenresAsync(netflix_id);
             return Ok();
         }
     }
