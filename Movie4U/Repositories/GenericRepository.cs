@@ -34,9 +34,9 @@ namespace Movie4U.Repositories
         }
 
 
-        public virtual async Task<List<TModel>> GetAllFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
+        public virtual async Task<List<TModel>> GetAllFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            return
+            var modelsList =
                 CastUtility.ToModelsList<TEntity, TModel>
                     (await GetAllDbFilteredAsync(
                         orderByFlagsPacked,
@@ -44,7 +44,10 @@ namespace Movie4U.Repositories
                         pageIndex,
                         extraFilters,
                         true));
-                //.Select(entity => EntitiesModelsFactory<TEntity, TModel>.getModel(entity));
+            
+            if (filler != null)
+                await filler(modelsList);
+            return modelsList;
         }
 
         public virtual async Task<List<TEntity>> GetAllDbFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
@@ -69,9 +72,10 @@ namespace Movie4U.Repositories
             return resultList;
         }
 
-        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
+        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            return CastUtility
+            var modelsList = 
+                CastUtility
                 .ToModelsList<TEntity, TModel>(
                     await GetAllDbOrderedAsync(
                         orderByFlagsPacked,
@@ -79,6 +83,10 @@ namespace Movie4U.Repositories
                         pageIndex,
                         extraFilters,
                         true));
+
+            if (filler != null)
+                await filler(modelsList);
+            return modelsList;
         }
 
         public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
@@ -103,7 +111,7 @@ namespace Movie4U.Repositories
                 .ToList();
         }
 
-        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null)
+        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, Func<List<TModel>, Task> filler = null)
         {
             return await PaginatedListFactory<TModel>
                 .Create(
@@ -111,7 +119,8 @@ namespace Movie4U.Repositories
                         orderByFlagsPacked,
                         whereFlagsPacked,
                         pageIndex,
-                        extraFilters),
+                        extraFilters,
+                        filler),
                     (int)pageIndex, pageSize);
         }
 
@@ -127,18 +136,26 @@ namespace Movie4U.Repositories
                     (int)pageIndex, pageSize);
         }
 
-        public virtual async Task<TModel> GetOneByIdAsync(object id)
+        public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id);
 
-            return CastUtility.ToModel<TEntity, TModel>(entity);
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+
+            if (filler != null)
+                await filler(model);
+            return model;
         }
 
-        public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2)
+        public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id1, id2);
 
-            return CastUtility.ToModel<TEntity, TModel>(entity);
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+
+            if (filler != null)
+                await filler(model);
+            return model;
         }
 
         public virtual async Task<TEntity> GetOneDbByIdAsync(object id)

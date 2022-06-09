@@ -27,6 +27,9 @@ namespace Movie4U.Managers
 
         private async Task<bool> FillModelsLists(WatcherTitleModel watcherTitleModel)
         {
+            if (watcherTitleModel == null)
+                return false;
+
             var titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
 
             watcherTitleModel.synopsis = titleModel.synopsis;
@@ -48,12 +51,13 @@ namespace Movie4U.Managers
 
         public async Task<List<WatcherTitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var watcherTitleModels = await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            Func<List<WatcherTitleModel>, Task> filler = async watcherTitleModels =>
+            {
+                foreach (var watcherTitleModel in watcherTitleModels)
+                    await FillModelsLists(watcherTitleModel);
+            };
 
-            foreach (var watcherTitleModel in watcherTitleModels)
-                await FillModelsLists(watcherTitleModel);
-
-            return watcherTitleModels;
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
         }
 
         public async Task<List<WatcherTitleModel>> GetAllByWatcherIdFromPageAsync(string watcher_name, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
@@ -61,20 +65,21 @@ namespace Movie4U.Managers
             List<Func<WatcherTitle, bool>> extraFilters = new List<Func<WatcherTitle, bool>>();
             extraFilters.Add(wt => wt.watcher_name == watcher_name);
 
-            var watcherTitleModels = await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
+            Func<List<WatcherTitleModel>, Task> filler = async watcherTitleModels =>
+            {
+                foreach (var watcherTitleModel in watcherTitleModels)
+                    await FillModelsLists(watcherTitleModel);
+            };
 
-            foreach (var watcherTitleModel in watcherTitleModels)
-                await FillModelsLists(watcherTitleModel);
-
-            return watcherTitleModels;
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters, filler);
         }
 
         public async Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, string netflix_id)
         {
-            var watcherTitleModel = await repo.GetOneByIdAsync(watcher_name, netflix_id);
-            await FillModelsLists(watcherTitleModel);
+            Func<WatcherTitleModel, Task> filler = async watcherTitleModel =>
+                await FillModelsLists(watcherTitleModel);
 
-            return watcherTitleModel;
+            return await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
         }
 
         public async Task Create(WatcherTitleModelParameter watcherTitleModelParam)

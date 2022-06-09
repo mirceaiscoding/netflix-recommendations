@@ -1,6 +1,5 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System;
@@ -30,6 +29,9 @@ namespace Movie4U.Managers
 
         private async Task<bool> FillModelsLists(TitleModel titleModel)
         {
+            if(titleModel == null)
+                return false;
+
             var netflixId = titleModel.netflix_id;
             titleModel.countryModels = await titleCountriesManager.GetAllCountriesByNetflixIdFromPageAsync(netflixId);
             titleModel.genreModels = await titleGenresManager.GetAllGenresByNetflixIdFromPageAsync(netflixId);
@@ -40,21 +42,21 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            var titleModels = await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            Func<List<TitleModel>, Task> filler = async titleModels =>
+            {
+                foreach (var titleModel in titleModels)
+                    await FillModelsLists(titleModel);
+            };
 
-            foreach (var titleModel in titleModels)
-                await FillModelsLists(titleModel);
-
-            return titleModels;
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
         }
 
         public async Task<TitleModel> GetOneByIdAsync(int netflix_id)
         {
-            var titleModel = await repo.GetOneByIdAsync(netflix_id);
-            if(titleModel != null)
+            Func<TitleModel, Task> filler = async titleModel =>
                 await FillModelsLists(titleModel);
 
-            return titleModel;
+            return await repo.GetOneByIdAsync(netflix_id, filler);
         }
 
         public async Task Create(TitleModelParameter titleModelParam)
