@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Movie4U.EntitiesModels.Entities;
 
 namespace Movie4U.EntitiesModels.Models
@@ -18,7 +19,17 @@ namespace Movie4U.EntitiesModels.Models
 
         public DateTime watchLaterLastSetTime { get; set; }
 
-        public TitleModel titleModel { get; set; }
+        public string synopsis { get; set; }
+
+        public string rating { get; set; }
+
+        public string title_date { get; set; }
+
+        public string poster { get; set; }
+
+        public List<CountryModel> countryModels { get; set; }
+
+        public List<WatcherGenreModel> watcherGenreModels { get; set; }
 
 
         /**<summary>
@@ -60,12 +71,18 @@ namespace Movie4U.EntitiesModels.Models
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;
+
+            synopsis = source.synopsis;
+            rating = source.rating;
+            title_date = source.title_date;
+            poster = source.poster;
         }
 
         override public void ShallowCopy(WatcherTitleModel source)
         {
             Copy(source);
-            titleModel = source.titleModel;
+            countryModels = source.countryModels;
+            watcherGenreModels = source.watcherGenreModels;
         }
 
         override public IdModel GetId()

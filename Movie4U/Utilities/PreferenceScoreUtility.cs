@@ -11,7 +11,6 @@ namespace Movie4U.Utilities
          * </summary> */
         public static double GetScore(WatcherTitleModel watcherTitle)
         {
-            List<GenreModel> genres = watcherTitle.titleModel.genreModels;
             // genres doesn't contain the genreScore, because it's only the genral genre information. 
             // to obtain the genreScore, it should be done a join to WatcherGenres - probably in the WatcherTitleModel.
             // in the case, we'll end up having the TitleModel containing genreScore too, which is not a bad thing.

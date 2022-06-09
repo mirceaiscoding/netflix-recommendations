@@ -12,20 +12,36 @@ namespace Movie4U.Managers
     {
         private readonly IWatcherTitlesRepository repo;
         private readonly ITitlesManager titlesManager;
+        private readonly IWatcherGenresManager watcherGenresManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager)
+        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager)
         {
             this.repo = repo;
             this.titlesManager = titlesManager;
+            this.watcherGenresManager = watcherGenresManager;
         }
 
 
         private async Task<bool> FillModelsLists(WatcherTitleModel watcherTitleModel)
         {
-            watcherTitleModel.titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
+            var titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
+
+            watcherTitleModel.synopsis = titleModel.synopsis;
+            watcherTitleModel.title_date = titleModel.title_date;
+            watcherTitleModel.poster = titleModel.poster;
+            watcherTitleModel.rating = titleModel.rating;
+            watcherTitleModel.countryModels = titleModel.countryModels;
+
+            var watcherGenreModels = new List<WatcherGenreModel>();
+            foreach(var genreModel in titleModel.genreModels)
+            {
+                var watcherGenreModel = await watcherGenresManager.GetOneByIdAsync(watcherTitleModel.watcher_name, genreModel.genre_id);
+                watcherGenreModels.Add(watcherGenreModel);
+            }
+            watcherTitleModel.watcherGenreModels = watcherGenreModels;
 
             return true;
         }
