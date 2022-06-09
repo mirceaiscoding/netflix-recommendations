@@ -42,15 +42,23 @@ namespace Movie4U.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> CreateWatcherGenreAsync([FromBody] WatcherGenreModelParameter watcherGenreModelParam)
         {
             await manager.Create(watcherGenreModelParam);
             return Ok();
         }
 
+        [HttpPut("AddToScore")]
+        [Authorize(Policy = "BasicUserPolicy")]
+        public async Task<IActionResult> AddToWatcherGenreScoreAsync([FromBody] WatcherGenreModelParameter watcherGenreModelParam)
+        {
+            await manager.AddToScore(watcherGenreModelParam);
+            return Ok();
+        }
+
         [HttpPut]
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> UpdateWatcherGenreAsync([FromBody] WatcherGenreModelParameter watcherGenreModelParam)
         {
             await manager.Update(watcherGenreModelParam);

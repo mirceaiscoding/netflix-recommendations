@@ -65,6 +65,14 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newWatcherGenre);
         }
 
+        public async Task AddToScore(WatcherGenreModelParameter watcherGenreModelParam)
+        {
+            WatcherGenre updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            updateWatcherGenre.watcherGenreScore += watcherGenreModelParam.watcherGenreScore;
+
+            await repo.UpdateAsync(updateWatcherGenre);
+        }
+
         public async Task Update(WatcherGenreModelParameter watcherGenreModelParam)
         {
             WatcherGenre updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);

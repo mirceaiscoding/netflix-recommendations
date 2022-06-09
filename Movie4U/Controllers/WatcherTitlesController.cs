@@ -42,7 +42,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> CreateWatcherTitleAsync([FromBody] WatcherTitleModelParameter watcherTitleModelParam)
         {
             await manager.Create(watcherTitleModelParam);
@@ -50,7 +50,7 @@ namespace Movie4U.Controllers
         }
 
         [HttpPut]
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> UpdateWatcherTitleAsync([FromBody] WatcherTitleModelParameter watcherTitleModelParam)
         {
             await manager.Update(watcherTitleModelParam);
