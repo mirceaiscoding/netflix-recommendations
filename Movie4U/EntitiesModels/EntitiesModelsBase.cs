@@ -46,7 +46,12 @@ namespace Movie4U.EntitiesModels
             return null;
         }
 
-        virtual public Func<TEntity, object> GetOrderingCriteria(int key)
+        virtual public Func<TEntity, TEntity, int> GetTEntityComparer(int key)
+        {
+            return null;
+        }
+
+        virtual public Func<TModel, TModel, int> GetTModelComparer(int key)
         {
             return null;
         }

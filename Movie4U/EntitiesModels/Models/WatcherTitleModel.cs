@@ -7,6 +7,15 @@ namespace Movie4U.EntitiesModels.Models
     public class WatcherTitleModel: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
     {
 
+        static Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>> comparers;
+
+        static WatcherTitleModel()
+        {
+            comparers = new Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>>();
+            //sorters.Add(34, (wtm1, wtm2) => wtm1.prefference.CompareTo(wtm2.prefference) );
+
+        }
+
         public string watcher_name { get; set; }
 
         public int netflix_id { get; set; }
@@ -88,6 +97,13 @@ namespace Movie4U.EntitiesModels.Models
         override public IdModel GetId()
         {
             return new IdModel(2, watcher_name, netflix_id);
+        }
+
+        public override Func<WatcherTitleModel, WatcherTitleModel, int> GetTModelComparer(int key)
+        {
+            if (!comparers.TryGetValue(key, out Func<WatcherTitleModel, WatcherTitleModel, int> comparer))
+                return null;
+            return comparer;
         }
 
     }

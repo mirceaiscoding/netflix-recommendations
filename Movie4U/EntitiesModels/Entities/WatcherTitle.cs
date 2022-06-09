@@ -118,10 +118,5 @@ namespace Movie4U.EntitiesModels.Entities
             return filter;
         }
 
-        override public Func<WatcherTitle, object> GetOrderingCriteria(int key)
-        {
-            return null;
-        }
-
     }
 }

@@ -74,10 +74,10 @@ namespace Movie4U.Repositories
 
         public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            var modelsList = 
+            var result = 
                 CastUtility
                 .ToModelsList<TEntity, TModel>(
-                    await GetAllDbOrderedAsync(
+                    await GetAllDbFilteredAsync(
                         orderByFlagsPacked,
                         whereFlagsPacked,
                         pageIndex,
@@ -85,8 +85,14 @@ namespace Movie4U.Repositories
                         true));
 
             if (filler != null)
-                await filler(modelsList);
-            return modelsList;
+                await filler(result);
+
+            var comparerList = await GetTModelComparerList(orderByFlagsPacked);
+            if (comparerList.Count() == 0)
+                return result;
+
+            result.Sort(new ModelChainComparer<TModel>(comparerList));
+            return result;
         }
 
         public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, bool asNoTracking = false)
@@ -98,17 +104,12 @@ namespace Movie4U.Repositories
                 extraFilters,
                 asNoTracking);
 
-            var orderingCriteriaList = await GetOrderingCriteriaList(orderByFlagsPacked);
-            if (orderingCriteriaList.Count() == 0)
+            var comparerList = await GetTEntityComparerList(orderByFlagsPacked);
+            if (comparerList.Count() == 0)
                 return result;
-                    //.ToList();
 
-            IOrderedEnumerable<TEntity> resultOrdered = result.OrderBy(orderingCriteriaList[0]);
-            for (int i = 1; i < orderingCriteriaList.Count(); i++)
-                resultOrdered = resultOrdered.ThenBy(orderingCriteriaList[i]);
-
-            return resultOrdered
-                .ToList();
+            result.Sort(new EntityChainComparer<TEntity>(comparerList));
+            return result;
         }
 
         public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraFilters = null, Func<List<TModel>, Task> filler = null)
@@ -139,7 +140,6 @@ namespace Movie4U.Repositories
         public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id);
-
             var model = CastUtility.ToModel<TEntity, TModel>(entity);
 
             if (filler != null)
@@ -150,7 +150,6 @@ namespace Movie4U.Repositories
         public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id1, id2);
-
             var model = CastUtility.ToModel<TEntity, TModel>(entity);
 
             if (filler != null)
@@ -222,14 +221,24 @@ namespace Movie4U.Repositories
             return Task.FromResult(filterList);
         }
 
-        protected static Task<List<Func<TEntity, object>>> GetOrderingCriteriaList(int orderByFlagsPacked)
+        protected static Task<List<Func<TEntity, TEntity, int>>> GetTEntityComparerList(int orderByFlagsPacked)
         {
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
-            var filterList = new List<Func<TEntity, object>>();
+            var comparerList = new List<Func<TEntity, TEntity, int>>();
             if (flagsUnpacked.Count > 0)
                 foreach (int flag in flagsUnpacked)
-                    filterList.Add(new TEntity().GetOrderingCriteria(flag));
-            return Task.FromResult(filterList);
+                    comparerList.Add(new TEntity().GetTEntityComparer(flag));
+            return Task.FromResult(comparerList);
+        }
+
+        protected static Task<List<Func<TModel, TModel, int>>> GetTModelComparerList(int orderByFlagsPacked)
+        {
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
+            var comparerList = new List<Func<TModel, TModel, int>>();
+            if (flagsUnpacked.Count > 0)
+                foreach (int flag in flagsUnpacked)
+                    comparerList.Add(new TModel().GetTModelComparer(flag));
+            return Task.FromResult(comparerList);
         }
 
     }
