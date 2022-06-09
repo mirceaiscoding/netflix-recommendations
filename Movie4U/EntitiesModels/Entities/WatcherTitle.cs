@@ -15,13 +15,13 @@ namespace Movie4U.EntitiesModels.Entities
             filters = new Dictionary<int, Func<WatcherTitle, bool>>();
             filters.Add((int)WhereEnum.InWatchLater, wt => wt.watchLater == true);
             filters.Add((int)WhereEnum.NotInWatchLater, wt => wt.watchLater == false);
-            filters.Add((int)WhereEnum.PrefferenceIsMore, wt => wt.prefference == Prefferences.More);
-            filters.Add((int)WhereEnum.PrefferenceIsLess, wt => wt.prefference == Prefferences.Less);
-            filters.Add((int)WhereEnum.PrefferenceIsNull, wt => wt.prefference == Prefferences.Null);
+            filters.Add((int)WhereEnum.PrefferenceIsMore, wt => wt.preference == Preferences.More);
+            filters.Add((int)WhereEnum.PrefferenceIsLess, wt => wt.preference == Preferences.Less);
+            filters.Add((int)WhereEnum.PrefferenceIsNull, wt => wt.preference == Preferences.Null);
 
         }
 
-        public enum Prefferences
+        public enum Preferences
         {
             Null = 0,
             More = 1,
@@ -35,7 +35,7 @@ namespace Movie4U.EntitiesModels.Entities
         [Required]
         public int netflix_id { get; set; }
 
-        public Prefferences prefference { get; set; }
+        public Preferences preference { get; set; }
 
         public DateTime prefLastSetTime { get; set; }
 
@@ -80,7 +80,7 @@ namespace Movie4U.EntitiesModels.Entities
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            prefference = source.prefference;
+            preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;
@@ -90,7 +90,7 @@ namespace Movie4U.EntitiesModels.Entities
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            prefference = source.prefference;
+            preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;
@@ -100,7 +100,7 @@ namespace Movie4U.EntitiesModels.Entities
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            prefference = source.prefference;
+            preference = source.prefference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;

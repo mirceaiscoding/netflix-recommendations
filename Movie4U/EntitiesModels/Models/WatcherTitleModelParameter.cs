@@ -13,7 +13,7 @@ namespace Movie4U.EntitiesModels.Models
 
         public int netflix_id { get; set; }
 
-        public WatcherTitle.Prefferences prefference { get; set; }
+        public WatcherTitle.Preferences prefference { get; set; }
 
         public DateTime prefLastSetTime { get; set; }
 

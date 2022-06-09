@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Movie4U.EntitiesModels.Entities;
+using Movie4U.Enums;
 
 namespace Movie4U.EntitiesModels.Models
 {
@@ -12,7 +13,7 @@ namespace Movie4U.EntitiesModels.Models
         static WatcherTitleModel()
         {
             comparers = new Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>>();
-            //sorters.Add(34, (wtm1, wtm2) => wtm1.prefference.CompareTo(wtm2.prefference) );
+            comparers.Add((int)OrderByEnum.Score, (wtm1, wtm2) => wtm1.GetScore().CompareTo(wtm2.GetScore()));
 
         }
 
@@ -20,7 +21,7 @@ namespace Movie4U.EntitiesModels.Models
 
         public int netflix_id { get; set; }
 
-        public WatcherTitle.Prefferences prefference { get; set; }
+        public WatcherTitle.Preferences preference { get; set; }
 
         public DateTime prefLastSetTime { get; set; }
 
@@ -66,7 +67,7 @@ namespace Movie4U.EntitiesModels.Models
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            prefference = source.prefference;
+            preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;
@@ -76,7 +77,7 @@ namespace Movie4U.EntitiesModels.Models
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            prefference = source.prefference;
+            preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;
@@ -104,6 +105,28 @@ namespace Movie4U.EntitiesModels.Models
             if (!comparers.TryGetValue(key, out Func<WatcherTitleModel, WatcherTitleModel, int> comparer))
                 return null;
             return comparer;
+        }
+
+        public double GetScore()
+        {
+            double score = 0;
+            foreach(var watcherGenreModel in watcherGenreModels)
+                score += watcherGenreModel.watcherGenreScore;
+
+            switch (preference)
+            {
+                case WatcherTitle.Preferences.More:
+                    score += 50.0 / ((DateTime.Now - prefLastSetTime).TotalDays + 1);
+                    break;
+                case WatcherTitle.Preferences.Less:
+                    score -= 50.0 / ((DateTime.Now - prefLastSetTime).TotalDays + 1);
+                    break;
+            }
+
+            if (watchLater)
+                score += 10.0 / ((DateTime.Now - watchLaterLastSetTime).TotalDays + 1);
+
+            return score;
         }
 
     }
