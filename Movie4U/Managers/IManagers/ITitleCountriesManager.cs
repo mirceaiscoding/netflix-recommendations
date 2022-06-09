@@ -18,7 +18,8 @@ namespace Movie4U.Managers.IManagers
         Task Update(TitleCountryModel titleCountryModel);
 
         Task Create(TitleCountryModel titleCountryModel);
-        Task CreateMultiple(TitleCountryModel[] titleCountryModels);
+
+        Task CreateOrUpdateMultiple(TitleCountryModel[] titleCountryModels);
 
         Task Delete(int country_id, int netflix_id);
     }

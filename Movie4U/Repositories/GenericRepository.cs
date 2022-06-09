@@ -7,6 +7,7 @@ using Movie4U.Repositories.IRepositories;
 using Movie4U.Utilities;
 using Movie4U.EntitiesModels;
 using System;
+using EFCore.BulkExtensions;
 
 namespace Movie4U.Repositories
 {
@@ -160,6 +161,13 @@ namespace Movie4U.Repositories
         public async Task<TEntity[]> InsertMultipleAsync(TEntity[] entities)
         {
             await this.entities.AddRangeAsync(entities);
+            await db.SaveChangesAsync();
+            return entities;
+        }
+
+        public async Task<TEntity[]> InsertOrUpdateMultipleAsync(TEntity[] entities)
+        {
+            await db.BulkInsertOrUpdateAsync(entities);
             await db.SaveChangesAsync();
             return entities;
         }

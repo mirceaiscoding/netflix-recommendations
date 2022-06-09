@@ -71,6 +71,13 @@ namespace Movie4U.Managers
             await repo.InsertMultipleAsync(titles);
         }
 
+        public async Task CreateOrUpdateMultiple(TitleModel[] models)
+        {
+            Title[] titles = Array.ConvertAll(models, x => new Title(x));
+
+            await repo.InsertOrUpdateMultipleAsync(titles);
+        }
+
         public async Task Update(TitleModelParameter titleModelParam)
         {
             Title updateTitle = await repo.GetOneDbByIdAsync(titleModelParam.netflix_id);

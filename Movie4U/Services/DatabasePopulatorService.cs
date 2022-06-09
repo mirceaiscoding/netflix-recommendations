@@ -119,7 +119,7 @@ namespace Movie4U.Services
                     //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Countries ON;");
                     db.SaveChanges();
 
-                    await countriesManager.CreateMultiple(countries.results);
+                    await countriesManager.CreateOrUpdateMultiple(countries.results);
 
                     //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Countries OFF;");
                 }
@@ -200,7 +200,7 @@ namespace Movie4U.Services
                         });
                     }
 
-                    await titleCountriesManager.CreateMultiple(titleCountryModels.ToArray());
+                    await titleCountriesManager.CreateOrUpdateMultiple(titleCountryModels.ToArray());
 
                     //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Title_Details OFF;");
                     //db.SaveChanges();
@@ -280,7 +280,7 @@ namespace Movie4U.Services
                         });
                     }
 
-                    await titleGenresManager.CreateMultiple(titleGenreModels.ToArray());
+                    await titleGenresManager.CreateOrUpdateMultiple(titleGenreModels.ToArray());
 
                     //db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Title_Details OFF;");
                     //db.SaveChanges();

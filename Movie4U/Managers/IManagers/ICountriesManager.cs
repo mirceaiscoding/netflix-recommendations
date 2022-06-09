@@ -14,7 +14,7 @@ namespace Movie4U.Managers.IManagers
 
         Task Create(CountryModel countryModel);
 
-        Task CreateMultiple(CountryResponseModel[] models);
+        Task CreateOrUpdateMultiple(CountryResponseModel[] models);
 
         Task Update(CountryModel countryModel);
 

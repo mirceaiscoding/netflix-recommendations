@@ -40,13 +40,13 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newCountry);
         }
 
-        public async Task CreateMultiple(CountryResponseModel[] models)
+        public async Task CreateOrUpdateMultiple(CountryResponseModel[] models)
         {
             //Genre[] genres = (Genre[])models.Select(x => new Genre(x));
 
             Country[] countries = Array.ConvertAll(models, x => new Country(x));
 
-            await repo.InsertMultipleAsync(countries);
+            await repo.InsertOrUpdateMultipleAsync(countries);
         }
 
         public async Task Update(CountryModel countryModel)

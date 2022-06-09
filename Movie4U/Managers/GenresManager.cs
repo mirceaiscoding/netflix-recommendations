@@ -46,7 +46,7 @@ namespace Movie4U.Managers
 
             Genre[] genres = Array.ConvertAll(models, x => new Genre(x) );
 
-            await repo.InsertMultipleAsync(genres);
+            await repo.InsertOrUpdateMultipleAsync(genres);
         }
 
         public async Task Update(GenreModel genreModel)
