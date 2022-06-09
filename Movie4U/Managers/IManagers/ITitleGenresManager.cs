@@ -18,6 +18,7 @@ namespace Movie4U.Managers.IManagers
         Task Update(TitleGenreModel titleGenreModel);
 
         Task Create(TitleGenreModel titleGenreModel);
+        Task CreateOrUpdateMultiple(TitleGenreModel[] titleGenreModels);
 
         Task Delete(int genre_id, int netflix_id);
     }

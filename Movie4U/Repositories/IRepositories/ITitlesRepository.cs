@@ -5,6 +5,5 @@ namespace Movie4U.Repositories.IRepositories
 {
     public interface ITitlesRepository: IGenericRepository<Title, TitleModel>
     {
-
     }
 }
