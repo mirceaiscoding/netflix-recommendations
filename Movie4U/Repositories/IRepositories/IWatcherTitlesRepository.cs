@@ -7,7 +7,6 @@ namespace Movie4U.Repositories.IRepositories
 {
     public interface IWatcherTitlesRepository: IGenericRepository<WatcherTitle, WatcherTitleModel>
     {
-        Task<List<WatcherTitleModel>> GetAllByWatcherIdAsync(string watcher_name);
 
     }
 }
