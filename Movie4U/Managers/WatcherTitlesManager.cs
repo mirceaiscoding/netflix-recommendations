@@ -30,7 +30,7 @@ namespace Movie4U.Managers
             var titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
 
             watcherTitleModel.synopsis = titleModel.synopsis;
-            watcherTitleModel.title_date = titleModel.title_date;
+            watcherTitleModel.year = titleModel.year;
             watcherTitleModel.poster = titleModel.poster;
             watcherTitleModel.rating = titleModel.rating;
             watcherTitleModel.countryModels = titleModel.countryModels;

@@ -23,7 +23,7 @@ namespace Movie4U.EntitiesModels.Models
 
         public string rating { get; set; }
 
-        public string title_date { get; set; }
+        public string year { get; set; }
 
         public string poster { get; set; }
 
@@ -74,7 +74,7 @@ namespace Movie4U.EntitiesModels.Models
 
             synopsis = source.synopsis;
             rating = source.rating;
-            title_date = source.title_date;
+            year = source.year;
             poster = source.poster;
         }
 
