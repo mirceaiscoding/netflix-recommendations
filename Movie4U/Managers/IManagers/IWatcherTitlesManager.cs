@@ -7,9 +7,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface IWatcherTitlesManager
     {
-        Task<List<WatcherTitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
-
-        Task<List<WatcherTitleModel>> GetAllByWatcherIdFromPageAsync(string watcher_name, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
+        Task<List<WatcherTitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, WatcherModel watcherModel = null);
 
         Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, string netflix_id);
 

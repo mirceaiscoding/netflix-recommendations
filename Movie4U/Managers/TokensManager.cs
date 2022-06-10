@@ -102,7 +102,7 @@ namespace Movie4U.Managers
         }
 
 
-        public string ExtractUserName(string tokenHeader)
+        public static string ExtractUserName(string tokenHeader)
         {
             var handler = new JwtSecurityTokenHandler();
             var accessToken =  handler.ReadJwtToken(tokenHeader.Split(' ')[1]); // token format is:    Bearer + space + accessToken

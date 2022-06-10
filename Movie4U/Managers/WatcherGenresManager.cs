@@ -33,7 +33,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, WatcherModel watcherModel = null)
         {
             Func<List<WatcherGenreModel>, Task> filler = async watcherGenreModels =>
             {
@@ -41,19 +41,11 @@ namespace Movie4U.Managers
                     await FillModelsLists(watcherGenreModel);
             };
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
-        }
+            if (watcherModel == null)
+                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
 
-        public async Task<List<WatcherGenreModel>> GetAllByWatcherIdFromPageAsync(string watcher_name, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
-        {
             List<Func<WatcherGenre, bool>> extraFilters = new List<Func<WatcherGenre, bool>>();
-            extraFilters.Add(wg => wg.watcher_name == watcher_name);
-
-            Func<List<WatcherGenreModel>, Task> filler = async watcherGenreModels =>
-            {
-                foreach (var watcherGenreModel in watcherGenreModels)
-                    await FillModelsLists(watcherGenreModel);
-            };
+            extraFilters.Add(wg => wg.watcher_name == watcherModel.watcher_name);
 
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters, filler);
         }
