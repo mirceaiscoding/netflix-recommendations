@@ -19,6 +19,8 @@ namespace Movie4U.EntitiesModels.Entities
         [Required]
         public string userId { get; set; }
 
+        public int? coutryId { get; set; } 
+
         public virtual User user { get; set; }
         public virtual List<WatcherTitle> watcherTitles { get; set; }
         public virtual List<WatcherGenre> watcherGenres { get; set; }
@@ -51,6 +53,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
+            this.coutryId = source.coutryId;
         }
 
         public override void Copy(WatcherModel source)
@@ -60,6 +63,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
+            this.coutryId = source.coutryId;
         }
 
         override public IdModel GetId()

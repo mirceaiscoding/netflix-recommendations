@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
 
@@ -41,6 +42,21 @@ namespace Movie4U.Controllers
                 return NotFound("There is no watcher with the given name stored in the database");
 
             return Ok(watcher);
+        }
+
+        [HttpPut]
+        [Authorize(Policy = "BasicUserPolicy")]
+        public async Task<IActionResult> UpdateWatcherCountryId([FromHeader] string Authorization, [FromBody] int? countryId)
+        {
+            var watcherName = TokensManager.ExtractUserName(Authorization);
+
+            var watcherModel = await manager.GetOneByIdAsync(watcherName);
+            if (watcherModel == null)
+                return BadRequest("The watcher couldn not be found");
+
+            await manager.UpdateWatcherCountryId(watcherName, countryId);
+
+            return Ok();
         }
 
 

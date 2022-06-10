@@ -14,7 +14,7 @@ namespace Movie4U.Utilities
 
         public int Compare(TEntity m1, TEntity m2)
         {
-            if (comparerList == null | comparerList.Count == 0)
+            if (comparerList == null || comparerList.Count == 0)
                 return -1;
 
             foreach (var comparer in comparerList)

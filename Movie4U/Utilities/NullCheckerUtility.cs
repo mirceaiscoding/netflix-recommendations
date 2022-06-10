@@ -33,7 +33,7 @@ namespace Movie4U.Utilities
                 var value = pi.GetValue(obj);
                 if (pi.PropertyType == typeof(string) && string.IsNullOrEmpty((string)value))
                     return true;
-                else if (value == null)
+                if (value == null)
                     return true;
             }
             return false;

@@ -31,10 +31,10 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            List<Func<TitleCountry, bool>> extraFilters = new List<Func<TitleCountry, bool>>();
-            extraFilters.Add(tc => tc.netflix_id == netflixId);
+            List<Func<TitleCountry, bool>> extraEntityFilters = new List<Func<TitleCountry, bool>>();
+            extraEntityFilters.Add(tc => tc.netflix_id == netflixId);
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters);
         }
 
         public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)

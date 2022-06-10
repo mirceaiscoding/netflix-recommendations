@@ -46,10 +46,10 @@ namespace Movie4U.Controllers
 
             var result = await manager.Signup(registerModel);
 
-            if (result)
-                return Ok("Signup succedeed");
+            if (!result)
+                return BadRequest("Failed to signup");
 
-            return BadRequest("Failed to signup");
+            return Ok("Signup succedeed");
         }
 
         [HttpPost("Login")]
@@ -60,10 +60,10 @@ namespace Movie4U.Controllers
 
             var tokens = await manager.Login(loginModel);
 
-            if (tokens != null)
-                return Ok(tokens);
+            if (tokens == null)
+                return BadRequest("Failed to login");
 
-            return BadRequest("Failed to login");
+            return Ok(tokens);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Movie4U.EntitiesModels.Models
 
         public string userId { get; set; }
 
+        public int? coutryId { get; set; }
+
 
         /**<summary>
         * Constructor.
@@ -44,6 +46,7 @@ namespace Movie4U.EntitiesModels.Models
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
+            this.coutryId = source.coutryId;
         }
 
         public override void Copy(WatcherModel source)
@@ -53,6 +56,7 @@ namespace Movie4U.EntitiesModels.Models
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
+            this.coutryId = source.coutryId;
         }
 
         override public IdModel GetId()

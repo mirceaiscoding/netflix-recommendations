@@ -48,7 +48,7 @@ namespace Movie4U.Managers
                     await FillModelsLists(titleModel);
             };
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
         }
 
         public async Task<TitleModel> GetOneByIdAsync(int netflix_id)

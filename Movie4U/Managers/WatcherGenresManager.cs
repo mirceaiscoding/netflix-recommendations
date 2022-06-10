@@ -42,12 +42,12 @@ namespace Movie4U.Managers
             };
 
             if (watcherModel == null)
-                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, filler);
+                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
 
-            List<Func<WatcherGenre, bool>> extraFilters = new List<Func<WatcherGenre, bool>>();
-            extraFilters.Add(wg => wg.watcher_name == watcherModel.watcher_name);
+            List<Func<WatcherGenre, bool>> extraEntityFilters = new List<Func<WatcherGenre, bool>>();
+            extraEntityFilters.Add(wg => wg.watcher_name == watcherModel.watcher_name);
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters, filler);
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, null, filler);
         }
 
         public async Task<WatcherGenreModel> GetOneByIdAsync(string watcher_name, int genre_id)

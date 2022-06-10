@@ -15,7 +15,7 @@ namespace Movie4U.Utilities
 
         public int Compare(TModel m1, TModel m2)
         {
-            if (comparerList == null | comparerList.Count == 0)
+            if (comparerList == null || comparerList.Count == 0)
                 return -1;
 
             foreach (var comparer in comparerList)

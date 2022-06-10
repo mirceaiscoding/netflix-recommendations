@@ -17,7 +17,9 @@ namespace Movie4U.Managers.IManagers
         Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime);
 
         Task<TokensModel> UpdateRefreshToken(WatcherModel watcher);
-        
+
+        Task<bool> UpdateWatcherCountryId(string watcherName, int? countryId);
+
         Task Delete(string name);
     }
 }

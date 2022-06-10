@@ -28,10 +28,10 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleImageModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
         {
-            List<Func<TitleImage, bool>> extraFilters = new List<Func<TitleImage, bool>>();
-            extraFilters.Add(ti => ti.netflix_id == netflixId);
+            List<Func<TitleImage, bool>> extraEntityFilters = new List<Func<TitleImage, bool>>();
+            extraEntityFilters.Add(ti => ti.netflix_id == netflixId);
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraFilters);
+            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters);
         }
 
         public async Task<TitleImageModel> GetOneByIdAsync(string url)

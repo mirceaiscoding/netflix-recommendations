@@ -86,6 +86,18 @@ namespace Movie4U.Managers
             return tokensModel;
         }
 
+        public async Task<bool> UpdateWatcherCountryId(string watcherName, int? countryId)
+        {
+            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            if(dbWatcher == null)
+                return false;
+
+            dbWatcher.coutryId = countryId;
+
+            await repo.UpdateAsync(dbWatcher);
+            return true;
+        }
+
         public async Task Delete(string name)
         {
             Watcher delWatcher = await repo.GetOneDbByIdAsync(name);
