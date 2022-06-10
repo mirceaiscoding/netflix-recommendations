@@ -98,6 +98,18 @@ namespace Movie4U.Managers
             return true;
         }
 
+        public async Task<bool> UpdateNextPageIndex(string watcherName, int? nextPageIndex = 1)
+        {
+            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            if (dbWatcher == null)
+                return false;
+
+            dbWatcher.nextPageIndex = (int)nextPageIndex;
+
+            await repo.UpdateAsync(dbWatcher);
+            return true;
+        }
+
         public async Task Delete(string name)
         {
             Watcher delWatcher = await repo.GetOneDbByIdAsync(name);

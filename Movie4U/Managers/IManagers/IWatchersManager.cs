@@ -20,6 +20,8 @@ namespace Movie4U.Managers.IManagers
 
         Task<bool> UpdateWatcherCountryId(string watcherName, int? countryId);
 
+        Task<bool> UpdateNextPageIndex(string watcherName, int? nextPageIndex = 1);
+
         Task Delete(string name);
     }
 }
