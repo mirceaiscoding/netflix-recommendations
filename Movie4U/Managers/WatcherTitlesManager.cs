@@ -34,6 +34,11 @@ namespace Movie4U.Managers
                 return false;
 
             var titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
+            if(titleModel == null)
+            {
+                Console.WriteLine(String.Format("WatcherTitlesManager.FillModelsLists:  titlesManager.GetOneByIdAsync({0}, {1}) method retrieved a null result.", watcherTitleModel.netflix_id));
+                return false;
+            }
 
             watcherTitleModel.synopsis = titleModel.synopsis;
             watcherTitleModel.year = titleModel.year;
@@ -45,10 +50,16 @@ namespace Movie4U.Managers
             foreach(var genreModel in titleModel.genreModels)
             {
                 var watcherGenreModel = await watcherGenresManager.GetOneByIdAsync(watcherTitleModel.watcher_name, genreModel.genre_id);
+                if(watcherGenreModel == null)
+                {
+                    Console.WriteLine(String.Format("WatcherTitlesManager.FillModelsLists:  watcherGenresManager.GetOneByIdAsync({0}, {1}) method retrieved a null result.", watcherTitleModel.watcher_name, genreModel.genre_id));
+                    continue;
+                }
+
                 watcherGenreModels.Add(watcherGenreModel);
             }
-            watcherTitleModel.watcherGenreModels = watcherGenreModels;
 
+            watcherTitleModel.watcherGenreModels = watcherGenreModels;
             return true;
         }
 
@@ -60,7 +71,7 @@ namespace Movie4U.Managers
                     await FillModelsLists(watcherTitleModel);
             };
 
-            if(watcherModel == null)
+            if(watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
                 return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
 
             List<Func<WatcherTitle, bool>> extraEntityFilters = new List<Func<WatcherTitle, bool>>();
@@ -85,22 +96,30 @@ namespace Movie4U.Managers
             Func<WatcherTitleModel, Task> filler = async watcherTitleModel =>
                 await FillModelsLists(watcherTitleModel);
 
+            var watcherTitleModel = await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
+            if(watcherTitleModel != null)
+                return watcherTitleModel;
+
+            await Create(new WatcherTitleModelParameter(watcher_name, netflix_id, WatcherTitle.Preferences.Null, DateTime.Now, false, DateTime.Now));
             return await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
         }
 
         public async Task Create(WatcherTitleModelParameter watcherTitleModelParam)
         {
-            WatcherTitle newWatcherTitle = new WatcherTitle(watcherTitleModelParam);
+            var newWatcherTitle = new WatcherTitle(watcherTitleModelParam);
 
             await repo.InsertAsync(newWatcherTitle);
         }
 
-        public async Task Update(WatcherTitleModelParameter watcherTitleModelParam)
+        public async Task<bool> Update(WatcherTitleModelParameter watcherTitleModelParam)
         {
-            WatcherTitle updateWatcherTitle = await repo.GetOneDbByIdAsync(watcherTitleModelParam.watcher_name, watcherTitleModelParam.netflix_id);
+            var updateWatcherTitle = await repo.GetOneDbByIdAsync(watcherTitleModelParam.watcher_name, watcherTitleModelParam.netflix_id);
+            if (updateWatcherTitle == null)
+                return false;
+
             updateWatcherTitle.Copy(watcherTitleModelParam);
 
-            await repo.UpdateAsync(updateWatcherTitle);
+            return await repo.UpdateAsync(updateWatcherTitle);
         }
 
         public async Task CreateOrUpdateMultiple(WatcherTitleModelParameter[] models)
@@ -110,12 +129,13 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(titles);
         }
 
-        public async Task Delete(string watcher_name, int netflix_id)
+        public async Task<bool> Delete(string watcher_name, int netflix_id)
         {
-            WatcherTitle delWatcherTitle = await repo.GetOneDbByIdAsync(watcher_name, netflix_id);
+            var delWatcherTitle = await repo.GetOneDbByIdAsync(watcher_name, netflix_id);
+            if (delWatcherTitle == null)
+                return false;
 
-            if (delWatcherTitle != null)
-                await repo.DeleteAsync(delWatcherTitle);
+            return await repo.DeleteAsync(delWatcherTitle);
         }
 
     }

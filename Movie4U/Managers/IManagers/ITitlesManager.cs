@@ -17,8 +17,8 @@ namespace Movie4U.Managers.IManagers
 
         Task CreateOrUpdateMultiple(TitleModel[] models);
 
-        Task Update(TitleModelParameter titleModelParam);
+        Task<bool> Update(TitleModelParameter titleModelParam);
 
-        Task Delete(int netflix_id);
+        Task<bool> Delete(int netflix_id);
     }
 }

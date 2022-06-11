@@ -41,25 +41,29 @@ namespace Movie4U.Managers
 
         public async Task Create(TitleImageModel titleImageModel)
         {
-            TitleImage newTitleImage = new TitleImage(titleImageModel);
+            var newTitleImage = new TitleImage(titleImageModel);
 
             await repo.InsertAsync(newTitleImage);
         }
 
-        public async Task Update(TitleImageModel titleImageModel)
+        public async Task<bool> Update(TitleImageModel titleImageModel)
         {
-            TitleImage updateTitleImage = await repo.GetOneDbByIdAsync(titleImageModel.url);
+            var updateTitleImage = await repo.GetOneDbByIdAsync(titleImageModel.url);
+            if(updateTitleImage == null)
+                return false;
+
             updateTitleImage.Copy(titleImageModel);
 
-            await repo.UpdateAsync(updateTitleImage);
+            return await repo.UpdateAsync(updateTitleImage);
         }
 
-        public async Task Delete(string url)
+        public async Task<bool> Delete(string url)
         {
-            TitleImage delTitleImage = await repo.GetOneDbByIdAsync(url);
+            var delTitleImage = await repo.GetOneDbByIdAsync(url);
+            if (delTitleImage == null)
+                return false;
 
-            if (delTitleImage != null)
-                await repo.DeleteAsync(delTitleImage);
+            return await repo.DeleteAsync(delTitleImage);
         }
 
     }

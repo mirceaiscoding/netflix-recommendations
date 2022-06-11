@@ -154,20 +154,26 @@ namespace Movie4U.Repositories
         public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id);
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+            if (entity == null)
+                return null;
 
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
             if (filler != null)
                 await filler(model);
+
             return model;
         }
 
         public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id1, id2);
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+            if (entity == null)
+                return null;
 
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
             if (filler != null)
                 await filler(model);
+
             return model;
         }
 
@@ -183,9 +189,17 @@ namespace Movie4U.Repositories
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
-            await entities.AddAsync(entity);
-            await db.SaveChangesAsync();
-            return entity;
+            try
+            {
+                await entities.AddAsync(entity);
+                await db.SaveChangesAsync();
+                return entity;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return null;
+            }
         }
 
         public async Task<TEntity[]> InsertMultipleAsync(TEntity[] entities)
@@ -202,26 +216,35 @@ namespace Movie4U.Repositories
             return entities;
         }
 
-        public virtual async Task UpdateAsync(TEntity entityToUpdate)
+        public virtual async Task<bool> UpdateAsync(TEntity entityToUpdate)
         {
             entities.Attach(entityToUpdate);
             db.Entry(entityToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
+
+            return true;
         }
 
-        public virtual async Task DeleteAsync(object id)
+        public virtual async Task<bool> DeleteAsync(object id)
         {
             var entityToDelete = await entities.FindAsync(id);
-            await DeleteAsync(entityToDelete);
+            if (entityToDelete == null)
+                return false;
+
+            var result = await DeleteAsync(entityToDelete);
             await db.SaveChangesAsync();
+
+            return result;
         }
 
-        public virtual async Task DeleteAsync(TEntity entityToDelete)
+        public virtual async Task<bool> DeleteAsync(TEntity entityToDelete)
         {
             if (db.Entry(entityToDelete).State == EntityState.Detached)
                 entities.Attach(entityToDelete);
             entities.Remove(entityToDelete);
             await db.SaveChangesAsync();
+
+            return true;
         }
 
 

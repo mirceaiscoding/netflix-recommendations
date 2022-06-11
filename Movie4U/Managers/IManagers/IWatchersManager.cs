@@ -14,7 +14,7 @@ namespace Movie4U.Managers.IManagers
         
         Task Create(string watcherName, string UserId);
 
-        Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime);
+        Task<bool> UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime);
 
         Task<TokensModel> UpdateRefreshToken(WatcherModel watcher);
 
@@ -22,6 +22,6 @@ namespace Movie4U.Managers.IManagers
 
         Task<bool> UpdateNextPageIndex(string watcherName, int? nextPageIndex = 1);
 
-        Task Delete(string name);
+        Task<bool> Delete(string name);
     }
 }

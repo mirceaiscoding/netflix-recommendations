@@ -29,6 +29,11 @@ namespace Movie4U.Managers
                 return false;
 
             watcherGenreModel.genreModel = await genresManager.GetOneByIdAsync(watcherGenreModel.genre_id);
+            if (watcherGenreModel.genreModel == null)
+            {
+                Console.WriteLine(String.Format("WatcherGenresManager.FillModelsList:  genresManager.GetOneById({0}) retrieved a null result.", watcherGenreModel.genre_id));
+                return false;
+            }
 
             return true;
         }
@@ -55,38 +60,50 @@ namespace Movie4U.Managers
             Func<WatcherGenreModel, Task> filler = async watcherGenreModel =>
                 await FillModelsLists(watcherGenreModel);
 
+            var watcherGenreModel = await repo.GetOneByIdAsync(watcher_name, genre_id, filler);
+            if(watcherGenreModel != null)
+                return watcherGenreModel;
+
+            await Create(new WatcherGenreModelParameter(watcher_name, genre_id, 0));
             return await repo.GetOneByIdAsync(watcher_name, genre_id, filler);
         }
 
         public async Task Create(WatcherGenreModelParameter watcherGenreModelParameter)
         {
-            WatcherGenre newWatcherGenre = new WatcherGenre(watcherGenreModelParameter);
+            var newWatcherGenre = new WatcherGenre(watcherGenreModelParameter);
 
             await repo.InsertAsync(newWatcherGenre);
         }
 
-        public async Task AddToScore(WatcherGenreModelParameter watcherGenreModelParam)
+        public async Task<bool> AddToScore(WatcherGenreModelParameter watcherGenreModelParam)
         {
-            WatcherGenre updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            if (updateWatcherGenre == null)
+                return false;
+
             updateWatcherGenre.watcherGenreScore += watcherGenreModelParam.watcherGenreScore;
 
-            await repo.UpdateAsync(updateWatcherGenre);
+            return await repo.UpdateAsync(updateWatcherGenre);
         }
 
-        public async Task Update(WatcherGenreModelParameter watcherGenreModelParam)
+        public async Task<bool> Update(WatcherGenreModelParameter watcherGenreModelParam)
         {
-            WatcherGenre updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            if (updateWatcherGenre == null)
+                return false;
+
             updateWatcherGenre.Copy(watcherGenreModelParam);
 
-            await repo.UpdateAsync(updateWatcherGenre);
+            return await repo.UpdateAsync(updateWatcherGenre);
         }
 
-        public async Task Delete(string watcher_name, int genre_id)
+        public async Task<bool> Delete(string watcher_name, int genre_id)
         {
-            WatcherGenre WatcherGenre = await repo.GetOneDbByIdAsync(watcher_name, genre_id);
+            var delWatcherGenre = await repo.GetOneDbByIdAsync(watcher_name, genre_id);
+            if (delWatcherGenre == null)
+                return false;
 
-            if (WatcherGenre != null)
-                await repo.DeleteAsync(WatcherGenre);
+            return await repo.DeleteAsync(delWatcherGenre);
         }
 
     }

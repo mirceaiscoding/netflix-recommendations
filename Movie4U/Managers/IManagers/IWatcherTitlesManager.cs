@@ -11,12 +11,12 @@ namespace Movie4U.Managers.IManagers
 
         Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, int netflix_id);
 
-        Task Update(WatcherTitleModelParameter watcherTitleModelParam);
+        Task<bool> Update(WatcherTitleModelParameter watcherTitleModelParam);
 
         Task Create(WatcherTitleModelParameter watcherTitleModelParam);
 
         Task CreateOrUpdateMultiple(WatcherTitleModelParameter[] models);
 
-        Task Delete(string watcher_name, int netflix_id);
+        Task<bool> Delete(string watcher_name, int netflix_id);
     }
 }

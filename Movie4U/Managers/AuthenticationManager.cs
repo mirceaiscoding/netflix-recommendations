@@ -77,7 +77,7 @@ namespace Movie4U.Managers
 
             var accessToken = await tokensManager.GenerateAccessToken(user);
             var refreshToken = tokensManager.GenerateRefreshToken();
-            DateTime refTokExpTime = DateTime.Now.AddDays(7);
+            var refTokExpTime = DateTime.Now.AddDays(7);
 
             await watchersManager.UpdadeRefreshTokenAndExpTime(user.UserName, refreshToken, refTokExpTime);
 
