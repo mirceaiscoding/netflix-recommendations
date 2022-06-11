@@ -154,20 +154,26 @@ namespace Movie4U.Repositories
         public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id);
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+            if (entity == null)
+                return null;
 
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
             if (filler != null)
                 await filler(model);
+
             return model;
         }
 
         public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null)
         {
             var entity = await entities.FindAsync(id1, id2);
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+            if (entity == null)
+                return null;
 
+            var model = CastUtility.ToModel<TEntity, TModel>(entity);
             if (filler != null)
                 await filler(model);
+
             return model;
         }
 

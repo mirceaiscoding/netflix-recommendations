@@ -9,6 +9,9 @@ namespace Movie4U.Utilities
             where TEntity: EntitiesModelsBase<TEntity, TModel>
             where TModel: EntitiesModelsBase<TEntity, TModel>, new()
         {
+            if (entity == null)
+                return null;
+
             var model = new TModel();
             model.Copy(entity);
 

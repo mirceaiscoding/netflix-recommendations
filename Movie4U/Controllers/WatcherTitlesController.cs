@@ -40,7 +40,7 @@ namespace Movie4U.Controllers
 
         [HttpGet("GetOneById/{watcher_name}/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> GetWatcherTitleByIdAsync([FromHeader] string Authorization, string netflix_id)
+        public async Task<IActionResult> GetWatcherTitleByIdAsync([FromHeader] string Authorization, int netflix_id)
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
@@ -88,7 +88,7 @@ namespace Movie4U.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteWatcherTitleAsync([FromHeader] string Authorization, [FromBody] string watcher_name, string netflix_id)
+        public async Task<IActionResult> DeleteWatcherTitleAsync([FromHeader] string Authorization, [FromBody] string watcher_name, int netflix_id)
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
