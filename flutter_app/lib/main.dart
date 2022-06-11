@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      initialRoute: '/login', // Route when the app opens
+      initialRoute: '/watchlist', // Route when the app opens
       routes: {
         '/home': (context) => const Homescreen(),
         '/login': (context) => const LoginScreen(),

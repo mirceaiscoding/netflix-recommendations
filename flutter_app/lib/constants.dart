@@ -76,4 +76,5 @@ const kAuthRequestURL = "https://localhost:5003/api/Authentication/";
 
 // Watchlist
 const kMoviesToLoad = 5;
+const kmaxMoviesOnScreen = 4; //how many movies can fit on the screen
 const kPixelsBeforeRenderingNewMovies = 1000;

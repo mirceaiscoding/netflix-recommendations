@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/screens/watchlist/watchlist_screen.dart'; 
 
 class Body extends StatelessWidget {
 
   // Constructor
   // Used like this: Body(movie=...)
   final movie;
-  const Body({Key? key, @required this.movie }) : super(key: key);
+  const Body({Key? key, @required this.movie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,21 +101,27 @@ class Body extends StatelessWidget {
                         ListTile(
                           title: const Center(
                               child: Text(
-                            'Remove from watchlist',
+                            'Rate movie',
                             style: kMenuItemTextStyle,
                           )),
                           onTap: () {
-                            // Update the state of the app
-                            
-
-                            // Close the drawer
                             Navigator.pop(context);
                           },
                         ),
                         ListTile(
                           title: const Center(
                               child: Text(
-                            'Rate movie',
+                            'Add to Liked movies',
+                            style: kMenuItemTextStyle,
+                          )),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: const Center(
+                              child: Text(
+                            'Add to Disliked movies',
                             style: kMenuItemTextStyle,
                           )),
                           onTap: () {
