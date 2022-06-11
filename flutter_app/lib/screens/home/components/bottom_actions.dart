@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/services/watcher_title_preference_service.dart';
 
 class BottomActions extends StatelessWidget {
-
   final Function(int) onPageChanged;
 
-  const BottomActions({Key? key, required this.onPageChanged}) : super(key: key);
+  const BottomActions({Key? key, required this.onPageChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class BottomActions extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           IconButton(
-            onPressed: (){
+            onPressed: () {
               onPageChanged(-1);
             },
             iconSize: 40,
@@ -50,7 +51,7 @@ class BottomActions extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: (){
+            onPressed: () {
               onPageChanged(1);
             },
             iconSize: 40,
@@ -63,9 +64,10 @@ class BottomActions extends StatelessWidget {
       ),
     );
   }
-    
+
   dislikeMovie() {
-    // TODO
+    //TODO
+    // WatcherTitlePreferenceService.models.add(value)
   }
 
   likeMovie() {
@@ -75,6 +77,4 @@ class BottomActions extends StatelessWidget {
   addToWatchlist() {
     // TODO
   }
-
 }
-

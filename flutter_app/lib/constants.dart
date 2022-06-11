@@ -72,4 +72,6 @@ const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);
 const kDebugMode = true;
 
 // API
-const kAuthRequestURL = "https://localhost:5003/api/Authentication/";
+const kBaseAPIURL = "https://localhost:5003/";
+const kAuthRequestURL = kBaseAPIURL + "api/Authentication/";
+const kWatcherTitleURL = kBaseAPIURL + "WatcherTitles/";

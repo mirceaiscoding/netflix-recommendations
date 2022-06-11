@@ -100,7 +100,7 @@ namespace Movie4U.EntitiesModels.Entities
         {
             watcher_name = source.watcher_name;
             netflix_id = source.netflix_id;
-            preference = source.prefference;
+            preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;
             watchLater = source.watchLater;
             watchLaterLastSetTime = source.watchLaterLastSetTime;

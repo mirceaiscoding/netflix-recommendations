@@ -80,7 +80,7 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, extraModelFilters, filler);
         }
 
-        public async Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, string netflix_id)
+        public async Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, int netflix_id)
         {
             Func<WatcherTitleModel, Task> filler = async watcherTitleModel =>
                 await FillModelsLists(watcherTitleModel);
@@ -103,7 +103,14 @@ namespace Movie4U.Managers
             await repo.UpdateAsync(updateWatcherTitle);
         }
 
-        public async Task Delete(string watcher_name, string netflix_id)
+        public async Task CreateOrUpdateMultiple(WatcherTitleModelParameter[] models)
+        {
+            WatcherTitle[] titles = Array.ConvertAll(models, x => new WatcherTitle(x));
+
+            await repo.InsertOrUpdateMultipleAsync(titles);
+        }
+
+        public async Task Delete(string watcher_name, int netflix_id)
         {
             WatcherTitle delWatcherTitle = await repo.GetOneDbByIdAsync(watcher_name, netflix_id);
 
