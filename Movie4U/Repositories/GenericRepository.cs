@@ -189,9 +189,17 @@ namespace Movie4U.Repositories
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
-            await entities.AddAsync(entity);
-            await db.SaveChangesAsync();
-            return entity;
+            try
+            {
+                await entities.AddAsync(entity);
+                await db.SaveChangesAsync();
+                return entity;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return null;
+            }
         }
 
         public async Task<TEntity[]> InsertMultipleAsync(TEntity[] entities)
@@ -208,26 +216,35 @@ namespace Movie4U.Repositories
             return entities;
         }
 
-        public virtual async Task UpdateAsync(TEntity entityToUpdate)
+        public virtual async Task<bool> UpdateAsync(TEntity entityToUpdate)
         {
             entities.Attach(entityToUpdate);
             db.Entry(entityToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
+
+            return true;
         }
 
-        public virtual async Task DeleteAsync(object id)
+        public virtual async Task<bool> DeleteAsync(object id)
         {
             var entityToDelete = await entities.FindAsync(id);
-            await DeleteAsync(entityToDelete);
+            if (entityToDelete == null)
+                return false;
+
+            var result = await DeleteAsync(entityToDelete);
             await db.SaveChangesAsync();
+
+            return result;
         }
 
-        public virtual async Task DeleteAsync(TEntity entityToDelete)
+        public virtual async Task<bool> DeleteAsync(TEntity entityToDelete)
         {
             if (db.Entry(entityToDelete).State == EntityState.Detached)
                 entities.Attach(entityToDelete);
             entities.Remove(entityToDelete);
             await db.SaveChangesAsync();
+
+            return true;
         }
 
 

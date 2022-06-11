@@ -13,10 +13,10 @@ namespace Movie4U.Managers.IManagers
 
         Task<TitleImageModel> GetOneByIdAsync(string url);
 
-        Task Update(TitleImageModel titleImageModel);
+        Task<bool> Update(TitleImageModel titleImageModel);
 
         Task Create(TitleImageModel titleImageModel);
 
-        Task Delete(string url);
+        Task<bool> Delete(string url);
     }
 }

@@ -61,7 +61,7 @@ namespace Movie4U.Managers
 
         public async Task Create(TitleModelParameter titleModelParam)
         {
-            Title newTitle = new Title(titleModelParam);
+            var newTitle = new Title(titleModelParam);
 
             await repo.InsertAsync(newTitle);
         }
@@ -80,20 +80,24 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(titles);
         }
 
-        public async Task Update(TitleModelParameter titleModelParam)
+        public async Task<bool> Update(TitleModelParameter titleModelParam)
         {
-            Title updateTitle = await repo.GetOneDbByIdAsync(titleModelParam.netflix_id);
+            var updateTitle = await repo.GetOneDbByIdAsync(titleModelParam.netflix_id);
+            if (updateTitle == null)
+                return false;
+
             updateTitle.Copy(titleModelParam);
 
-            await repo.UpdateAsync(updateTitle);
+            return await repo.UpdateAsync(updateTitle);
         }
 
-        public async Task Delete(int netflix_id)
+        public async Task<bool> Delete(int netflix_id)
         {
-            Title delTitle = await repo.GetOneDbByIdAsync(netflix_id);
+            var delTitle = await repo.GetOneDbByIdAsync(netflix_id);
+            if (delTitle == null)
+                return false;
 
-            if (delTitle != null)
-                await repo.DeleteAsync(delTitle);
+            return await repo.DeleteAsync(delTitle);
         }
 
     }

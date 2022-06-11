@@ -15,12 +15,12 @@ namespace Movie4U.Managers.IManagers
 
         Task<TitleCountryModel> GetOneByIdAsync(int country_id, int netflix_id);
 
-        Task Update(TitleCountryModel titleCountryModel);
+        Task<bool> Update(TitleCountryModel titleCountryModel);
 
         Task Create(TitleCountryModel titleCountryModel);
 
         Task CreateOrUpdateMultiple(TitleCountryModel[] titleCountryModels);
 
-        Task Delete(int country_id, int netflix_id);
+        Task<bool> Delete(int country_id, int netflix_id);
     }
 }

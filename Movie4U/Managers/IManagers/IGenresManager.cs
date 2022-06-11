@@ -12,12 +12,12 @@ namespace Movie4U.Managers.IManagers
 
         Task<GenreModel> GetOneByIdAsync(int genre_id);
 
-        Task Update(GenreModel genreModel);
+        Task<bool> Update(GenreModel genreModel);
 
         Task Create(GenreModel genreModel);
 
         Task CreateMultiple(GenreResponseModel[] models);
 
-        Task Delete(int genre_id);
+        Task<bool> Delete(int genre_id);
     }
 }

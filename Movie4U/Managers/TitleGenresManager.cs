@@ -57,7 +57,7 @@ namespace Movie4U.Managers
 
         public async Task Create(TitleGenreModel titleGenreModel)
         {
-            TitleGenre newTitleGenre = new TitleGenre(titleGenreModel);
+            var newTitleGenre = new TitleGenre(titleGenreModel);
 
             await repo.InsertAsync(newTitleGenre);
         }
@@ -69,20 +69,24 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(titleGenres);
         }
 
-        public async Task Update(TitleGenreModel titleGenreModel)
+        public async Task<bool> Update(TitleGenreModel titleGenreModel)
         {
-            TitleGenre updateTitleGenre = await repo.GetOneDbByIdAsync(titleGenreModel.genre_id, titleGenreModel.netflix_id);
+            var updateTitleGenre = await repo.GetOneDbByIdAsync(titleGenreModel.genre_id, titleGenreModel.netflix_id);
+            if (updateTitleGenre == null)
+                return false;
+
             updateTitleGenre.Copy(titleGenreModel);
 
-            await repo.UpdateAsync(updateTitleGenre);
+            return await repo.UpdateAsync(updateTitleGenre);
         }
 
-        public async Task Delete(int genre_id, int netflix_id)
+        public async Task<bool> Delete(int genre_id, int netflix_id)
         {
-            TitleGenre delTitleGenre = await repo.GetOneDbByIdAsync(genre_id, netflix_id);
+            var delTitleGenre = await repo.GetOneDbByIdAsync(genre_id, netflix_id);
+            if (delTitleGenre == null)
+                return false;
 
-            if (delTitleGenre != null)
-                await repo.DeleteAsync(delTitleGenre);
+            return await repo.DeleteAsync(delTitleGenre);
         }
 
     }

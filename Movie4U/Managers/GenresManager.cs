@@ -34,7 +34,7 @@ namespace Movie4U.Managers
 
         public async Task Create(GenreModel genreModel)
         {
-            Genre newGenre = new Genre(genreModel);
+            var newGenre = new Genre(genreModel);
 
             await repo.InsertAsync(newGenre);
         }
@@ -48,20 +48,24 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(genres);
         }
 
-        public async Task Update(GenreModel genreModel)
+        public async Task<bool> Update(GenreModel genreModel)
         {
-            Genre updateGenre = await repo.GetOneDbByIdAsync(genreModel.genre_id);
+            var updateGenre = await repo.GetOneDbByIdAsync(genreModel.genre_id);
+            if (updateGenre == null)
+                return false;
+
             updateGenre.Copy(genreModel);
 
-            await repo.UpdateAsync(updateGenre);
+            return await repo.UpdateAsync(updateGenre);
         }
 
-        public async Task Delete(int genre_id)
+        public async Task<bool> Delete(int genre_id)
         {
-            Genre delGenre = await repo.GetOneDbByIdAsync(genre_id);
+            var delGenre = await repo.GetOneDbByIdAsync(genre_id);
+            if (delGenre == null)
+                return false;
 
-            if (delGenre != null)
-                await repo.DeleteAsync(delGenre);
+            return await repo.DeleteAsync(delGenre);
         }
 
     }

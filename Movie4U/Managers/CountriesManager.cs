@@ -34,7 +34,7 @@ namespace Movie4U.Managers
 
         public async Task Create(CountryModel countryModel)
         {
-            Country newCountry = new Country(countryModel);
+            var newCountry = new Country(countryModel);
 
             await repo.InsertAsync(newCountry);
         }
@@ -48,20 +48,24 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(countries);
         }
 
-        public async Task Update(CountryModel countryModel)
+        public async Task<bool> Update(CountryModel countryModel)
         {
-            Country updateCountry = await repo.GetOneDbByIdAsync(countryModel.id);
+            var updateCountry = await repo.GetOneDbByIdAsync(countryModel.id);
+            if(updateCountry == null)
+                return false;
+
             updateCountry.Copy(countryModel);
 
-            await repo.UpdateAsync(updateCountry);
+            return await repo.UpdateAsync(updateCountry);
         }
 
-        public async Task Delete(int country_id)
+        public async Task<bool> Delete(int country_id)
         {
-            Country delCountry = await repo.GetOneDbByIdAsync(country_id);
+            var delCountry = await repo.GetOneDbByIdAsync(country_id);
+            if (delCountry == null)
+                return false;
 
-            if (delCountry != null)
-                await repo.DeleteAsync(delCountry);
+            return await repo.DeleteAsync(delCountry);
         }
 
     }

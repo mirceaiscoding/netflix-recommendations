@@ -29,10 +29,10 @@ namespace Movie4U.Repositories.IRepositories
         Task<TEntity[]> InsertMultipleAsync(TEntity[] entities);
         Task<TEntity[]> InsertOrUpdateMultipleAsync(TEntity[] entities);
 
-        Task UpdateAsync(TEntity entity);
+        Task<bool> UpdateAsync(TEntity entity);
 
-        Task DeleteAsync(TEntity entity);
-        Task DeleteAsync(object id);
+        Task<bool> DeleteAsync(TEntity entity);
+        Task<bool> DeleteAsync(object id);
 
     }
 }

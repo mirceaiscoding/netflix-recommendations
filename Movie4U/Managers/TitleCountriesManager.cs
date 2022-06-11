@@ -58,7 +58,7 @@ namespace Movie4U.Managers
 
         public async Task Create(TitleCountryModel titleCountryModel)
         {
-            TitleCountry newTitleGenre = new TitleCountry(titleCountryModel);
+            var newTitleGenre = new TitleCountry(titleCountryModel);
 
             await repo.InsertAsync(newTitleGenre);
         }
@@ -70,20 +70,24 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(titlesCountries);
         }
 
-        public async Task Update(TitleCountryModel titleCountryModel)
+        public async Task<bool> Update(TitleCountryModel titleCountryModel)
         {
-            TitleCountry updateTitleCountry = await repo.GetOneDbByIdAsync(titleCountryModel.country_id, titleCountryModel.netflix_id);
+            var updateTitleCountry = await repo.GetOneDbByIdAsync(titleCountryModel.country_id, titleCountryModel.netflix_id);
+            if (updateTitleCountry == null)
+                return false;
+
             updateTitleCountry.Copy(titleCountryModel);
 
-            await repo.UpdateAsync(updateTitleCountry);
+            return await repo.UpdateAsync(updateTitleCountry);
         }
 
-        public async Task Delete(int country_id, int netflix_id)
+        public async Task<bool> Delete(int country_id, int netflix_id)
         {
-            TitleCountry delTitleCountry = await repo.GetOneDbByIdAsync(country_id, netflix_id);
+            var delTitleCountry = await repo.GetOneDbByIdAsync(country_id, netflix_id);
+            if (delTitleCountry == null)
+                return false;
 
-            if (delTitleCountry != null)
-                await repo.DeleteAsync(delTitleCountry);
+            return await repo.DeleteAsync(delTitleCountry);
         }
 
     }

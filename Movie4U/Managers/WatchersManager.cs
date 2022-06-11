@@ -38,7 +38,7 @@ namespace Movie4U.Managers
 
         public async Task Create(string watcherName, string UserId)
         {
-            Watcher newWatcher = new Watcher
+            var newWatcher = new Watcher
             {
                 watcher_name = watcherName,
                 register_date = DateTime.Now,
@@ -48,37 +48,37 @@ namespace Movie4U.Managers
             await repo.InsertAsync(newWatcher);
         }
 
-        public async Task UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
+        public async Task<bool> UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
         {
-            Watcher watcher = await repo.GetOneDbByIdAsync(watcherName);
+            var watcher = await repo.GetOneDbByIdAsync(watcherName);
+            if (watcher == null)
+                return false;
             
             watcher.refreshToken = refreshToken;
             watcher.refreshTokenExpiryTime = refTokExpTime;
 
-            await repo.UpdateAsync(watcher);
+            return await repo.UpdateAsync(watcher);
         }
 
         public async Task<TokensModel> UpdateRefreshToken(WatcherModel watcher)
         {
-            User user =
-                await
-                userManager
-                .FindByNameAsync(watcher.watcher_name);
-            
-            var accessToken =
-                tokensManager
-                .GenerateAccessToken(user)
-                .Result;
-            var refreshToken =
-                tokensManager
-                .GenerateRefreshToken();
+            User user = await userManager.FindByNameAsync(watcher.watcher_name);
+            if (user == null)
+                return null;
 
-            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcher.watcher_name);
+            var accessToken = tokensManager.GenerateAccessToken(user).Result;
+            var refreshToken = tokensManager.GenerateRefreshToken();
+
+            var dbWatcher = await repo.GetOneDbByIdAsync(watcher.watcher_name);
+            if (dbWatcher == null)
+                return null;
+
             dbWatcher.refreshToken = refreshToken;
+            var result = await repo.UpdateAsync(dbWatcher);
+            if (!result)
+                return null;
 
-            await repo.UpdateAsync(dbWatcher);
-
-            TokensModel tokensModel = new TokensModel
+            var tokensModel = new TokensModel
             {
                 accessToken = accessToken,
                 refreshToken = refreshToken
@@ -88,7 +88,7 @@ namespace Movie4U.Managers
 
         public async Task<bool> UpdateWatcherCountryId(string watcherName, int? countryId)
         {
-            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            var dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
             if(dbWatcher == null)
                 return false;
 
@@ -100,7 +100,7 @@ namespace Movie4U.Managers
 
         public async Task<bool> UpdateNextPageIndex(string watcherName, int? nextPageIndex = 1)
         {
-            Watcher dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            var dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
             if (dbWatcher == null)
                 return false;
 
@@ -110,12 +110,13 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task Delete(string name)
+        public async Task<bool> Delete(string name)
         {
-            Watcher delWatcher = await repo.GetOneDbByIdAsync(name);
+            var delWatcher = await repo.GetOneDbByIdAsync(name);
+            if (delWatcher == null)
+                return false;
 
-            if (delWatcher != null)
-                await repo.DeleteAsync(delWatcher);
+            return await repo.DeleteAsync(delWatcher);
         }
 
     }

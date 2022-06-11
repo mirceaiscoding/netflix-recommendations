@@ -16,8 +16,8 @@ namespace Movie4U.Managers.IManagers
 
         Task CreateOrUpdateMultiple(CountryResponseModel[] models);
 
-        Task Update(CountryModel countryModel);
+        Task<bool> Update(CountryModel countryModel);
 
-        Task Delete(int country_id);
+        Task<bool> Delete(int country_id);
     }
 }
