@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/screens/dislikes/Dislikes_screen.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
+import 'package:flutter_app/screens/likes/Likes_screen.dart';
 import 'package:flutter_app/screens/login/login_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
 import 'package:flutter_app/screens/watchlist/watchlist_screen.dart';
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/watchlist':(context) => const WatchlistScreen(),
+        '/likes':(context) => const LikesScreen(),
+        '/dislikes':(context) => const DislikesScreen(),
       },
     );
   }

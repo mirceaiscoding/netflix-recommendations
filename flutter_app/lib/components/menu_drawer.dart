@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:path/path.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({
@@ -8,61 +9,32 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const menu = ['HOME', 'ACCOUNT', 'WATCHLIST', 'LIKES', 'DISLIKES'];
+    const paths = ['/home', '/login', '/watchlist', '/likes', '/dislikes'];
     return Drawer(
       backgroundColor: kBackgroundColor,
       // ListView allows scrolling inside the drawer
-      child: ListView(
+      child: ListView.builder(
         padding: EdgeInsets.zero,
-        children: <Widget>[
-          const SizedBox(
-            height: 50,
-          ),
-          ListTile(
-            title: const Center(
-                child: Text(
-              'ACCOUNT',
-              style: kMenuItemTextStyle,
-            )),
-            onTap: () {
-              // Update the state of the app
-              
-
-              // Close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Center(
-                child: Text(
-              'WATCHLIST',
-              style: kMenuItemTextStyle,
-            )),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Center(
-                child: Text(
-              'LIKES',
-              style: kMenuItemTextStyle,
-            )),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Center(
-                child: Text(
-              'DISLIKES',
-              style: kMenuItemTextStyle,
-            )),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
+        itemCount: menu.length+1,
+          itemBuilder: (context, index) {
+            if (index == 0){
+              return const SizedBox(height: 50,);
+            }
+            return Container (
+              color: ModalRoute.of(context)!.settings.name == paths[index-1] ? kCurrentMenuItem : Colors.transparent,
+              child:ListTile(
+                      title: Center(
+                      child: Text(menu[index-1],style:kMenuItemTextStyle,)
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, paths[index-1]);
+                      },
+              )
+            );
+          }
+      )
     );
   }
 }
+      
