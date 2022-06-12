@@ -76,3 +76,8 @@ const kBaseAPIURL = "https://localhost:5003/";
 const kAuthRequestURL = kBaseAPIURL + "api/Authentication/";
 const kWatcherTitleURL = kBaseAPIURL + "WatcherTitles/";
 const kTitleURL = kBaseAPIURL + "Titles/";
+
+// Watchlist
+const kMoviesToLoad = 5;
+const kmaxMoviesOnScreen = 4; //how many movies can fit on the screen
+const kPixelsBeforeRenderingNewMovies = 1000;

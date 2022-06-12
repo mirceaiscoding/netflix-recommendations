@@ -5,6 +5,7 @@ import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/login/login_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
+import 'package:flutter_app/screens/watchlist/watchlist_screen.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -25,11 +26,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      initialRoute: '/login', // Route when the app opens
+      initialRoute: '/watchlist', // Route when the app opens
       routes: {
         '/home': (context) => const Homescreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/watchlist':(context) => const WatchlistScreen(),
       },
     );
   }
