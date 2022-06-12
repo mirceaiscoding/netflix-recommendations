@@ -75,3 +75,4 @@ const kDebugMode = true;
 const kBaseAPIURL = "https://localhost:5003/";
 const kAuthRequestURL = kBaseAPIURL + "api/Authentication/";
 const kWatcherTitleURL = kBaseAPIURL + "WatcherTitles/";
+const kTitleURL = kBaseAPIURL + "Titles/";

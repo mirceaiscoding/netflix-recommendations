@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/models/title_model.dart';
 import 'package:flutter_app/models/watcher_title_preference_model.dart';
 import 'package:flutter_app/services/secure_storage.dart';
+import 'package:flutter_app/services/titles_service.dart';
 import 'package:http/http.dart' as http;
 
 class WatcherTitlePreferenceService {

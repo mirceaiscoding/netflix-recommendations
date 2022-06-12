@@ -1,3 +1,5 @@
+import 'package:flutter_app/models/title_model.dart';
+
 class WatcherTitlePreferenceModel {
   final String watcherName;
   final int netflixId;

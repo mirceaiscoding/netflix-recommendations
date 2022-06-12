@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/models/title_model.dart';
 
 class Body extends StatelessWidget {
-
   // Constructor
   // Used like this: Body(movie=...)
-  final movie;
-  const Body({Key? key, @required this.movie }) : super(key: key);
+  final TitleModel title;
+  const Body({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,20 @@ class Body extends StatelessWidget {
                       )),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(kImageBoarderRadius),
-                    child: Image.network(
-                      movie['poster'], // Movie poster image
+                    child: AspectRatio(
+                      aspectRatio: 2 / 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          fit: BoxFit.fitWidth,
+                          alignment: FractionalOffset.topCenter,
+                          image: NetworkImage(title.poster),
+                        )),
+                      ),
                     ),
+                    // child: Image.network(
+                    //   title.poster, // Movie poster image
+                    // ),
                   ),
                 ),
               ),
@@ -42,7 +53,7 @@ class Body extends StatelessWidget {
               // Movie title
               RichText(
                 text: TextSpan(
-                    text: "${movie['title']} (${movie['year']})",
+                    text: "${title.title} (${title.year})",
                     style: kMovieTitleStyle),
               ),
 
@@ -62,9 +73,7 @@ class Body extends StatelessWidget {
                     ), // IMDB logo
                     RichText(
                       text: TextSpan(
-                          text:
-                              " ${movie['score']} (${movie['number_of_reviews']})",
-                          style: kIMDBRatingStyle),
+                          text: " ${title.rating} ", style: kIMDBRatingStyle),
                     ),
                   ],
                 ),
@@ -73,8 +82,7 @@ class Body extends StatelessWidget {
               // Movie description
               RichText(
                 text: TextSpan(
-                    text: "${movie['description']}",
-                    style: kMovieDescriptionStyle),
+                    text: title.synopsis, style: kMovieDescriptionStyle),
               ),
             ],
           ),
