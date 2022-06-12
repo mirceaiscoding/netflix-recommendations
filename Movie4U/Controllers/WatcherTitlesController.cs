@@ -38,7 +38,7 @@ namespace Movie4U.Controllers
             return Ok(watcherTitles);
         }
 
-        [HttpGet("GetOneById/{watcher_name}/{netflix_id}")]
+        [HttpGet("GetOneById/{netflix_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetWatcherTitleByIdAsync([FromHeader] string Authorization, int netflix_id)
         {

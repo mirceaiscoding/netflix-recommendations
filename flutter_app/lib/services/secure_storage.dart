@@ -29,4 +29,9 @@ class SecureStorage {
     var refreshToken = await readSecureData("refreshToken");
     return AuthModel(accessToken: accessToken, refreshToken: refreshToken);
   }
+
+  Future removeAuthModel() async {
+    await deleteSecureData("accessToken");
+    await deleteSecureData("refreshToken");
+  }
 }

@@ -1,12 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/services/watcher_title_preference_service.dart';
+import 'package:flutter_app/models/watcher_title_preference_model.dart';
 
-class BottomActions extends StatelessWidget {
+class BottomActions extends StatefulWidget {
   final Function(int) onPageChanged;
 
-  const BottomActions({Key? key, required this.onPageChanged})
+  final WatcherTitlePreferenceModel title;
+
+  const BottomActions(Key? key, this.onPageChanged, this.title)
       : super(key: key);
+
+  @override
+  State<BottomActions> createState() => _BottomActions2State();
+}
+
+class _BottomActions2State extends State<BottomActions> {
+  // ACTIONS
+  dislikeMovie() {
+    setState(() {
+      if (kDebugMode) {
+        print("pressed dislike!");
+      }
+      if (widget.title.preference != 2) {
+        widget.title.preference = 2;
+      } else {
+        widget.title.preference = 0;
+      }
+    });
+  }
+
+  likeMovie() {
+    setState(() {
+      if (kDebugMode) {
+        print("pressed like!");
+      }
+      if (widget.title.preference != 1) {
+        widget.title.preference = 1;
+      } else {
+        widget.title.preference = 0;
+      }
+    });
+  }
+
+  addToWatchlist() {
+    setState(() {
+      if (kDebugMode) {
+        print("pressed add to watchlist!");
+      }
+      if (widget.title.watchLater == false) {
+        widget.title.watchLater = true;
+      } else {
+        widget.title.watchLater = false;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +65,7 @@ class BottomActions extends StatelessWidget {
         children: <Widget>[
           IconButton(
             onPressed: () {
-              onPageChanged(-1);
+              widget.onPageChanged(-1);
             },
             iconSize: 40,
             icon: const Icon(
@@ -27,32 +74,53 @@ class BottomActions extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: dislikeMovie(),
+            onPressed: () {
+              dislikeMovie();
+            },
             iconSize: 40,
-            icon: const Icon(
-              Icons.sentiment_dissatisfied_outlined,
-              color: kIconColor,
-            ),
-          ),
-          IconButton(
-            onPressed: addToWatchlist(),
-            iconSize: 50,
-            icon: const Icon(
-              Icons.add_circle,
-              color: kIconColor,
-            ),
-          ),
-          IconButton(
-            onPressed: likeMovie(),
-            iconSize: 40,
-            icon: const Icon(
-              Icons.sentiment_satisfied_outlined,
-              color: kIconColor,
-            ),
+            icon: (widget.title.preference == 2
+                ? const Icon(
+                    Icons.sentiment_very_dissatisfied_outlined,
+                    color: kIconColor,
+                  )
+                : const Icon(
+                    Icons.sentiment_dissatisfied_outlined,
+                    color: kIconNotSelectedColor,
+                  )),
           ),
           IconButton(
             onPressed: () {
-              onPageChanged(1);
+              addToWatchlist();
+            },
+            iconSize: 50,
+            icon: (widget.title.watchLater
+                ? const Icon(
+                    Icons.check_circle,
+                    color: kIconColor,
+                  )
+                : const Icon(
+                    Icons.add_circle_outline,
+                    color: kIconNotSelectedColor,
+                  )),
+          ),
+          IconButton(
+            onPressed: () {
+              likeMovie();
+            },
+            iconSize: 40,
+            icon: (widget.title.preference == 1
+                ? const Icon(
+                    Icons.sentiment_very_satisfied_outlined,
+                    color: kIconColor,
+                  )
+                : const Icon(
+                    Icons.sentiment_satisfied_outlined,
+                    color: kIconNotSelectedColor,
+                  )),
+          ),
+          IconButton(
+            onPressed: () {
+              widget.onPageChanged(1);
             },
             iconSize: 40,
             icon: const Icon(
@@ -63,18 +131,5 @@ class BottomActions extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  dislikeMovie() {
-    //TODO
-    // WatcherTitlePreferenceService.models.add(value)
-  }
-
-  likeMovie() {
-    // TODO
-  }
-
-  addToWatchlist() {
-    // TODO
   }
 }

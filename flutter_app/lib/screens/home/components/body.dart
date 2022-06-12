@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/models/title_model.dart';
+import 'package:flutter_app/models/watcher_title_preference_model.dart';
 
 class Body extends StatelessWidget {
   // Constructor
   // Used like this: Body(movie=...)
-  final TitleModel title;
+  final WatcherTitlePreferenceModel title;
   const Body({Key? key, required this.title}) : super(key: key);
 
   @override

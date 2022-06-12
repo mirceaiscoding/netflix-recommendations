@@ -21,6 +21,8 @@ namespace Movie4U.EntitiesModels.Models
 
         public int netflix_id { get; set; }
 
+        public string title { get; set; }
+
         public WatcherTitle.Preferences preference { get; set; }
 
         public DateTime prefLastSetTime { get; set; }
@@ -86,6 +88,7 @@ namespace Movie4U.EntitiesModels.Models
             rating = source.rating;
             year = source.year;
             poster = source.poster;
+            title = source.title;
         }
 
         override public void ShallowCopy(WatcherTitleModel source)

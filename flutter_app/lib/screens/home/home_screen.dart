@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/menu_drawer.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/screens/home/components/body.dart';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/services/titles_service.dart';
 
 import 'components/bottom_actions.dart';
@@ -23,6 +24,8 @@ class HomescreenState extends State<Homescreen> {
 
   final TitlesService _titlesService = TitlesService();
 
+  final AuthService _authService = AuthService();
+
   static bool loading = false;
 
   @override
@@ -34,23 +37,27 @@ class HomescreenState extends State<Homescreen> {
       appBar: buildAppBar(),
       endDrawer: const MenuDrawer(),
       body: PageView.builder(
+        physics: const BouncingScrollPhysics(),
         controller: pageController,
         // allowImplicitScrolling: true, // preloads pages
         onPageChanged: (int val) => setPage(val),
         itemBuilder: (context, index) {
-          if (index > _titlesService.titleModels.length) {
-            index = _titlesService.titleModels.length;
+          if (index > _titlesService.watcherTitleModels.length) {
+            index = _titlesService.watcherTitleModels.length;
             scrollTo(index);
           }
-          if (index > _titlesService.titleModels.length - 1) {
+          if (index > _titlesService.watcherTitleModels.length - 1) {
             loadTitles();
             return const Center(child: CircularProgressIndicator());
           }
-          return Body(title: _titlesService.titleModels[index]);
+          return Scaffold(
+            body: Body(title: _titlesService.watcherTitleModels[index]),
+            bottomNavigationBar: BottomActions(
+                null,
+                (int val) => changePage(val),
+                _titlesService.watcherTitleModels[index]),
+          );
         },
-      ),
-      bottomNavigationBar: BottomActions(
-        onPageChanged: (int val) => changePage(val),
       ),
     );
   }
@@ -72,7 +79,7 @@ class HomescreenState extends State<Homescreen> {
     // print("Change page with $val");
     setState(() {
       currentPage = max(0, currentPage + val);
-      currentPage = min(currentPage, _titlesService.titleModels.length);
+      currentPage = min(currentPage, _titlesService.watcherTitleModels.length);
     });
 
     scrollToCurrentPage(); // Animate scrolling to new current page
@@ -102,13 +109,27 @@ class HomescreenState extends State<Homescreen> {
   loadTitles() {
     if (loading == false) {
       loading = true;
-      _titlesService.load().then((value) => {afterLoadIsDone()});
+      _titlesService.load().then((status) => {afterLoadIsDone(status)});
     }
   }
 
-  afterLoadIsDone() {
+  afterLoadIsDone(int status) {
     loading = false;
-    changePage(1);
-    scrollToCurrentPage();
+    if (status == 401) {
+      // Unauthorized -> Try to refresh
+      _authService.refreshAccessToken().then((success) => {
+            if (success == false)
+              {
+                // Go back to login
+                Navigator.pushNamed(context, "/login")
+              }
+            else
+              // Try again to load with the refreshed token
+              {loadTitles()}
+          });
+    } else {
+      changePage(1);
+      scrollToCurrentPage();
+    }
   }
 }

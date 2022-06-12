@@ -19,4 +19,9 @@ class AuthModel {
       "refreshToken": refreshToken,
     }.toString();
   }
+
+  Map<String, dynamic> toJson() => {
+        "accessToken": accessToken,
+        "refreshToken": refreshToken,
+      };
 }

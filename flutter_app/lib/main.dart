@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Homescreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/watchlist':(context) => const WatchlistScreen(),
-        '/likes':(context) => const LikesScreen(),
-        '/dislikes':(context) => const DislikesScreen(),
+        '/watchlist': (context) => const WatchlistScreen(),
+        '/likes': (context) => const LikesScreen(),
+        '/dislikes': (context) => const DislikesScreen(),
       },
     );
   }

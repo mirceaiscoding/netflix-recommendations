@@ -87,4 +87,9 @@ class TitleModel {
         "genreModels": List<dynamic>.from(genreModels.map((x) => x.toJson())),
         "titleImageModels": List<dynamic>.from(titleImageModels.map((x) => x)),
       };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

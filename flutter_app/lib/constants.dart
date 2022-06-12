@@ -5,6 +5,10 @@ const kPrimaryColor = Color.fromRGBO(246, 199, 0, 1);
 const kBackgroundColor = Color.fromRGBO(23, 21, 21, 1);
 const kTextColor = Color.fromARGB(255, 255, 255, 255);
 const kIconColor = Color.fromARGB(255, 0, 0, 0);
+const kIconNotSelectedColor = Color.fromARGB(255, 76, 76, 76);
+
+// const kRed = Color.fromARGB(255, 112, 248, 91);
+const kGreen = Color.fromARGB(195, 255, 108, 16);
 
 const kAppBarColor = kBackgroundColor;
 
@@ -75,6 +79,7 @@ const kDebugMode = true;
 // API
 const kBaseAPIURL = "https://localhost:5003/";
 const kAuthRequestURL = kBaseAPIURL + "api/Authentication/";
+const kTokensURL = kBaseAPIURL + "api/Tokens/";
 const kWatcherTitleURL = kBaseAPIURL + "WatcherTitles/";
 const kTitleURL = kBaseAPIURL + "Titles/";
 

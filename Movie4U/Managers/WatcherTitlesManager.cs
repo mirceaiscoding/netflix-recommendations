@@ -45,6 +45,7 @@ namespace Movie4U.Managers
             watcherTitleModel.poster = titleModel.poster;
             watcherTitleModel.rating = titleModel.rating;
             watcherTitleModel.countryModels = titleModel.countryModels;
+            watcherTitleModel.title = titleModel.title;
 
             var watcherGenreModels = new List<WatcherGenreModel>();
             foreach(var genreModel in titleModel.genreModels)

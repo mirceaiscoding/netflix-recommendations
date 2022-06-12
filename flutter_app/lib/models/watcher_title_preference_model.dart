@@ -1,49 +1,84 @@
-import 'package:flutter_app/models/title_model.dart';
+// To parse this JSON data, do
+//
+//     final watcherTitlePreferenceModel = watcherTitlePreferenceModelFromJson(jsonString);
+
+import 'package:flutter_app/models/country_model.dart';
+import 'dart:convert';
+
+import 'package:flutter_app/models/watcher_genre_model.dart';
+
+WatcherTitlePreferenceModel watcherTitlePreferenceModelFromJson(String str) =>
+    WatcherTitlePreferenceModel.fromJson(json.decode(str));
+
+String watcherTitlePreferenceModelToJson(WatcherTitlePreferenceModel data) =>
+    json.encode(data.toJson());
 
 class WatcherTitlePreferenceModel {
-  final String watcherName;
-  final int netflixId;
-  final int preference;
-  final DateTime prefLastSetTime;
-  final bool watchLater;
-  final DateTime watchLaterLastSetTime;
+  WatcherTitlePreferenceModel({
+    required this.watcherName,
+    required this.netflixId,
+    required this.title,
+    required this.preference,
+    required this.prefLastSetTime,
+    required this.watchLater,
+    required this.watchLaterLastSetTime,
+    required this.synopsis,
+    required this.rating,
+    required this.year,
+    required this.poster,
+    required this.countryModels,
+    required this.watcherGenreModels,
+  });
 
-  const WatcherTitlePreferenceModel(
-      {required this.watcherName,
-      required this.netflixId,
-      required this.preference,
-      required this.prefLastSetTime,
-      required this.watchLater,
-      required this.watchLaterLastSetTime});
+  String watcherName;
+  int netflixId;
+  String title;
+  int preference; // 0 if none | 1 if liked | 2 if disliked
+  DateTime prefLastSetTime;
+  bool watchLater; // true if in watchlist
+  DateTime watchLaterLastSetTime;
+  String synopsis;
+  String rating;
+  String year;
+  String poster;
+  List<CountryModel> countryModels;
+  List<WatcherGenreModel> watcherGenreModels;
 
-  factory WatcherTitlePreferenceModel.fromJson(Map<String, dynamic> json) {
-    return WatcherTitlePreferenceModel(
-        watcherName: json['watcher_name'],
-        netflixId: json['netflix_id'],
-        preference: json['preference'],
-        prefLastSetTime: json['prefLastSetTime'],
-        watchLater: json['watchLater'],
-        watchLaterLastSetTime: json['watchLaterLastSetTime']);
-  }
-
-  @override
-  String toString() {
-    return {
-      "watcher_name": watcherName,
-      "netflix_id": netflixId,
-      "preference": preference,
-      "prefLastSetTime": prefLastSetTime,
-      "watchLater": watchLater,
-      "watchLaterLastSetTime": watchLaterLastSetTime
-    }.toString();
-  }
+  factory WatcherTitlePreferenceModel.fromJson(Map<String, dynamic> json) =>
+      WatcherTitlePreferenceModel(
+        watcherName: json["watcher_name"],
+        netflixId: json["netflix_id"],
+        title: json["title"],
+        preference: json["preference"],
+        prefLastSetTime: DateTime.parse(json["prefLastSetTime"]),
+        watchLater: json["watchLater"],
+        watchLaterLastSetTime: DateTime.parse(json["watchLaterLastSetTime"]),
+        synopsis: json["synopsis"],
+        rating: json["rating"],
+        year: json["year"],
+        poster: json["poster"],
+        countryModels: List<CountryModel>.from(
+            json["countryModels"].map((x) => CountryModel.fromJson(x))),
+        watcherGenreModels: List<WatcherGenreModel>.from(
+            json["watcherGenreModels"]
+                .map((x) => WatcherGenreModel.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
         "watcher_name": watcherName,
         "netflix_id": netflixId,
+        "title": title,
         "preference": preference,
-        "prefLastSetTime": prefLastSetTime,
+        "prefLastSetTime": prefLastSetTime.toIso8601String(),
         "watchLater": watchLater,
-        "watchLaterLastSetTime": watchLaterLastSetTime
+        "watchLaterLastSetTime": watchLaterLastSetTime.toIso8601String(),
+        "synopsis": synopsis,
+        "rating": rating,
+        "year": year,
+        "poster": poster,
+        "countryModels":
+            List<dynamic>.from(countryModels.map((x) => x.toJson())),
+        "watcherGenreModels":
+            List<dynamic>.from(watcherGenreModels.map((x) => x.toJson())),
       };
 }
