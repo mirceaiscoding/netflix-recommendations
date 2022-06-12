@@ -64,6 +64,7 @@ const kMenuItemTextStyle = TextStyle(
   fontSize: 18.0,
   color: kPrimaryColor,
 );
+const kCurrentMenuItem = Color.fromARGB(255, 70, 70, 70);
 
 const kFormFieldColor = kPrimaryColor;
 const kFormFieldIconColor = Color.fromARGB(255, 255, 255, 255);

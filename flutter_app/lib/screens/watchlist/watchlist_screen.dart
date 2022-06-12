@@ -18,7 +18,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
 
   static List<Body>movies = [
                                     const Body(movie: {
-                                      'id': '1',
                                       'title': 'Bumblebee',
                                       'year': '2018',
                                       'score': '6.7',
@@ -29,7 +28,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '2',
                                       'title': 'Cars 3',
                                       'year': '2017',
                                       'score': '6.7',
@@ -40,7 +38,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '3',
                                       'title': 'Megamind',
                                       'year': '2010',
                                       'score': '7.3',
@@ -51,7 +48,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
                                     }),
                                     const Body(movie: {
-                                      'id': '4',
                                       'title': 'Shrek',
                                       'year': '2001',
                                       'score': '7.9',
@@ -62,7 +58,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '5',
                                       'title': 'Bee Movie',
                                       'year': '2007',
                                       'score': '6.1',
@@ -73,7 +68,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjE1MDYxOTA4MF5BMl5BanBnXkFtZTcwMDE0MDUzMw@@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '6',
                                       'title': 'The Road to El Dorado',
                                       'year': '2000',
                                       'score': '6.9',
@@ -84,7 +78,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BOTEzNWIwMzctOTE1YS00YjIyLTgwZGEtMTMxZDAzNzlmODMxXkEyXkFqcGdeQXVyMjgyMDk1MzY@._V1_FMjpg_UX1000_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '7',
                                       'title': 'Bumblebee',
                                       'year': '2018',
                                       'score': '6.7',
@@ -95,7 +88,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '8',
                                       'title': 'Cars 3',
                                       'year': '2017',
                                       'score': '6.7',
@@ -106,7 +98,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '9',
                                       'title': 'Megamind',
                                       'year': '2010',
                                       'score': '7.3',
@@ -117,7 +108,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
                                     }),
                                     const Body(movie: {
-                                      'id': '10',
                                       'title': 'Shrek',
                                       'year': '2001',
                                       'score': '7.9',
@@ -128,7 +118,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '11',
                                       'title': 'Bee Movie',
                                       'year': '2007',
                                       'score': '6.1',
@@ -139,7 +128,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjE1MDYxOTA4MF5BMl5BanBnXkFtZTcwMDE0MDUzMw@@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '12',
                                       'title': 'The Road to El Dorado',
                                       'year': '2000',
                                       'score': '6.9',
@@ -150,7 +138,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BOTEzNWIwMzctOTE1YS00YjIyLTgwZGEtMTMxZDAzNzlmODMxXkEyXkFqcGdeQXVyMjgyMDk1MzY@._V1_FMjpg_UX1000_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '13',
                                       'title': 'Bumblebee',
                                       'year': '2018',
                                       'score': '6.7',
@@ -161,7 +148,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '14',
                                       'title': 'Cars 3',
                                       'year': '2017',
                                       'score': '6.7',
@@ -172,7 +158,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://cdn.europosters.eu/image/750/cars-3-duel-i97645.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '15',
                                       'title': 'Megamind',
                                       'year': '2010',
                                       'score': '7.3',
@@ -183,7 +168,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://imgc.allpostersimages.com/img/posters/megamind_u-L-F3WOKT0.jpg?artHeight=550&artPerspective=n&artWidth=550"
                                     }),
                                     const Body(movie: {
-                                      'id': '16',
                                       'title': 'Shrek',
                                       'year': '2001',
                                       'score': '7.9',
@@ -194,7 +178,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '17',
                                       'title': 'Bee Movie',
                                       'year': '2007',
                                       'score': '6.1',
@@ -205,7 +188,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                           "https://m.media-amazon.com/images/M/MV5BMjE1MDYxOTA4MF5BMl5BanBnXkFtZTcwMDE0MDUzMw@@._V1_.jpg",
                                     }),
                                     const Body(movie: {
-                                      'id': '18',
                                       'title': 'The Road to El Dorado',
                                       'year': '2000',
                                       'score': '6.9',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/screens/watchlist/watchlist_screen.dart'; 
 
 class Body extends StatelessWidget {
 
