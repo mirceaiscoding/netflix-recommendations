@@ -9,9 +9,9 @@ Mobile application written in flutter, with a music player like interface where 
 # Team members
 
 
-[Mircea Bina](https://github.com/mirceaiscoding)
-[Stefan Grigorescu](https://github.com/StefanGrigorescu)
-[Denis Troaca](https://github.com/TroacaDenis)
+- [Mircea Bina](https://github.com/mirceaiscoding)
+- [Stefan Grigorescu](https://github.com/StefanGrigorescu)
+- [Denis Troaca](https://github.com/TroacaDenis)
 
 
 # App description
@@ -70,6 +70,14 @@ https://github.com/mirceaiscoding/netflix-recommendations/issues?q=is%3Aissue+is
 For the frontend: our project uses Visual Studio Code for writing the flutter program and Xcode for simulating a mobile interface (iphone) for the app.
 
 The backend is written in .NET with Visual Studio as the IDE. It Connects to a cloud database (Microsoft Azure SQL Database)  populated with movies from a public Netflix API ([uNoGS](https://rapidapi.com/unogs/api/unogs/)).
+
+
+# Refactoring
+
+
+<img width="1440" alt="photo4" src="https://user-images.githubusercontent.com/79210519/173361343-f117137c-8ca0-40dc-b5f9-2195826e0979.png">
+
+Multiple issues that require refactoring: https://github.com/mirceaiscoding/netflix-recommendations/issues?q=is%3Aissue+label%3Arefactoring+is%3Aclosed
 
 
 # Design patterns
