@@ -27,6 +27,7 @@ class HomescreenState extends State<Homescreen> {
   final AuthService _authService = AuthService();
 
   static bool loading = false;
+  static bool isUpdating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +101,7 @@ class HomescreenState extends State<Homescreen> {
   // Sets the page to a specified value
   // It is called by swiping so no animation is required
   setPage(int val) {
+    updateDatabase();
     // print("Set page to $val");
     setState(() {
       currentPage = val;
@@ -110,6 +112,13 @@ class HomescreenState extends State<Homescreen> {
     if (loading == false) {
       loading = true;
       _titlesService.load().then((status) => {afterLoadIsDone(status)});
+    }
+  }
+
+  updateDatabase() {
+    if (isUpdating == false && _titlesService.watcherTitleModels.isNotEmpty) {
+      isUpdating = true;
+      _titlesService.batchUpdate().then((value) => {isUpdating = false});
     }
   }
 
