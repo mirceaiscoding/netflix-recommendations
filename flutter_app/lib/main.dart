@@ -6,6 +6,7 @@ import 'package:flutter_app/screens/dislikes/Dislikes_screen.dart';
 import 'package:flutter_app/screens/home/home_screen.dart';
 import 'package:flutter_app/screens/likes/Likes_screen.dart';
 import 'package:flutter_app/screens/login/login_screen.dart';
+import 'package:flutter_app/screens/logout/logout_screen.dart';
 import 'package:flutter_app/screens/register/register_screen.dart';
 import 'package:flutter_app/screens/watchlist/watchlist_screen.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      initialRoute: '/watchlist', // Route when the app opens
+      initialRoute: '/login', // Route when the app opens
       routes: {
         '/home': (context) => const Homescreen(),
         '/login': (context) => const LoginScreen(),
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/watchlist':(context) => const WatchlistScreen(),
         '/likes':(context) => const LikesScreen(),
         '/dislikes':(context) => const DislikesScreen(),
+        '/logout': (context) => const LogoutScreen(),
       },
     );
   }

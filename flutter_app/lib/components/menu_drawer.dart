@@ -10,7 +10,7 @@ class MenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const menu = ['HOME', 'ACCOUNT', 'WATCHLIST', 'LIKES', 'DISLIKES'];
-    const paths = ['/home', '/login', '/watchlist', '/likes', '/dislikes'];
+    const paths = ['/home', '/logout', '/watchlist', '/likes', '/dislikes'];
     return Drawer(
       backgroundColor: kBackgroundColor,
       // ListView allows scrolling inside the drawer
