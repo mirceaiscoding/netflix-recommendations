@@ -254,7 +254,7 @@ namespace Movie4U.Repositories
             var filterList = new List<Func<TEntity, bool>>();
             if (flagsUnpacked.Count > 0)
                 foreach (int flag in flagsUnpacked)
-                    filterList.Add(new TEntity().GetFilter(flag));
+                    filterList.Add(new TEntity().GetEntityFilter(flag));
             return Task.FromResult(filterList);
         }
 
@@ -264,7 +264,7 @@ namespace Movie4U.Repositories
             var comparerList = new List<Func<TEntity, TEntity, int>>();
             if (flagsUnpacked.Count > 0)
                 foreach (int flag in flagsUnpacked)
-                    comparerList.Add(new TEntity().GetTEntityComparer(flag));
+                    comparerList.Add(new TEntity().GetEntityComparer(flag));
             return Task.FromResult(comparerList);
         }
 
@@ -274,7 +274,7 @@ namespace Movie4U.Repositories
             var comparerList = new List<Func<TModel, TModel, int>>();
             if (flagsUnpacked.Count > 0)
                 foreach (int flag in flagsUnpacked)
-                    comparerList.Add(new TModel().GetTModelComparer(flag));
+                    comparerList.Add(new TModel().GetModelComparer(flag));
             return Task.FromResult(comparerList);
         }
 

@@ -1,6 +1,7 @@
 ﻿
 using Movie4U.Enums;
 using System;
+using System.Linq;
 
 namespace Movie4U.EntitiesModels
 {
@@ -41,17 +42,27 @@ namespace Movie4U.EntitiesModels
             return new IdModel();
         }
 
-        virtual public Func<TEntity, bool> GetFilter(int key)
+        virtual public Func<TEntity, bool> GetEntityFilter(int key)
         {
             return null;
         }
 
-        virtual public Func<TEntity, TEntity, int> GetTEntityComparer(int key)
+        virtual public Func<IQueryable<TEntity>, IQueryable<TEntity>> GetDynamicEntityFilter(int key)
         {
             return null;
         }
 
-        virtual public Func<TModel, TModel, int> GetTModelComparer(int key)
+        virtual public Func<IQueryable<TModel>, IQueryable<TModel>> GetDynamicModelSorter(int key)
+        {
+            return null;
+        }
+
+        virtual public Func<TEntity, TEntity, int> GetEntityComparer(int key)
+        {
+            return null;
+        }
+
+        virtual public Func<TModel, TModel, int> GetModelComparer(int key)
         {
             return null;
         }
