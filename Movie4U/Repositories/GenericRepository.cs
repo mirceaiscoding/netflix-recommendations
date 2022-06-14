@@ -70,7 +70,7 @@ namespace Movie4U.Repositories
             foreach (var filter in filterList)
                 result = filter(result);
 
-            if(config.extraEntityFilters == null)
+            if (config.extraEntityFilters == null)
                 return await result.ToListAsync();
 
             foreach (var filter in config.extraEntityFilters)
@@ -242,31 +242,70 @@ namespace Movie4U.Repositories
 
         protected static Task<List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>> GetDynamicEntityFilterList(int whereFlagsPacked)
         {
-            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
             var filterList = new List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>();
-            if (flagsUnpacked.Count > 0)
-                foreach (int flag in flagsUnpacked)
-                    filterList.Add(new TEntity().GetDynamicEntityFilter(flag));
+
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
+            if (flagsUnpacked.Count < 1)
+                return Task.FromResult(filterList);
+
+            foreach (int flag in flagsUnpacked)
+            {
+                if (flag == 0)
+                    continue;
+
+                var filter = new TEntity().GetDynamicEntityFilter(flag);
+                if (filter == null)
+                    continue;
+
+                filterList.Add(filter);
+            }
+
             return Task.FromResult(filterList);
         }
 
         protected static Task<List<Func<TEntity, TEntity, int>>> GetTEntityComparerList(int orderByFlagsPacked)
         {
-            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
             var comparerList = new List<Func<TEntity, TEntity, int>>();
-            if (flagsUnpacked.Count > 0)
-                foreach (int flag in flagsUnpacked)
-                    comparerList.Add(new TEntity().GetEntityComparer(flag));
+
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
+            if (flagsUnpacked.Count < 1)
+                return Task.FromResult(comparerList);
+
+            foreach (int flag in flagsUnpacked)
+            {
+                if (flag == 0)
+                    continue;
+
+                var comparer = new TEntity().GetEntityComparer(flag);
+                if (comparer == null)
+                    continue;
+
+                comparerList.Add(comparer);
+            }
+
             return Task.FromResult(comparerList);
         }
 
         protected static Task<List<Func<TModel, TModel, int>>> GetTModelComparerList(int orderByFlagsPacked)
         {
-            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
             var comparerList = new List<Func<TModel, TModel, int>>();
-            if (flagsUnpacked.Count > 0)
-                foreach (int flag in flagsUnpacked)
-                    comparerList.Add(new TModel().GetModelComparer(flag));
+
+            var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
+            if (flagsUnpacked.Count < 1)
+                return Task.FromResult(comparerList);
+
+            foreach (int flag in flagsUnpacked)
+            {
+                if (flag == 0)
+                    continue;
+
+                var comparer = new TModel().GetModelComparer(flag);
+                if (comparer == null)
+                    continue;
+
+                comparerList.Add(comparer);
+            }
+
             return Task.FromResult(comparerList);
         }
 
