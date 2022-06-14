@@ -8,6 +8,7 @@ using Movie4U.Utilities;
 using Movie4U.EntitiesModels;
 using System;
 using EFCore.BulkExtensions;
+using Movie4U.EntitiesModels.Models;
 
 namespace Movie4U.Repositories
 {
@@ -34,121 +35,113 @@ namespace Movie4U.Repositories
         }
 
 
-        public virtual async Task<List<TModel>> GetAllFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
+        public virtual async Task<List<TModel>> GetAllFilteredAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            var modelList =
+            var result =
                 CastUtility.ToModelsList<TEntity, TModel>
                     (await GetAllDbFilteredAsync(
-                        orderByFlagsPacked,
-                        whereFlagsPacked,
-                        pageIndex,
-                        extraEntityFilters,
+                        config,
                         true));
-            
+
             if (filler != null)
-                await filler(modelList);
+                await filler(result);
 
-            if (extraModelFilters != null)
-                foreach (var filter in extraModelFilters)
-                    modelList = modelList
-                        .Where(model => filter(model))
-                        .ToList();
+            if (extraModelFilters == null)
+                return result;
 
-            return modelList;
+            foreach (var filter in extraModelFilters)
+                result = result
+                    .Where(model => filter(model))
+                    .ToList();
+
+            return result;
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbFilteredAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null, bool asNoTracking = false)
+        public virtual async Task<List<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
-            var filterList = await GetFilterList(whereFlagsPacked);
-
             IQueryable<TEntity> result = entities;
             if (asNoTracking)
                 result = result.AsNoTracking();
 
+            if (config == null)
+                return await result.ToListAsync();
+
+            var filterList = await GetDynamicEntityFilterList(config.whereFlagsPacked);
             foreach (var filter in filterList)
-                result = result.Where(entity => filter(entity));
+                result = filter(result);
 
-             var entityList = await result.ToListAsync();
+            if(config.extraEntityFilters == null)
+                return await result.ToListAsync();
 
-            if (extraEntityFilters != null)
-                foreach (var filter in extraEntityFilters)
-                    entityList = entityList
-                        .Where(entity => filter(entity))
-                        .ToList();
+            foreach (var filter in config.extraEntityFilters)
+                result = filter(result);
 
-            return entityList;
+            return await result.ToListAsync();
         }
 
-        public virtual async Task<List<TModel>> GetAllOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
+        public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            var modelList = 
+            var result =
                 CastUtility
                 .ToModelsList<TEntity, TModel>(
                     await GetAllDbFilteredAsync(
-                        orderByFlagsPacked,
-                        whereFlagsPacked,
-                        pageIndex,
-                        extraEntityFilters,
+                        config,
                         true));
 
             if (filler != null)
-                await filler(modelList);
+                await filler(result);
 
             if (extraModelFilters != null)
                 foreach (var filter in extraModelFilters)
-                    modelList = modelList
+                    result = result
                         .Where(model => filter(model))
                         .ToList();
 
-            var comparerList = await GetTModelComparerList(orderByFlagsPacked);
-            if (comparerList.Count() == 0)
-                return modelList;
+            if (config == null)
+                return result;
 
-            modelList.Sort(new ModelChainComparer<TModel>(comparerList));
-            return modelList;
+            var comparerList = await GetTModelComparerList(config.orderByFlagsPacked);
+            if (comparerList.Count() == 0)
+                return result;
+
+            result.Sort(new ModelChainComparer<TModel>(comparerList));
+            return result;
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null, bool asNoTracking = false)
+        public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
-            var entityList = await GetAllDbFilteredAsync(
-                orderByFlagsPacked,
-                whereFlagsPacked,
-                pageIndex,
-                extraEntityFilters,
+            var result = await GetAllDbFilteredAsync(
+                config,
                 asNoTracking);
 
-            var comparerList = await GetTEntityComparerList(orderByFlagsPacked);
-            if (comparerList.Count() == 0)
-                return entityList;
+            if (config == null)
+                return result;
 
-            entityList.Sort(new EntityChainComparer<TEntity>(comparerList));
-            return entityList;
+            var comparerList = await GetTEntityComparerList(config.orderByFlagsPacked);
+            if (comparerList.Count() == 0)
+                return result;
+
+            result.Sort(new EntityChainComparer<TEntity>(comparerList));
+            return result;
         }
 
-        public virtual async Task<List<TModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
+        public virtual async Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
         {
             return await PaginatedListFactory<TModel>
                 .Create(
                     await GetAllOrderedAsync(
-                        orderByFlagsPacked,
-                        whereFlagsPacked,
-                        pageIndex,
-                        extraEntityFilters,
+                        config,
                         extraModelFilters,
                         filler),
-                    (int)pageIndex, pageSize);
+                    (int)config.pageIndex, pageSize);
         }
 
-        public virtual async Task<List<TEntity>> GetAllDbFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, List<Func<TEntity, bool>> extraEntityFilters = null)
+        public virtual async Task<List<TEntity>> GetAllDbFromPageAsync(GetAllConfig<TEntity> config = null)
         {
             return await PaginatedListFactory<TEntity>
                 .Create(
-                    await GetAllDbOrderedAsync(
-                        orderByFlagsPacked,
-                        whereFlagsPacked,
-                        pageIndex,
-                        extraEntityFilters),
-                    (int)pageIndex, pageSize);
+                    await GetAllDbOrderedAsync(config),
+                    (int)config.pageIndex, pageSize);
         }
 
         public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
@@ -195,7 +188,7 @@ namespace Movie4U.Repositories
                 await db.SaveChangesAsync();
                 return entity;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 return null;
@@ -247,14 +240,13 @@ namespace Movie4U.Repositories
             return true;
         }
 
-
-        protected static Task<List<Func<TEntity, bool>>> GetFilterList(int whereFlagsPacked)
+        protected static Task<List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>> GetDynamicEntityFilterList(int whereFlagsPacked)
         {
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
-            var filterList = new List<Func<TEntity, bool>>();
+            var filterList = new List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>();
             if (flagsUnpacked.Count > 0)
                 foreach (int flag in flagsUnpacked)
-                    filterList.Add(new TEntity().GetEntityFilter(flag));
+                    filterList.Add(new TEntity().GetDynamicEntityFilter(flag));
             return Task.FromResult(filterList);
         }
 

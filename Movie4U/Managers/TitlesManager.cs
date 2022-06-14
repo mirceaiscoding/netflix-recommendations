@@ -40,7 +40,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<TitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null)
         {
             Func<List<TitleModel>, Task> filler = async titleModels =>
             {
@@ -48,7 +48,7 @@ namespace Movie4U.Managers
                     await FillModelsLists(titleModel);
             };
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
+            return await repo.GetAllFromPageAsync(config, null, filler);
         }
 
         public async Task<TitleModel> GetOneByIdAsync(int netflix_id)

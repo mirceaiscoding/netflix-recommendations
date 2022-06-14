@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetAllTitlesFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var titles = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            var titles = await manager.GetAllFromPageAsync(new GetAllConfig<Title>(orderByFlagsPacked, whereFlagsPacked, pageIndex));
 
             if (titles.Count == 0)
                 return NotFound("There are no titles stored in the database");

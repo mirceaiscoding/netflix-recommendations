@@ -3,8 +3,10 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -64,7 +66,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<WatcherTitleModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, WatcherModel watcherModel = null)
+        public async Task<List<WatcherTitleModel>> GetAllFromPageAsync(GetAllConfig<WatcherTitle> config = null, WatcherModel watcherModel = null)
         {
             Func<List<WatcherTitleModel>, Task> filler = async watcherTitleModels =>
             {
@@ -73,23 +75,26 @@ namespace Movie4U.Managers
             };
 
             if(watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
-                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
+                return await repo.GetAllFromPageAsync(config, null, filler);
 
-            List<Func<WatcherTitle, bool>> extraEntityFilters = new List<Func<WatcherTitle, bool>>();
-            extraEntityFilters.Add(wt => wt.watcher_name == watcherModel.watcher_name);
+            if (config == null)
+                config = new GetAllConfig<WatcherTitle>();
 
-            if ((whereFlagsPacked & (int)WhereEnum.WatcherCountryOnly) == 0  ||  watcherModel.coutryId == null)
-                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, null, filler);
+            config.extraEntityFilters = new List<Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
+            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "watcher_name", watcherModel.watcher_name));
 
-            var watcherCountry = await countriesManager.GetOneByIdAsync((int)watcherModel.coutryId);
-            if(watcherCountry == null)
-                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, null, filler);
+            if ((config.whereFlagsPacked & (int)WhereEnum.WatcherCountryOnly) == 0  ||  watcherModel.countryId == null)
+                return await repo.GetAllFromPageAsync(config, null, filler);
 
             List<Func<WatcherTitleModel, bool>> extraModelFilters = new List<Func<WatcherTitleModel, bool>>();
-            extraModelFilters.Add(wt => wt.countryModels.Contains(watcherCountry));
-            whereFlagsPacked ^= (int)WhereEnum.WatcherCountryOnly;      // We created the extraModelFilter for this flag, so we do not need to evaluate it furher.
+            extraModelFilters.Add(wt =>
+                wt
+                .countryModels
+                .Where(cm =>cm.id == watcherModel.countryId)
+                .Count() > 0 );
+            config.whereFlagsPacked ^= (int)WhereEnum.WatcherCountryOnly;      // We created the extraModelFilter for this flag, so we do not need to evaluate it furher.
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, extraModelFilters, filler);
+            return await repo.GetAllFromPageAsync(config, extraModelFilters, filler);
         }
 
         public async Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, int netflix_id)

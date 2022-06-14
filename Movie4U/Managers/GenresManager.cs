@@ -22,9 +22,9 @@ namespace Movie4U.Managers
         }
 
 
-        public async Task<List<GenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<GenreModel>> GetAllFromPageAsync(GetAllConfig<Genre> config = null)
         {
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<GenreModel> GetOneByIdAsync(int genre_id)

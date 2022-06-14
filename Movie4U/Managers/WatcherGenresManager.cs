@@ -2,8 +2,10 @@
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -38,7 +40,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1, WatcherModel watcherModel = null)
+        public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(GetAllConfig<WatcherGenre> config = null, WatcherModel watcherModel = null)
         {
             Func<List<WatcherGenreModel>, Task> filler = async watcherGenreModels =>
             {
@@ -47,12 +49,15 @@ namespace Movie4U.Managers
             };
 
             if (watcherModel == null)
-                return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, null, null, filler);
+                return await repo.GetAllFromPageAsync(config, null, filler);
 
-            List<Func<WatcherGenre, bool>> extraEntityFilters = new List<Func<WatcherGenre, bool>>();
-            extraEntityFilters.Add(wg => wg.watcher_name == watcherModel.watcher_name);
+            if (config == null)
+                config = new GetAllConfig<WatcherGenre>();
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters, null, filler);
+            config.extraEntityFilters = new List<Func<IQueryable<WatcherGenre>, IQueryable<WatcherGenre>>>();
+            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "watcher_name", watcherModel.watcher_name));
+
+            return await repo.GetAllFromPageAsync(config, null, filler);
         }
 
         public async Task<WatcherGenreModel> GetOneByIdAsync(string watcher_name, int genre_id)

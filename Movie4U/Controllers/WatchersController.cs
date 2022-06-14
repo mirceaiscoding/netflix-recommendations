@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetAllWatchersFromPageAsync([FromHeader] int orderByFlagsPacked = 0, [FromHeader] int whereFlagsPacked = 0, [FromRoute] int? pageIndex = 1)
         {
-            var watchers = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            var watchers = await manager.GetAllFromPageAsync(new GetAllConfig<Watcher>(orderByFlagsPacked, whereFlagsPacked, pageIndex));
 
             if (watchers.Count == 0)
                 return NotFound("There are no watchers stored in the database");
@@ -44,7 +46,7 @@ namespace Movie4U.Controllers
             return Ok(watcher);
         }
 
-        [HttpPut]
+        [HttpPut("UpdateWatcherCountryId")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> UpdateWatcherCountryId([FromHeader] string Authorization, [FromBody] int? countryId)
         {

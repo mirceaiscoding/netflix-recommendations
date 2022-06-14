@@ -42,11 +42,6 @@ namespace Movie4U.EntitiesModels
             return new IdModel();
         }
 
-        virtual public Func<TEntity, bool> GetEntityFilter(int key)
-        {
-            return null;
-        }
-
         virtual public Func<IQueryable<TEntity>, IQueryable<TEntity>> GetDynamicEntityFilter(int key)
         {
             return null;
