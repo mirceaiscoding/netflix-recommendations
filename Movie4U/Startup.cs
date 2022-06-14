@@ -149,6 +149,8 @@ namespace Movie4U
                     });
             });
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddScoped<ITokensManager, TokensManager>();
 
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();

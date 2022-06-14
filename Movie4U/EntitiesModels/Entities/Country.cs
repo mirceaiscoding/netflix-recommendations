@@ -1,6 +1,5 @@
 ﻿using Movie4U.EntitiesModels.Models;
 using Movie4U.EntitiesModels.Models.uNoGS;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
