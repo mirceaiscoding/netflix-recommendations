@@ -7,6 +7,11 @@ import 'dart:convert';
 
 import 'package:flutter_app/models/watcher_genre_model.dart';
 
+List<WatcherTitlePreferenceModel> watcherTitlePreferenceModelsFromJson(
+        String str) =>
+    List<WatcherTitlePreferenceModel>.from(
+        json.decode(str).map((x) => WatcherTitlePreferenceModel.fromJson(x)));
+
 WatcherTitlePreferenceModel watcherTitlePreferenceModelFromJson(String str) =>
     WatcherTitlePreferenceModel.fromJson(json.decode(str));
 

@@ -23,7 +23,7 @@ class TitlesService {
     if (kDebugMode) {
       print("Loading titles for user...");
     }
-    var res = await getBestTitles(1);
+    var res = await getTitles();
     if (res.statusCode == 200) {
       var titleModels = titlesFromJson(res.body);
       for (var titleModel in titleModels) {
@@ -46,7 +46,8 @@ class TitlesService {
     return res.statusCode;
   }
 
-  Future<http.Response> getBestTitles(int page) async {
+  static Future<http.Response> getTitles(
+      {bool sorted = false, int filterFlags = 0, int page = 1}) async {
     // service for secure storage
     final SecureStorage _secureStorage = SecureStorage();
 
@@ -56,7 +57,9 @@ class TitlesService {
         Uri.parse(kTitleURL + "GetAllFromPage/" + page.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ' + authModel.accessToken
+          'Authorization': 'Bearer ' + authModel.accessToken,
+          'orderByFlagsPacked': sorted ? 1.toString() : 0.toString(),
+          'whereFlagsPacked': filterFlags.toString(),
         });
 
     return res;
@@ -165,7 +168,7 @@ class TitlesService {
         watcherTitleModels.map((e) => e.clone()).toList();
   }
 
-  Future<WatcherTitlePreferenceModel?> getPreferenceModel(
+  static Future<WatcherTitlePreferenceModel?> getPreferenceModel(
       TitleModel titleModel) async {
     // service for secure storage
     final SecureStorage _secureStorage = SecureStorage();

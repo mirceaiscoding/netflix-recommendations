@@ -100,3 +100,12 @@ const kTitleURL = kBaseAPIURL + "Titles/";
 const kMoviesToLoad = 5;
 const kmaxMoviesOnScreen = 4; //how many movies can fit on the screen
 const kPixelsBeforeRenderingNewMovies = 1000;
+
+// Filter flags
+const kNone = 0;
+const kInWatchLater = 1 << 0;
+const kNotInWatchLater = 1 << 1;
+const kPrefferenceIsMore = 1 << 2;
+const kPrefferenceIsLess = 1 << 3;
+const kPrefferenceIsNull = 1 << 4;
+const kWatcherCountryOnly = 1 << 5;
