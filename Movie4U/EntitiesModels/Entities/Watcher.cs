@@ -66,7 +66,7 @@ namespace Movie4U.EntitiesModels.Entities
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
-            this.coutryId = source.coutryId;
+            this.coutryId = source.countryId;
             this.nextPageIndex = source.nextPageIndex;
         }
 

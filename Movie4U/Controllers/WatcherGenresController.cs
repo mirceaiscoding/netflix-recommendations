@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers;
 using Movie4U.Managers.IManagers;
@@ -30,7 +31,7 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            var watcherTitles = await manager.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, watcherModel);
+            var watcherTitles = await manager.GetAllFromPageAsync(new GetAllConfig<WatcherGenre>(orderByFlagsPacked, whereFlagsPacked, pageIndex), watcherModel);
 
             if (watcherTitles.Count == 0)
                 return NotFound("There are no watcher genres stored in the database");

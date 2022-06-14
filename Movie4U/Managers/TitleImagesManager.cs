@@ -2,8 +2,10 @@
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -21,17 +23,20 @@ namespace Movie4U.Managers
         }
 
 
-        public async Task<List<TitleImageModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleImageModel>> GetAllFromPageAsync(GetAllConfig<TitleImage> config = null)
         {
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            return await repo.GetAllFromPageAsync(config);
         }
 
-        public async Task<List<TitleImageModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleImageModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleImage> config = null)
         {
-            List<Func<TitleImage, bool>> extraEntityFilters = new List<Func<TitleImage, bool>>();
-            extraEntityFilters.Add(ti => ti.netflix_id == netflixId);
+            if (config == null)
+                config = new GetAllConfig<TitleImage>();
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters);
+            config.extraEntityFilters = new List<Func<IQueryable<TitleImage>, IQueryable<TitleImage>>>();
+            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "netflix_id", netflixId));
+
+            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<TitleImageModel> GetOneByIdAsync(string url)

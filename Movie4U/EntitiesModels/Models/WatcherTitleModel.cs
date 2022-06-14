@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.Enums;
 
@@ -8,13 +11,40 @@ namespace Movie4U.EntitiesModels.Models
     public class WatcherTitleModel: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
     {
 
-        static Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>> comparers;
+        static private Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>> modelComparers;
+        static private Dictionary<int, Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>>> dynamicModelSorters;
 
         static WatcherTitleModel()
         {
-            comparers = new Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>>();
-            comparers.Add((int)OrderByEnum.Score, (wtm1, wtm2) => wtm1.GetScore().CompareTo(wtm2.GetScore()));
+            modelComparers = new Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>>();
+            modelComparers.Add((int)OrderByEnum.Score, (wtm1, wtm2) => wtm1.GetScore().CompareTo(wtm2.GetScore()));
+            
+            dynamicModelSorters = new Dictionary<int, Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>>>();
+            dynamicModelSorters.Add((int)OrderByEnum.Score, query => scoreSorter(query));
 
+        }
+        
+        public static IQueryable<TModel> scoreSorter<TModel>(IQueryable<TModel> source)
+            where TModel : WatcherTitleModel
+        {
+            Type thisType = typeof(TModel);
+            ParameterExpression wtm1 = Expression.Parameter(thisType, "wtm1");
+            ParameterExpression wtm2 = Expression.Parameter(thisType, "wtm2");
+            MethodInfo getScoreMethodInfo = thisType.GetMethod("GetScore");
+
+            ParameterExpression score1 = Expression.Parameter(typeof(double), "score1");
+            ParameterExpression score2 = Expression.Parameter(typeof(double), "score2");
+            MethodInfo compareToMethodInfo = typeof(double).GetMethod("CompareTo", new[] { typeof(double) });
+            ParameterExpression difference = Expression.Parameter(typeof(int), "difference");
+
+            BlockExpression block = Expression.Block(
+                new[] { difference },
+                Expression.Assign(score1, Expression.Call(wtm1, getScoreMethodInfo)),
+                Expression.Assign(score2, Expression.Call(wtm2, getScoreMethodInfo)),
+                Expression.Assign(difference, Expression.Call(score1, compareToMethodInfo, new[] { score2 })));
+
+            var lambda = Expression.Lambda < Func < TModel, int>>(block, false, new[] {wtm1, wtm2});
+            return source.OrderBy(lambda);
         }
 
         public string watcher_name { get; set; }
@@ -103,11 +133,18 @@ namespace Movie4U.EntitiesModels.Models
             return new IdModel(2, watcher_name, netflix_id);
         }
 
-        public override Func<WatcherTitleModel, WatcherTitleModel, int> GetTModelComparer(int key)
+        public override Func<WatcherTitleModel, WatcherTitleModel, int> GetModelComparer(int key)
         {
-            if (!comparers.TryGetValue(key, out Func<WatcherTitleModel, WatcherTitleModel, int> comparer))
+            if (!modelComparers.TryGetValue(key, out Func<WatcherTitleModel, WatcherTitleModel, int> comparer))
                 return null;
             return comparer;
+        }
+
+        public override Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>> GetDynamicModelSorter(int key)
+        {
+            if (!dynamicModelSorters.TryGetValue(key, out Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>> sorter))
+                return null;
+            return sorter;
         }
 
         public double GetScore()

@@ -22,9 +22,9 @@ namespace Movie4U.Managers
         }
 
 
-        public async Task<List<CountryModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<CountryModel>> GetAllFromPageAsync(GetAllConfig<Country> config = null)
         {
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<CountryModel> GetOneByIdAsync(int country_id)

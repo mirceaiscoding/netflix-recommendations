@@ -15,7 +15,7 @@ namespace Movie4U.EntitiesModels.Models
 
         public string userId { get; set; }
 
-        public int? coutryId { get; set; }
+        public int? countryId { get; set; }
 
         public int nextPageIndex { get; set; }
 
@@ -48,7 +48,7 @@ namespace Movie4U.EntitiesModels.Models
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
-            this.coutryId = source.coutryId;
+            this.countryId = source.coutryId;
             this.nextPageIndex = source.nextPageIndex;
         }
 
@@ -59,7 +59,7 @@ namespace Movie4U.EntitiesModels.Models
             this.refreshToken = source.refreshToken;
             this.refreshTokenExpiryTime = source.refreshTokenExpiryTime;
             this.userId = source.userId;
-            this.coutryId = source.coutryId;
+            this.countryId = source.countryId;
             this.nextPageIndex = source.nextPageIndex;
         }
 

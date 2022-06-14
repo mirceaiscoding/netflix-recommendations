@@ -1,23 +1,25 @@
 ﻿using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Movie4U.EntitiesModels.Entities
 {
     public class WatcherTitle: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
     {
-        static Dictionary<int, Func<WatcherTitle, bool>> filters;
+        static private Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>> dynamicEntityFilters;
 
         static WatcherTitle()
         {
-            filters = new Dictionary<int, Func<WatcherTitle, bool>>();
-            filters.Add((int)WhereEnum.InWatchLater, wt => wt.watchLater == true);
-            filters.Add((int)WhereEnum.NotInWatchLater, wt => wt.watchLater == false);
-            filters.Add((int)WhereEnum.PrefferenceIsMore, wt => wt.preference == Preferences.More);
-            filters.Add((int)WhereEnum.PrefferenceIsLess, wt => wt.preference == Preferences.Less);
-            filters.Add((int)WhereEnum.PrefferenceIsNull, wt => wt.preference == Preferences.Null);
+            dynamicEntityFilters = new Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
+            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => ExpressionsUtility.propertyFilter(source, "watchLater", true));
+            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => ExpressionsUtility.propertyFilter(source, "watchLater", false));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.More));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.Less));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.Null));
 
         }
 
@@ -111,9 +113,9 @@ namespace Movie4U.EntitiesModels.Entities
             return new IdModel ( 2, watcher_name, netflix_id );
         }
 
-        override public Func<WatcherTitle, bool> GetFilter(int key)
+        public override Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> GetDynamicEntityFilter(int key)
         {
-            if(!filters.TryGetValue(key, out Func<WatcherTitle, bool> filter))
+            if (!dynamicEntityFilters.TryGetValue(key, out Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> filter))
                 return null;
             return filter;
         }

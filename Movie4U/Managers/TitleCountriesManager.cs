@@ -2,8 +2,10 @@
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
@@ -24,22 +26,25 @@ namespace Movie4U.Managers
         }
 
 
-        public async Task<List<TitleCountryModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<TitleCountryModel>> GetAllFromPageAsync(GetAllConfig<TitleCountry> config = null)
         {
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex);
+            return await repo.GetAllFromPageAsync(config);
         }
 
-        public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
-        {
-            List<Func<TitleCountry, bool>> extraEntityFilters = new List<Func<TitleCountry, bool>>();
-            extraEntityFilters.Add(tc => tc.netflix_id == netflixId);
+        public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleCountry> config = null)
+        {   
+            if (config == null)
+                config = new GetAllConfig<TitleCountry>();
 
-            return await repo.GetAllFromPageAsync(orderByFlagsPacked, whereFlagsPacked, pageIndex, extraEntityFilters);
+            config.extraEntityFilters = new List<Func<IQueryable<TitleCountry>, IQueryable<TitleCountry>>>();
+            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "netflix_id", netflixId));
+
+            return await repo.GetAllFromPageAsync(config);
         }
 
-        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(int netflixId, int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1)
+        public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleCountry> config = null)
         {
-            var titleCountries = await GetAllByNetflixIdFromPageAsync(netflixId);
+            var titleCountries = await GetAllByNetflixIdFromPageAsync(netflixId, config);
 
             var countries = new List<CountryModel>();
             foreach (var titleCountry in titleCountries)

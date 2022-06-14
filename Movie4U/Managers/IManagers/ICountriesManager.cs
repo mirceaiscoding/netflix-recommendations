@@ -1,6 +1,6 @@
-﻿using Movie4U.EntitiesModels.Models;
+﻿using Movie4U.EntitiesModels.Entities;
+using Movie4U.EntitiesModels.Models;
 using Movie4U.EntitiesModels.Models.uNoGS;
-using Movie4U.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +8,7 @@ namespace Movie4U.Managers.IManagers
 {
     public interface ICountriesManager
     {
-        Task<List<CountryModel>> GetAllFromPageAsync(int orderByFlagsPacked = 0, int whereFlagsPacked = 0, int? pageIndex = 1);
+        Task<List<CountryModel>> GetAllFromPageAsync(GetAllConfig<Country> config = null);
 
         Task<CountryModel> GetOneByIdAsync(int country_id);
 
