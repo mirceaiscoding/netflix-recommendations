@@ -81,4 +81,24 @@ class WatcherTitlePreferenceModel {
         "watcherGenreModels":
             List<dynamic>.from(watcherGenreModels.map((x) => x.toJson())),
       };
+
+  @override
+  String toString() {
+    return "${preference}, ${watchLater}";
+  }
+
+  WatcherTitlePreferenceModel clone() => WatcherTitlePreferenceModel(
+      watcherName: watcherName,
+      netflixId: netflixId,
+      title: title,
+      preference: preference,
+      prefLastSetTime: prefLastSetTime,
+      watchLater: watchLater,
+      watchLaterLastSetTime: watchLaterLastSetTime,
+      synopsis: synopsis,
+      rating: rating,
+      year: year,
+      poster: poster,
+      countryModels: countryModels,
+      watcherGenreModels: watcherGenreModels);
 }

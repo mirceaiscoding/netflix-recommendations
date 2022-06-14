@@ -45,6 +45,18 @@ const kAuthStyle = TextStyle(
   color: kTextColor,
 );
 
+const kLogoutTitleStyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 26.0,
+  fontWeight: FontWeight.bold,
+  color: kTextColor,
+);
+const kLogoutLinetyle = TextStyle(
+  fontFamily: "Roboto",
+  fontSize: 22.0,
+  color: kTextColor,
+);
+
 const kButtonTextStyle = TextStyle(
   fontFamily: "Roboto",
   fontSize: 16.0,
@@ -81,6 +93,7 @@ const kBaseAPIURL = "https://localhost:5003/";
 const kAuthRequestURL = kBaseAPIURL + "api/Authentication/";
 const kTokensURL = kBaseAPIURL + "api/Tokens/";
 const kWatcherTitleURL = kBaseAPIURL + "WatcherTitles/";
+const kWatcherGenresURL = kBaseAPIURL + "WatcherGenres/";
 const kTitleURL = kBaseAPIURL + "Titles/";
 
 // Watchlist

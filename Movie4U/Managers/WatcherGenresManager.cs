@@ -86,6 +86,24 @@ namespace Movie4U.Managers
             return await repo.UpdateAsync(updateWatcherGenre);
         }
 
+        public async Task AddToScoreMultiple(string watcher_name, WatcherGenreChangeModel[] changeModels)
+        {
+            List<WatcherGenre> updatedWatcherGenres = new List<WatcherGenre>();
+
+            foreach (var changeModel in changeModels)
+            {
+                var watcherGenre = await repo.GetOneDbByIdAsync(watcher_name, changeModel.genre_id);
+                if (watcherGenre == null)
+                    // skip it
+                    continue;
+
+                watcherGenre.watcherGenreScore += changeModel.watcherGenreScore;
+                updatedWatcherGenres.Add(watcherGenre);
+            }
+
+            await repo.InsertOrUpdateMultipleAsync(updatedWatcherGenres.ToArray());
+        }
+
         public async Task<bool> Update(WatcherGenreModelParameter watcherGenreModelParam)
         {
             var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);

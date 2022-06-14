@@ -101,6 +101,23 @@ namespace Movie4U.Controllers
             return Ok();
         }
 
+
+        [HttpPut("BatchAddToScore")]
+        [Authorize(Policy = "BasicUserPolicy")]
+        public async Task<IActionResult> AddToWatcherGenreAsync([FromHeader] string Authorization, [FromBody] WatcherGenreChangeModel[] changeModels)
+        {
+            var watcherName = TokensManager.ExtractUserName(Authorization);
+
+            var watcherModel = await watchersManager.GetOneByIdAsync(watcherName);
+            if (watcherModel == null)
+                return BadRequest("The watcher couldn not be found");
+
+            await manager.AddToScoreMultiple(watcherName, changeModels);
+
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteWatcherGenreAsync([FromHeader] string Authorization, [FromBody] string watcher_name, int genre_id)
