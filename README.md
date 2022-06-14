@@ -44,6 +44,9 @@ https://github.com/mirceaiscoding/netflix-recommendations/projects/1
 # UML diagram
 
 
+![UML](https://user-images.githubusercontent.com/79210519/173590391-a84b0d40-c23c-4780-b0bd-ed0d4575ce56.png)
+
+
 # Source control
 
 
