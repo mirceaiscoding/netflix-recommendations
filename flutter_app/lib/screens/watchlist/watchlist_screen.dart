@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/menu_drawer.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/models/title_model.dart';
+import 'package:flutter_app/models/watcher_title_preference_model.dart';
 import 'package:flutter_app/screens/watchlist/components/body.dart';
 import 'dart:math';
 
@@ -18,7 +19,8 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
   //final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final ScrollController _controller = ScrollController();
 
-  static List<Body> movies = [];
+  static List<Body> movies =
+      TitlesService().watchLaterTitles.map((e) => Body(movie: e)).toList();
 
   bool _isLoading = false;
   // ignore: prefer_final_fields
@@ -29,7 +31,15 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
 
   @override
   void initState() {
-    loadTitles();
+    setState(() {
+      movies =
+          TitlesService().watchLaterTitles.map((e) => Body(movie: e)).toList();
+      _dummy = List.generate(
+          min(movies.length, kMoviesToLoad), (index) => movies[index]);
+      toRemove = [];
+      removedMovies = [];
+    });
+
     _controller.addListener(_onScroll);
     super.initState();
   }
@@ -68,26 +78,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
     //TODO:moving await future before setState removes the need for scrolling after loading butcreates listview problems
     await Future.delayed(const Duration(seconds: 2));
     _isLoading = false;
-  }
-
-  void loadTitles() {
-    print("Loading titles in watchlist...");
-    TitlesService.getTitles(filterFlags: kInWatchLater).then((res) => {
-          if (res.statusCode == 200)
-            {
-              for (var titleModel in titlesFromJson(res.body))
-                {
-                  TitlesService.getPreferenceModel(titleModel)
-                      .then((watcherTitlePreferenceModel) => {
-                            if (watcherTitlePreferenceModel != null)
-                              {
-                                movies.add(Body(
-                                    movie: watcherTitlePreferenceModel.clone()))
-                              }
-                          })
-                }
-            }
-        });
   }
 
   @override

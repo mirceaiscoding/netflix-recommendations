@@ -12,6 +12,10 @@ class TitlesService {
 
   TitlesService._internal();
 
+  List<WatcherTitlePreferenceModel> watchLaterTitles = [];
+  List<WatcherTitlePreferenceModel> likedTitles = [];
+  List<WatcherTitlePreferenceModel> dislikedTitles = [];
+
   List<WatcherTitlePreferenceModel> watcherTitleModels = [];
   List<WatcherTitlePreferenceModel> originalWatcherTitleModels = [];
 
@@ -46,6 +50,58 @@ class TitlesService {
     return res.statusCode;
   }
 
+  Future<int> loadWatchLater() async {
+    if (kDebugMode) {
+      print("Loading watch later for user...");
+    }
+    var res = await getTitlePreferenceModels(filterFlags: kInWatchLater);
+    if (res.statusCode == 200) {
+      watchLaterTitles = watcherTitlePreferenceModelsFromJson(res.body);
+      print(watchLaterTitles);
+    } else {
+      watchLaterTitles = [];
+      print("Error ${res.statusCode} loading watchlist for user");
+    }
+    if (kDebugMode) {
+      print("Done loading watchlist");
+    }
+    return res.statusCode;
+  }
+
+  Future<int> loadLiked() async {
+    if (kDebugMode) {
+      print("Loading liked titles for user...");
+    }
+    var res = await getTitlePreferenceModels(filterFlags: kPrefferenceIsMore);
+    if (res.statusCode == 200) {
+      likedTitles = watcherTitlePreferenceModelsFromJson(res.body);
+    } else {
+      likedTitles = [];
+      print("Error ${res.statusCode} loading liked titles for user");
+    }
+    if (kDebugMode) {
+      print("Done loading liked titles");
+    }
+    return res.statusCode;
+  }
+
+  Future<int> loadDisliked() async {
+    if (kDebugMode) {
+      print("Loading dislikedliked titles for user...");
+    }
+    var res = await getTitlePreferenceModels(filterFlags: kPrefferenceIsLess);
+    if (res.statusCode == 200) {
+      dislikedTitles = watcherTitlePreferenceModelsFromJson(res.body);
+    } else {
+      likedTitles = [];
+      print("Error ${res.statusCode} loading disliked titles for user");
+    }
+    if (kDebugMode) {
+      print("Done loading disliked titles");
+    }
+    return res.statusCode;
+  }
+
   static Future<http.Response> getTitles(
       {bool sorted = false, int filterFlags = 0, int page = 1}) async {
     // service for secure storage
@@ -55,6 +111,25 @@ class TitlesService {
 
     var res = await http.get(
         Uri.parse(kTitleURL + "GetAllFromPage/" + page.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + authModel.accessToken,
+          'orderByFlagsPacked': sorted ? 1.toString() : 0.toString(),
+          'whereFlagsPacked': filterFlags.toString(),
+        });
+
+    return res;
+  }
+
+  static Future<http.Response> getTitlePreferenceModels(
+      {bool sorted = false, int filterFlags = 0, int page = 1}) async {
+    // service for secure storage
+    final SecureStorage _secureStorage = SecureStorage();
+
+    var authModel = await _secureStorage.readAuthModel();
+
+    var res = await http.get(
+        Uri.parse(kWatcherTitleURL + "GetAllFromPage/" + page.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ' + authModel.accessToken,
