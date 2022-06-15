@@ -6,6 +6,8 @@
 
 Mobile application written in flutter, with a music player like interface where you can like/dislike movies to get more/less movies like them or add them to your watchlist.
 
+DEMO: https://youtu.be/Gju5Mzr3Ex8
+
 # Team members
 
 
