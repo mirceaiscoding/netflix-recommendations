@@ -1,32 +1,42 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
+using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
-using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
     public class WatcherTitlesManager: IWatcherTitlesManager
     {
+        public static Expression<Func<WatcherTitle, object>>[] includers;
+
+        static WatcherTitlesManager()
+        {
+            includers = new Expression<Func<WatcherTitle, object>>[]
+            {
+                wt => wt.title.titleCountries,
+                wt => wt.title.titleGenres
+            };
+        }
+
         private readonly IWatcherTitlesRepository repo;
         private readonly ITitlesManager titlesManager;
         private readonly IWatcherGenresManager watcherGenresManager;
-        private readonly ICountriesManager countriesManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager, ICountriesManager countriesManager)
+        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager)
         {
             this.repo = repo;
             this.titlesManager = titlesManager;
             this.watcherGenresManager = watcherGenresManager;
-            this.countriesManager = countriesManager;
         }
 
 
@@ -74,14 +84,16 @@ namespace Movie4U.Managers
                     await FillModelsLists(watcherTitleModel);
             };
 
-            if(watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
-                return await repo.GetAllFromPageAsync(config, null, filler);
-
             if (config == null)
                 config = new GetAllConfig<WatcherTitle>();
 
+            config.includers = includers;
+
+            if (watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
+                return await repo.GetAllFromPageAsync(config, null, filler);
+
             config.extraEntityFilters = new List<Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters.Add(source => source.propertyFilter("watcher_name", watcherModel.watcher_name));
 
             if ((config.whereFlagsPacked & (int)WhereEnum.WatcherCountryOnly) == 0  ||  watcherModel.countryId == null)
                 return await repo.GetAllFromPageAsync(config, null, filler);

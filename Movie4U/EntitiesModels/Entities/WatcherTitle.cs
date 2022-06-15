@@ -1,6 +1,6 @@
 ﻿using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
-using Movie4U.Utilities;
+using Movie4U.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,11 +15,11 @@ namespace Movie4U.EntitiesModels.Entities
         static WatcherTitle()
         {
             dynamicEntityFilters = new Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => ExpressionsUtility.propertyFilter(source, "watchLater", true));
-            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => ExpressionsUtility.propertyFilter(source, "watchLater", false));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.More));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.Less));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => ExpressionsUtility.propertyFilter(source, "preference", Preferences.Null));
+            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => source.propertyFilter("watchLater", true));
+            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => source.propertyFilter("watchLater", false));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => source.propertyFilter("preference", Preferences.More));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.propertyFilter("preference", Preferences.Less));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.propertyFilter("preference", Preferences.Null));
 
         }
 

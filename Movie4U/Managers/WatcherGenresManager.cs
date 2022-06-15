@@ -1,17 +1,28 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
-using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
     public class WatcherGenresManager: IWatcherGenresManager
     {
+        public static Expression<Func<WatcherGenre, object>>[] includers;
+
+        static WatcherGenresManager()
+        {
+            includers = new Expression<Func<WatcherGenre, object>>[]
+            {
+                wg => wg.genre
+            };
+        }
+
         private readonly IWatcherGenresRepository repo;
         private readonly IGenresManager genresManager;
 
@@ -48,14 +59,16 @@ namespace Movie4U.Managers
                     await FillModelsLists(watcherGenreModel);
             };
 
-            if (watcherModel == null)
-                return await repo.GetAllFromPageAsync(config, null, filler);
-
             if (config == null)
                 config = new GetAllConfig<WatcherGenre>();
 
+            config.includers = includers;
+
+            if (watcherModel == null)
+                return await repo.GetAllFromPageAsync(config, null, filler);
+
             config.extraEntityFilters = new List<Func<IQueryable<WatcherGenre>, IQueryable<WatcherGenre>>>();
-            config.extraEntityFilters.Add(source => ExpressionsUtility.propertyFilter(source, "watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters.Add(source => source.propertyFilter("watcher_name", watcherModel.watcher_name));
 
             return await repo.GetAllFromPageAsync(config, null, filler);
         }

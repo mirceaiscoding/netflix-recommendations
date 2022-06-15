@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using AutoMapper;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
 
@@ -9,7 +10,7 @@ namespace Movie4U.Repositories
         /**<summary>
          * Constructor.
          * </summary>*/
-        public CountriesRepository(Movie4UContext db) : base(db) { }
+        public CountriesRepository(Movie4UContext db, IMapper mapper) : base(db, mapper) { }
 
     }
 }

@@ -4,12 +4,25 @@ using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class TitlesManager: ITitlesManager
+    public class TitlesManager : ITitlesManager
     {
+        public static Expression<Func<Title, object>>[] includers;
+
+        static TitlesManager()
+        {
+            includers = new Expression<Func<Title, object>>[]
+            {
+                title => title.titleCountries,
+                title => title.titleGenres,
+                title => title.titleImages
+            };
+        }
+
         private readonly ITitlesRepository repo;
         private readonly ITitleCountriesManager titleCountriesManager;
         private readonly ITitleGenresManager titleGenresManager;
@@ -47,6 +60,11 @@ namespace Movie4U.Managers
                 foreach (var titleModel in titleModels)
                     await FillModelsLists(titleModel);
             };
+
+            if (config == null)
+                config = new GetAllConfig<Title>();
+
+            config.includers = includers;
 
             return await repo.GetAllFromPageAsync(config, null, filler);
         }

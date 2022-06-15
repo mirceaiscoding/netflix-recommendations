@@ -9,6 +9,8 @@ using Movie4U.EntitiesModels;
 using System;
 using EFCore.BulkExtensions;
 using Movie4U.EntitiesModels.Models;
+using AutoMapper;
+using Movie4U.ExtensionMethods;
 
 namespace Movie4U.Repositories
 {
@@ -17,7 +19,10 @@ namespace Movie4U.Repositories
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
         readonly static int pageSize = 10;
+        protected Action<IMappingOperationOptions<IQueryable<TEntity>, List<TModel>>> optsAll;
+        protected Action<IMappingOperationOptions<TEntity, TModel>> optsOne;
 
+        protected readonly IMapper mapper;
 
         /**<summary>
          * The context.
@@ -28,68 +33,61 @@ namespace Movie4U.Repositories
         /**<summary>
          * Constructor.
          * </summary>*/
-        public GenericRepository(Movie4UContext db)
+        public GenericRepository(Movie4UContext db, IMapper mapper)
         {
             this.db = db;
             entities = db.Set<TEntity>();
+            this.mapper = mapper;
+
+            optsAll = opt =>
+            {
+                opt.Items["Countries"] = db.Countries;
+                opt.Items["Genres"] = db.Genres;
+                opt.Items["WatcherGenres"] = db.WatcherGenres;
+            };
+            optsOne = opt =>
+            {
+                opt.Items["Countries"] = db.Countries;
+                opt.Items["Genres"] = db.Genres;
+                opt.Items["WatcherGenres"] = db.WatcherGenres;
+            };
         }
 
 
-        public virtual async Task<List<TModel>> GetAllFilteredAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
-        {
-            var result =
-                CastUtility.ToModelsList<TEntity, TModel>
-                    (await GetAllDbFilteredAsync(
-                        config,
-                        true));
-
-            if (filler != null)
-                await filler(result);
-
-            if (extraModelFilters == null)
-                return result;
-
-            foreach (var filter in extraModelFilters)
-                result = result
-                    .Where(model => filter(model))
-                    .ToList();
-
-            return result;
-        }
-
-        public virtual async Task<List<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
+        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
             IQueryable<TEntity> result = entities;
             if (asNoTracking)
                 result = result.AsNoTracking();
 
             if (config == null)
-                return await result.ToListAsync();
+                return result;
 
             var filterList = await GetDynamicEntityFilterList(config.whereFlagsPacked);
             foreach (var filter in filterList)
                 result = filter(result);
 
             if (config.extraEntityFilters == null)
-                return await result.ToListAsync();
+                return result;
 
             foreach (var filter in config.extraEntityFilters)
                 result = filter(result);
 
-            return await result.ToListAsync();
+            if(config.includers == null || config.includers.Count() == 0)
+                return result;
+
+            return result
+                .IncludeMultiple(config.includers);
         }
 
         public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
         {
-            var result =
-                CastUtility
-                .ToModelsList<TEntity, TModel>(
-                    await GetAllDbFilteredAsync(
-                        config,
-                        true));
+            var result = mapper.Map(
+                await GetAllDbFilteredAsync(config, true),
+                optsAll);
 
-            if (filler != null)
-                await filler(result);
+/*            if (filler != null)
+                await filler(result);*/
 
             if (extraModelFilters != null)
                 foreach (var filter in extraModelFilters)
@@ -110,9 +108,9 @@ namespace Movie4U.Repositories
 
         public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
-            var result = await GetAllDbFilteredAsync(
+            var result = await (await GetAllDbFilteredAsync(
                 config,
-                asNoTracking);
+                asNoTracking)).ToListAsync();
 
             if (config == null)
                 return result;
@@ -150,9 +148,9 @@ namespace Movie4U.Repositories
             if (entity == null)
                 return null;
 
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
-            if (filler != null)
-                await filler(model);
+            var model = mapper.Map(entity, optsOne);
+/*            if (filler != null)
+                await filler(model);*/
 
             return model;
         }
@@ -163,7 +161,7 @@ namespace Movie4U.Repositories
             if (entity == null)
                 return null;
 
-            var model = CastUtility.ToModel<TEntity, TModel>(entity);
+            var model = mapper.Map(entity, optsOne);
             if (filler != null)
                 await filler(model);
 
