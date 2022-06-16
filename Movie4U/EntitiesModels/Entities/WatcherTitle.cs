@@ -108,9 +108,9 @@ namespace Movie4U.EntitiesModels.Entities
             watchLaterLastSetTime = source.watchLaterLastSetTime;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel ( 2, watcher_name, netflix_id );
+            return new IdModel (watcher_name, netflix_id);
         }
 
         public override Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> GetDynamicEntityFilter(int key)

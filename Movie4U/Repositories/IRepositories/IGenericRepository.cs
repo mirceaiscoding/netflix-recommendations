@@ -12,18 +12,15 @@ namespace Movie4U.Repositories.IRepositories
         where TModel : EntitiesModelsBase<TEntity, TModel>, new()
     {
         Task<IQueryable<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
+        
         Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null);
         Task<List<TEntity>> GetAllDbOrderedAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
 
         Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null);
-        
         Task<List<TEntity>> GetAllDbFromPageAsync(GetAllConfig<TEntity> config = null);
 
-        Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null);
-        Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null);
-
-        Task<TEntity> GetOneDbByIdAsync(object id);
-        Task<TEntity> GetOneDbByIdAsync(object id1, object id2);
+        Task<TModel> GetOneByIdAsync(params object[] ids);
+        Task<TEntity> GetOneDbByIdAsync(params object[] ids);
 
         Task<TEntity> InsertAsync(TEntity entity);
         Task<TEntity[]> InsertMultipleAsync(TEntity[] entities);
@@ -32,7 +29,7 @@ namespace Movie4U.Repositories.IRepositories
         Task<bool> UpdateAsync(TEntity entity);
 
         Task<bool> DeleteAsync(TEntity entity);
-        Task<bool> DeleteAsync(object id);
+        Task<bool> DeleteAsync(params object[] ids);
 
     }
 }

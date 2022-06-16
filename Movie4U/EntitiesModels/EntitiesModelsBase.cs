@@ -37,7 +37,7 @@ namespace Movie4U.EntitiesModels
          * Gets an object containing the count of ids that form the primary key of the entity/model.
          * If the count is not 0, it is followed by the ids, named id1, id2... .
          * </summary>*/
-        abstract public IdModel GetId();
+        abstract public IdModel GetIds();
 
         virtual public Func<IQueryable<TEntity>, IQueryable<TEntity>> GetDynamicEntityFilter(int key)
         {

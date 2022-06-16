@@ -13,17 +13,13 @@ namespace Movie4U.Managers.IManagers
     {
         Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null);
 
-        Task<TModel> GetOneByIdAsync(object id);
-
-        Task<TModel> GetOneByIdAsync(object id1, object id2);
+        Task<TModel> GetOneByIdAsync(params object[] ids);
 
         Task<bool> Update(TModel model);
 
         Task Create(TModel model);
 
-        Task<bool> Delete(object id);
-
-        Task<bool> Delete(object id1, object id2);
+        Task<bool> Delete(params object[] ids);
 
     }
 }

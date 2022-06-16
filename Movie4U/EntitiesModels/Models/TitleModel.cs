@@ -98,9 +98,9 @@ namespace Movie4U.EntitiesModels.Models
             titleImageModels = source.titleImageModels;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel(1, netflix_id);
+            return new IdModel(netflix_id);
         }
 
     }

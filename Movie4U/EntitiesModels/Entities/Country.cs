@@ -91,9 +91,9 @@ namespace Movie4U.EntitiesModels.Entities
             tvids = source.tvids;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel(1,  id);
+            return new IdModel(id);
         }
 
     }

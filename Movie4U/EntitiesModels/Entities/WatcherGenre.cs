@@ -64,9 +64,9 @@ namespace Movie4U.EntitiesModels.Entities
             watcherGenreScore = source.watcherGenreScore;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel ( 2, watcher_name, genre_id );
+            return new IdModel (watcher_name, genre_id);
         }
 
     }

@@ -48,9 +48,9 @@ namespace Movie4U.EntitiesModels.Entities
             netflix_id = source.netflix_id;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel (2, country_id, netflix_id);
+            return new IdModel (country_id, netflix_id);
         }
 
     }

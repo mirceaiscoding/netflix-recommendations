@@ -55,9 +55,9 @@ namespace Movie4U.EntitiesModels.Models
             genreModel = source.genreModel;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel(2, watcher_name, genre_id);
+            return new IdModel(watcher_name, genre_id);
         }
 
     }

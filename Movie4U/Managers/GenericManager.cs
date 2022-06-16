@@ -25,14 +25,9 @@ namespace Movie4U.Managers
             return await repo.GetAllFromPageAsync(config);
         }
 
-        public async Task<TModel> GetOneByIdAsync(object id)
+        public async Task<TModel> GetOneByIdAsync(params object[] ids)
         {
-            return await repo.GetOneByIdAsync(id);
-        }
-
-        public async Task<TModel> GetOneByIdAsync(object id1, object id2)
-        {
-            return await repo.GetOneByIdAsync(id1, id2);
+            return await repo.GetOneByIdAsync(ids);
         }
 
         public async Task Create(TModel model)
@@ -51,18 +46,18 @@ namespace Movie4U.Managers
             if (model == null)
                 return false;
 
-            var ids = model.GetId();
+            var ids = model.GetIds();
             if (ids == null)
                 return false;
 
             TEntity updateEntity;
-            switch(ids.count)
+            switch(ids.Length)
             {
                 case 1:
-                        updateEntity = await repo.GetOneDbByIdAsync(ids.id1);
+                        updateEntity = await repo.GetOneDbByIdAsync(ids[0]);
                     break;
                 case 2:
-                        updateEntity = await repo.GetOneDbByIdAsync(ids.id1, ids.id2);
+                        updateEntity = await repo.GetOneDbByIdAsync(ids[0], ids[1]);
                     break;
                 default:
                     return false;
@@ -76,18 +71,9 @@ namespace Movie4U.Managers
             return await repo.UpdateAsync(updateEntity);
         }
 
-        public async Task<bool> Delete(object id)
+        public async Task<bool> Delete(params object[] ids)
         {
-            var delEntity = await repo.GetOneDbByIdAsync(id);
-            if (delEntity == null)
-                return false;
-
-            return await repo.DeleteAsync(delEntity);
-        }
-
-        public async Task<bool> Delete(object id1, object id2)
-        {
-            var delEntity = await repo.GetOneDbByIdAsync(id1, id2);
+            var delEntity = await repo.GetOneDbByIdAsync(ids);
             if (delEntity == null)
                 return false;
 

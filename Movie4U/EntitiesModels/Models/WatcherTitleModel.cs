@@ -28,23 +28,22 @@ namespace Movie4U.EntitiesModels.Models
             where TModel : WatcherTitleModel
         {
             Type thisType = typeof(TModel);
-            ParameterExpression wtm1 = Expression.Parameter(thisType, "wtm1");
-            ParameterExpression wtm2 = Expression.Parameter(thisType, "wtm2");
+            ParameterExpression wtm = Expression.Parameter(thisType, "wtm");
             MethodInfo getScoreMethodInfo = thisType.GetMethod("GetScore");
 
-            ParameterExpression score1 = Expression.Parameter(typeof(double), "score1");
-            ParameterExpression score2 = Expression.Parameter(typeof(double), "score2");
-            MethodInfo compareToMethodInfo = typeof(double).GetMethod("CompareTo", new[] { typeof(double) });
-            ParameterExpression difference = Expression.Parameter(typeof(int), "difference");
+            var call = Expression.Call(wtm, getScoreMethodInfo);
 
-            BlockExpression block = Expression.Block(
-                new[] { difference },
-                Expression.Assign(score1, Expression.Call(wtm1, getScoreMethodInfo)),
-                Expression.Assign(score2, Expression.Call(wtm2, getScoreMethodInfo)),
-                Expression.Assign(difference, Expression.Call(score1, compareToMethodInfo, new[] { score2 })));
+            var accessor1 = Expression.PropertyOrField(wtm, "watcher_name");
+            var accessor2 = Expression.PropertyOrField(wtm, "netflix_id");
 
-            var lambda = Expression.Lambda < Func < TModel, int>>(block, false, new[] {wtm1, wtm2});
-            return source.OrderBy(lambda);
+            var lambda = Expression.Lambda < Func < TModel, double>>(call, false, new[] {wtm});
+            var lambda1 = Expression.Lambda<Func<TModel, string>>(accessor1, false, new[] { wtm });
+            var lambda2 = Expression.Lambda<Func<TModel, string>>(accessor2, false, new[] { wtm });
+
+            return source
+                .OrderBy(lambda)
+                .ThenBy(lambda1)    // ordering by composite key in order to generate fully unique ordering (see https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries)
+                .ThenBy(lambda2);
         }
 
         public string watcher_name { get; set; }
@@ -128,9 +127,9 @@ namespace Movie4U.EntitiesModels.Models
             watcherGenreModels = source.watcherGenreModels;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel(2, watcher_name, netflix_id);
+            return new IdModel(watcher_name, netflix_id);
         }
 
         public override Func<WatcherTitleModel, WatcherTitleModel, int> GetModelComparer(int key)

@@ -70,9 +70,9 @@ namespace Movie4U.EntitiesModels.Entities
             this.nextPageIndex = source.nextPageIndex;
         }
 
-        override public IdModel GetId()
+        override public IdModel GetIds()
         {
-            return new IdModel ( 1, watcher_name );
+            return new IdModel (watcher_name);
         }
 
     }

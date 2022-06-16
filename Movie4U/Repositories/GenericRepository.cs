@@ -146,9 +146,9 @@ namespace Movie4U.Repositories
                     (int)config.pageIndex, pageSize);
         }
 
-        public virtual async Task<TModel> GetOneByIdAsync(object id, Func<TModel, Task> filler = null)
+        public virtual async Task<TModel> GetOneByIdAsync(params object[] ids)
         {
-            var entity = await entities.FindAsync(id);
+            var entity = await entities.FindAsync(ids);
             if (entity == null)
                 return null;
 
@@ -159,27 +159,9 @@ namespace Movie4U.Repositories
             return model;
         }
 
-        public virtual async Task<TModel> GetOneByIdAsync(object id1, object id2, Func<TModel, Task> filler = null)
+        public virtual async Task<TEntity> GetOneDbByIdAsync(params object[] ids)
         {
-            var entity = await entities.FindAsync(id1, id2);
-            if (entity == null)
-                return null;
-
-            var model = mapper.Map(entity, optsOne);
-            if (filler != null)
-                await filler(model);
-
-            return model;
-        }
-
-        public virtual async Task<TEntity> GetOneDbByIdAsync(object id)
-        {
-            return await entities.FindAsync(id);
-        }
-
-        public virtual async Task<TEntity> GetOneDbByIdAsync(object id1, object id2)
-        {
-            return await entities.FindAsync(id1, id2);
+            return await entities.FindAsync(ids);
         }
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
@@ -220,9 +202,9 @@ namespace Movie4U.Repositories
             return true;
         }
 
-        public virtual async Task<bool> DeleteAsync(object id)
+        public virtual async Task<bool> DeleteAsync(params object[] ids)
         {
-            var entityToDelete = await entities.FindAsync(id);
+            var entityToDelete = await entities.FindAsync(ids);
             if (entityToDelete == null)
                 return false;
 
@@ -285,6 +267,8 @@ namespace Movie4U.Repositories
                 comparerList.Add(comparer);
             }
 
+            comparerList.Add((m1, m2) => m1.GetIds().CompareTo(m2.GetIds()));
+
             return Task.FromResult(comparerList);
         }
 
@@ -307,6 +291,8 @@ namespace Movie4U.Repositories
 
                 comparerList.Add(comparer);
             }
+
+            comparerList.Add((m1, m2) => m1.GetIds().CompareTo(m2.GetIds()));
 
             return Task.FromResult(comparerList);
         }
