@@ -28,7 +28,7 @@ namespace Movie4U.Controllers
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
-            var watcherModel = await watchersManager.GetOneByIdAsync(watcherName);
+            var watcherModel = await watchersManager.GetOneByIdAsync(null, watcherName);
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
@@ -40,7 +40,7 @@ namespace Movie4U.Controllers
             return Ok(watcherTitles);
         }
 
-        [HttpGet("GetOneById/{watcher_name}/{genre_id}")]
+        [HttpGet("GetOneById/{genre_id}")]
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetWatcherGenreByIdAsync([FromHeader] string Authorization, int genre_id)
         {

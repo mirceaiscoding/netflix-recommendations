@@ -2,7 +2,6 @@
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -24,6 +23,7 @@ namespace Movie4U.Mappers
                     dest => dest.countryModels,
                     memberOptions => memberOptions.MapFrom(
                         (src, dest, destMember, context) =>
+                        destMember =
                             src.titleCountries.Join(
                                 (IEnumerable<Country>)context.Items["Countries"],
                                 tc => tc.country_id,
@@ -33,6 +33,7 @@ namespace Movie4U.Mappers
                     dest => dest.genreModels,
                     memberOptions => memberOptions.MapFrom(
                         (src, dest, destMember, context) =>
+                        destMember =
                             src.titleGenres.Join(
                                 (IEnumerable<Genre>)context.Items["Genres"],
                                 tg => tg.genre_id,
@@ -71,6 +72,7 @@ namespace Movie4U.Mappers
                     dest => dest.countryModels,
                     memberOptions => memberOptions.MapFrom(
                             (src, dest, destMember, context) =>
+                        destMember =
                                 src.title.titleCountries.Join(
                                     (IEnumerable<Country>)context.Items["Countries"],
                                     tc => tc.country_id,
@@ -80,6 +82,7 @@ namespace Movie4U.Mappers
                     dest => dest.watcherGenreModels,
                     memberOptions => memberOptions.MapFrom(
                         (src, dest, destMember, context) =>
+                        destMember = 
                             src.title.titleGenres.Join(
                                 ((IEnumerable<WatcherGenre>)context.Items["WatcherGenres"]).Where(wg => String.Equals(wg.watcher_name, src.watcher_name, StringComparison.CurrentCulture)),
                                 tg => tg.genre_id,

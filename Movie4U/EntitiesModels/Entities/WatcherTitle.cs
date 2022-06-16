@@ -15,11 +15,11 @@ namespace Movie4U.EntitiesModels.Entities
         static WatcherTitle()
         {
             dynamicEntityFilters = new Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => source.propertyFilter("watchLater", true));
-            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => source.propertyFilter("watchLater", false));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => source.propertyFilter("preference", Preferences.More));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.propertyFilter("preference", Preferences.Less));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.propertyFilter("preference", Preferences.Null));
+            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => source.PropertyFilter("watchLater", true));
+            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => source.PropertyFilter("watchLater", false));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => source.PropertyFilter("preference", Preferences.More));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.PropertyFilter("preference", Preferences.Less));
+            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.PropertyFilter("preference", Preferences.Null));
 
         }
 

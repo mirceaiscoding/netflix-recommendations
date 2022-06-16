@@ -146,9 +146,16 @@ namespace Movie4U.Repositories
                     (int)config.pageIndex, pageSize);
         }
 
-        public virtual async Task<TModel> GetOneByIdAsync(params object[] ids)
+        public virtual async Task<TModel> GetOneByIdAsync(GetOneConfig<TEntity> config)
         {
-            var entity = await entities.FindAsync(ids);
+            var entity = await entities
+                .IncludeMultiple(
+                    config.asSplitQuery,
+                    config.includers)
+                .FirstOrDefaultByPropertyAsync(
+                    config.filterPropertySelectors,
+                    config.filterValuesToMatch);
+            
             if (entity == null)
                 return null;
 
@@ -159,9 +166,15 @@ namespace Movie4U.Repositories
             return model;
         }
 
-        public virtual async Task<TEntity> GetOneDbByIdAsync(params object[] ids)
+        public virtual async Task<TEntity> GetOneDbByIdAsync(GetOneConfig<TEntity> config)
         {
-            return await entities.FindAsync(ids);
+            return await entities
+                .IncludeMultiple(
+                    config.asSplitQuery,
+                    config.includers)
+                .FirstOrDefaultByPropertyAsync(
+                    config.filterPropertySelectors,
+                    config.filterValuesToMatch);
         }
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)

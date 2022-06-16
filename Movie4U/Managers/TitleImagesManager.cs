@@ -25,7 +25,7 @@ namespace Movie4U.Managers
                 config = new GetAllConfig<TitleImage>();
 
             config.extraEntityFilters = new List<Func<IQueryable<TitleImage>, IQueryable<TitleImage>>>();
-            config.extraEntityFilters.Add(source => source.propertyFilter("netflix_id", netflixId));
+            config.extraEntityFilters.Add(source => source.PropertyFilter("netflix_id", netflixId));
 
             return await repo.GetAllFromPageAsync(config);
         }

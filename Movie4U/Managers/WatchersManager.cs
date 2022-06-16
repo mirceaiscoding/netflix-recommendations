@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Threading.Tasks;
 
@@ -37,7 +38,11 @@ namespace Movie4U.Managers
 
         public async Task<bool> UpdadeRefreshTokenAndExpTime(string watcherName, string refreshToken, DateTime refTokExpTime)
         {
-            var watcher = await repo.GetOneDbByIdAsync(watcherName);
+            var watcher = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<Watcher, WatcherModel>.New(
+                        new object[] { watcherName }));
+
             if (watcher == null)
                 return false;
             
@@ -56,7 +61,11 @@ namespace Movie4U.Managers
             var accessToken = tokensManager.GenerateAccessToken(user).Result;
             var refreshToken = tokensManager.GenerateRefreshToken();
 
-            var dbWatcher = await repo.GetOneDbByIdAsync(watcher.watcher_name);
+            var dbWatcher = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<Watcher, WatcherModel>.New(
+                        new object[] { watcher.watcher_name })); 
+
             if (dbWatcher == null)
                 return null;
 
@@ -75,7 +84,11 @@ namespace Movie4U.Managers
 
         public async Task<bool> UpdateWatcherCountryId(string watcherName, int? countryId)
         {
-            var dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            var dbWatcher = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<Watcher, WatcherModel>.New(
+                        new object[] { watcherName }));
+
             if(dbWatcher == null)
                 return false;
 
@@ -87,7 +100,11 @@ namespace Movie4U.Managers
 
         public async Task<bool> UpdateNextPageIndex(string watcherName, int? nextPageIndex = 1)
         {
-            var dbWatcher = await repo.GetOneDbByIdAsync(watcherName);
+            var dbWatcher = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<Watcher, WatcherModel>.New(
+                        new object[] { watcherName }));
+
             if (dbWatcher == null)
                 return false;
 

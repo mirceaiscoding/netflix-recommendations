@@ -5,6 +5,7 @@ using Movie4U.Enums;
 using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace Movie4U.Managers
                 return await repo.GetAllFromPageAsync(config, null, filler);
 
             config.extraEntityFilters = new List<Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            config.extraEntityFilters.Add(source => source.propertyFilter("watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters.Add(source => source.PropertyFilter("watcher_name", watcherModel.watcher_name));
 
             if ((config.whereFlagsPacked & (int)WhereEnum.WatcherCountryOnly) == 0  ||  watcherModel.countryId == null)
                 return await repo.GetAllFromPageAsync(config, null, filler);
@@ -114,12 +115,24 @@ namespace Movie4U.Managers
             Func<WatcherTitleModel, Task> filler = async watcherTitleModel =>
                 await FillModelsLists(watcherTitleModel);
 
-            var watcherTitleModel = await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
+            var watcherTitleModel = await repo
+                .GetOneByIdAsync(
+                    GetOneConfigFactory<WatcherTitle, WatcherTitleModel>.New(
+                        new object[] { watcher_name, netflix_id},
+                        includers,
+                        true));
+
             if(watcherTitleModel != null)
                 return watcherTitleModel;
 
             await Create(watcher_name, new WatcherTitleModelParameter(netflix_id, WatcherTitle.Preferences.Null, DateTime.Now, false, DateTime.Now));
-            return await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
+
+            return await repo
+                .GetOneByIdAsync(
+                    GetOneConfigFactory<WatcherTitle, WatcherTitleModel>.New(
+                        new object[] { watcher_name, netflix_id },
+                        includers,
+                        true));
         }
 
         public async Task Create(string watcherName, WatcherTitleModelParameter wtmParam)
@@ -131,7 +144,13 @@ namespace Movie4U.Managers
 
         public async Task<bool> Update(string watcherName, WatcherTitleModelParameter wtmParam)
         {
-            var updateWatcherTitle = await repo.GetOneDbByIdAsync(watcherName, wtmParam.netflix_id);
+            var updateWatcherTitle = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<WatcherTitle, WatcherTitleModel>.New(
+                        new object[] { watcherName, wtmParam.netflix_id },
+                        includers,
+                        true));
+
             if (updateWatcherTitle == null)
                 return false;
 

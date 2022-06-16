@@ -2,6 +2,7 @@
 using Movie4U.EntitiesModels;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Movie4U.Managers
 
         public async Task<TModel> GetOneByIdAsync(params object[] ids)
         {
-            return await repo.GetOneByIdAsync(ids);
+            return await repo.GetOneByIdAsync(GetOneConfigFactory<TEntity, TModel>.New(ids));
         }
 
         public async Task Create(TModel model)
@@ -50,18 +51,7 @@ namespace Movie4U.Managers
             if (ids == null)
                 return false;
 
-            TEntity updateEntity;
-            switch(ids.Length)
-            {
-                case 1:
-                        updateEntity = await repo.GetOneDbByIdAsync(ids[0]);
-                    break;
-                case 2:
-                        updateEntity = await repo.GetOneDbByIdAsync(ids[0], ids[1]);
-                    break;
-                default:
-                    return false;
-            }
+            TEntity updateEntity = await repo.GetOneDbByIdAsync(GetOneConfigFactory<TEntity, TModel>.New(ids.ids));
 
             if (updateEntity == null)
                 return false;
@@ -73,7 +63,7 @@ namespace Movie4U.Managers
 
         public async Task<bool> Delete(params object[] ids)
         {
-            var delEntity = await repo.GetOneDbByIdAsync(ids);
+            var delEntity = await repo.GetOneDbByIdAsync(GetOneConfigFactory<TEntity, TModel>.New(ids));
             if (delEntity == null)
                 return false;
 

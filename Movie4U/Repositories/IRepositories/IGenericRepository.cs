@@ -19,8 +19,8 @@ namespace Movie4U.Repositories.IRepositories
         Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null);
         Task<List<TEntity>> GetAllDbFromPageAsync(GetAllConfig<TEntity> config = null);
 
-        Task<TModel> GetOneByIdAsync(params object[] ids);
-        Task<TEntity> GetOneDbByIdAsync(params object[] ids);
+        Task<TModel> GetOneByIdAsync(GetOneConfig<TEntity> config);
+        Task<TEntity> GetOneDbByIdAsync(GetOneConfig<TEntity> config);
 
         Task<TEntity> InsertAsync(TEntity entity);
         Task<TEntity[]> InsertMultipleAsync(TEntity[] entities);

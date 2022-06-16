@@ -3,6 +3,7 @@ using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -74,7 +75,12 @@ namespace Movie4U.Managers
             Func<TitleModel, Task> filler = async titleModel =>
                 await FillModelsLists(titleModel);
 
-            return await repo.GetOneByIdAsync(netflix_id, filler);
+            return await repo
+                .GetOneByIdAsync(
+                    GetOneConfigFactory<Title, TitleModel>.New(
+                        new object[] { netflix_id },
+                        includers,
+                        true));
         }
 
         public async Task Create(TitleModelParameter titleModelParam)
@@ -100,7 +106,13 @@ namespace Movie4U.Managers
 
         public async Task<bool> Update(TitleModelParameter titleModelParam)
         {
-            var updateTitle = await repo.GetOneDbByIdAsync(titleModelParam.netflix_id);
+            var updateTitle = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<Title, TitleModel>.New(
+                        new object[] { titleModelParam.netflix_id },
+                        includers,
+                        true));
+
             if (updateTitle == null)
                 return false;
 

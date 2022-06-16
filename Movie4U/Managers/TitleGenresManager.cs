@@ -30,7 +30,7 @@ namespace Movie4U.Managers
                 config = new GetAllConfig<TitleGenre>();
 
             config.extraEntityFilters = new List<Func<IQueryable<TitleGenre>, IQueryable<TitleGenre>>>();
-            config.extraEntityFilters.Add(source => source.propertyFilter("netflix_id", netflixId));
+            config.extraEntityFilters.Add(source => source.PropertyFilter("netflix_id", netflixId));
 
             return await repo.GetAllFromPageAsync(config);
         }

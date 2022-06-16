@@ -4,6 +4,7 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace Movie4U.Managers
                 return await repo.GetAllFromPageAsync(config, null, filler);
 
             config.extraEntityFilters = new List<Func<IQueryable<WatcherGenre>, IQueryable<WatcherGenre>>>();
-            config.extraEntityFilters.Add(source => source.propertyFilter("watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters.Add(source => source.PropertyFilter("watcher_name", watcherModel.watcher_name));
 
             return await repo.GetAllFromPageAsync(config, null, filler);
         }
@@ -77,12 +78,24 @@ namespace Movie4U.Managers
             Func<WatcherGenreModel, Task> filler = async watcherGenreModel =>
                 await FillModelsLists(watcherGenreModel);
 
-            var watcherGenreModel = await repo.GetOneByIdAsync(watcher_name, genre_id, filler);
+            var watcherGenreModel = await repo
+                .GetOneByIdAsync(
+                    GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(
+                        new object[] { watcher_name, genre_id },
+                        includers,
+                        false));
+
             if(watcherGenreModel != null)
                 return watcherGenreModel;
 
             await Create(watcher_name, new WatcherGenreModelParameter(genre_id, 0));
-            return await repo.GetOneByIdAsync(watcher_name, genre_id, filler);
+
+            return await repo
+                .GetOneByIdAsync(
+                    GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(
+                        new object[] { watcher_name, genre_id },
+                        includers,
+                        false));
         }
 
         public async Task Create(string watcherName, WatcherGenreModelParameter wgmParam)
@@ -94,7 +107,13 @@ namespace Movie4U.Managers
 
         public async Task<bool> AddToScore(string watcherName, WatcherGenreModelParameter wgmParam)
         {
-            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherName, wgmParam.genre_id);
+            var updateWatcherGenre = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(
+                            new object[] { watcherName, wgmParam.genre_id },
+                            includers,
+                            false));
+
             if (updateWatcherGenre == null)
                 return false;
 
@@ -109,9 +128,14 @@ namespace Movie4U.Managers
 
             foreach (var changeModel in changeModels)
             {
-                var watcherGenre = await repo.GetOneDbByIdAsync(watcher_name, changeModel.genre_id);
+                var watcherGenre = await repo
+                    .GetOneDbByIdAsync(
+                        GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(
+                                new object[] { watcher_name, changeModel.genre_id },
+                                includers,
+                                false));
+
                 if (watcherGenre == null)
-                    // skip it
                     continue;
 
                 watcherGenre.watcherGenreScore += changeModel.watcherGenreScore;
@@ -123,7 +147,13 @@ namespace Movie4U.Managers
 
         public async Task<bool> Update(string watcherName, WatcherGenreModelParameter wgmParam)
         {
-            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherName, wgmParam.genre_id);
+            var updateWatcherGenre = await repo
+                .GetOneDbByIdAsync(
+                    GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(
+                            new object[] { watcherName, wgmParam.genre_id },
+                            includers,
+                            false));
+
             if (updateWatcherGenre == null)
                 return false;
 
