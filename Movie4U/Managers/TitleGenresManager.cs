@@ -10,25 +10,18 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class TitleGenresManager: ITitleGenresManager
+    public class TitleGenresManager: GenericManager<TitleGenre, TitleGenreModel, ITitleGenresRepository>, ITitleGenresManager
     {
-        private readonly ITitleGenresRepository repo;
         private readonly IGenresManager genresManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleGenresManager(ITitleGenresRepository repo, IGenresManager genresManager)
+        public TitleGenresManager(ITitleGenresRepository repo, IGenresManager genresManager): base(repo)
         {
-            this.repo = repo;
             this.genresManager = genresManager;
         }
 
-
-        public async Task<List<TitleGenreModel>> GetAllFromPageAsync(GetAllConfig<TitleGenre> config = null)
-        {
-            return await repo.GetAllFromPageAsync(config);
-        }
 
         public async Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleGenre> config = null)
         {
@@ -55,43 +48,11 @@ namespace Movie4U.Managers
             return genres;
         }
 
-        public async Task<TitleGenreModel> GetOneByIdAsync(int genre_id, int netflix_id)
-        {
-            return await repo.GetOneByIdAsync(genre_id, netflix_id);
-        }
-
-        public async Task Create(TitleGenreModel titleGenreModel)
-        {
-            var newTitleGenre = new TitleGenre(titleGenreModel);
-
-            await repo.InsertAsync(newTitleGenre);
-        }
-
         public async Task CreateOrUpdateMultiple(TitleGenreModel[] models)
         {
             TitleGenre[] titleGenres = Array.ConvertAll(models, x => new TitleGenre(x));
 
             await repo.InsertOrUpdateMultipleAsync(titleGenres);
-        }
-
-        public async Task<bool> Update(TitleGenreModel titleGenreModel)
-        {
-            var updateTitleGenre = await repo.GetOneDbByIdAsync(titleGenreModel.genre_id, titleGenreModel.netflix_id);
-            if (updateTitleGenre == null)
-                return false;
-
-            updateTitleGenre.Copy(titleGenreModel);
-
-            return await repo.UpdateAsync(updateTitleGenre);
-        }
-
-        public async Task<bool> Delete(int genre_id, int netflix_id)
-        {
-            var delTitleGenre = await repo.GetOneDbByIdAsync(genre_id, netflix_id);
-            if (delTitleGenre == null)
-                return false;
-
-            return await repo.DeleteAsync(delTitleGenre);
         }
 
     }

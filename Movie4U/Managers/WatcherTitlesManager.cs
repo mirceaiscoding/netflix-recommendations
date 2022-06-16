@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class WatcherTitlesManager: IWatcherTitlesManager
+    public class WatcherTitlesManager: GenericManager<WatcherTitle, WatcherTitleModel, IWatcherTitlesRepository>, IWatcherTitlesManager
     {
         public static Expression<Func<WatcherTitle, object>>[] includers;
 
@@ -25,16 +25,14 @@ namespace Movie4U.Managers
             };
         }
 
-        private readonly IWatcherTitlesRepository repo;
         private readonly ITitlesManager titlesManager;
         private readonly IWatcherGenresManager watcherGenresManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager)
+        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager): base(repo)
         {
-            this.repo = repo;
             this.titlesManager = titlesManager;
             this.watcherGenresManager = watcherGenresManager;
         }
@@ -145,15 +143,6 @@ namespace Movie4U.Managers
             WatcherTitle[] titles = Array.ConvertAll(models, x => new WatcherTitle(x));
 
             await repo.InsertOrUpdateMultipleAsync(titles);
-        }
-
-        public async Task<bool> Delete(string watcher_name, int netflix_id)
-        {
-            var delWatcherTitle = await repo.GetOneDbByIdAsync(watcher_name, netflix_id);
-            if (delWatcherTitle == null)
-                return false;
-
-            return await repo.DeleteAsync(delWatcherTitle);
         }
 
     }

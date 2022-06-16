@@ -10,25 +10,16 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class TitleCountriesManager: ITitleCountriesManager
+    public class TitleCountriesManager: GenericManager<TitleCountry, TitleCountryModel, ITitleCountriesRepository>, ITitleCountriesManager
     {
-
-        private readonly ITitleCountriesRepository repo;
         private readonly ICountriesManager countriesManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitleCountriesManager(ITitleCountriesRepository repo, ICountriesManager countriesManager)
+        public TitleCountriesManager(ITitleCountriesRepository repo, ICountriesManager countriesManager): base(repo)
         {
-            this.repo = repo;
             this.countriesManager = countriesManager;
-        }
-
-
-        public async Task<List<TitleCountryModel>> GetAllFromPageAsync(GetAllConfig<TitleCountry> config = null)
-        {
-            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleCountry> config = null)
@@ -56,43 +47,11 @@ namespace Movie4U.Managers
             return countries;
         }
 
-        public async Task<TitleCountryModel> GetOneByIdAsync(int country_id, int netflix_id)
-        {
-            return await repo.GetOneByIdAsync(country_id, netflix_id);
-        }
-
-        public async Task Create(TitleCountryModel titleCountryModel)
-        {
-            var newTitleGenre = new TitleCountry(titleCountryModel);
-
-            await repo.InsertAsync(newTitleGenre);
-        }
-
         public async Task CreateOrUpdateMultiple(TitleCountryModel[] models)
         {
             TitleCountry[] titlesCountries = Array.ConvertAll(models, x => new TitleCountry(x));
 
             await repo.InsertOrUpdateMultipleAsync(titlesCountries);
-        }
-
-        public async Task<bool> Update(TitleCountryModel titleCountryModel)
-        {
-            var updateTitleCountry = await repo.GetOneDbByIdAsync(titleCountryModel.country_id, titleCountryModel.netflix_id);
-            if (updateTitleCountry == null)
-                return false;
-
-            updateTitleCountry.Copy(titleCountryModel);
-
-            return await repo.UpdateAsync(updateTitleCountry);
-        }
-
-        public async Task<bool> Delete(int country_id, int netflix_id)
-        {
-            var delTitleCountry = await repo.GetOneDbByIdAsync(country_id, netflix_id);
-            if (delTitleCountry == null)
-                return false;
-
-            return await repo.DeleteAsync(delTitleCountry);
         }
 
     }

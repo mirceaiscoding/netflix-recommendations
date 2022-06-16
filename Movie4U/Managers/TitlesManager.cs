@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class TitlesManager : ITitlesManager
+    public class TitlesManager : GenericManager<Title, TitleModel, ITitlesRepository>, ITitlesManager
     {
         public static Expression<Func<Title, object>>[] includers;
 
@@ -23,7 +23,6 @@ namespace Movie4U.Managers
             };
         }
 
-        private readonly ITitlesRepository repo;
         private readonly ITitleCountriesManager titleCountriesManager;
         private readonly ITitleGenresManager titleGenresManager;
         private readonly ITitleImagesManager titleImagesManager; 
@@ -31,9 +30,8 @@ namespace Movie4U.Managers
         /**<summary>
          * Constructor.
          * </summary>*/
-        public TitlesManager(ITitlesRepository repo, ITitleCountriesManager countriesManager, ITitleGenresManager genresManager, ITitleImagesManager imagesManager)
+        public TitlesManager(ITitlesRepository repo, ITitleCountriesManager countriesManager, ITitleGenresManager genresManager, ITitleImagesManager imagesManager): base(repo)
         {
-            this.repo = repo;
             this.titleCountriesManager = countriesManager;
             this.titleGenresManager = genresManager;
             this.titleImagesManager = imagesManager;
@@ -53,7 +51,7 @@ namespace Movie4U.Managers
             return true;
         }
 
-        public async Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null)
+        public new async Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null)
         {
             Func<List<TitleModel>, Task> filler = async titleModels =>
             {
@@ -107,15 +105,6 @@ namespace Movie4U.Managers
             updateTitle.Copy(titleModelParam);
 
             return await repo.UpdateAsync(updateTitle);
-        }
-
-        public async Task<bool> Delete(int netflix_id)
-        {
-            var delTitle = await repo.GetOneDbByIdAsync(netflix_id);
-            if (delTitle == null)
-                return false;
-
-            return await repo.DeleteAsync(delTitle);
         }
 
     }

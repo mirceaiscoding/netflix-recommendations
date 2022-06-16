@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class WatcherGenresManager: IWatcherGenresManager
+    public class WatcherGenresManager: GenericManager<WatcherGenre, WatcherGenreModel, IWatcherGenresRepository>, IWatcherGenresManager
     {
         public static Expression<Func<WatcherGenre, object>>[] includers;
 
@@ -23,15 +23,13 @@ namespace Movie4U.Managers
             };
         }
 
-        private readonly IWatcherGenresRepository repo;
         private readonly IGenresManager genresManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherGenresManager(IWatcherGenresRepository repo, IGenresManager genresManager)
+        public WatcherGenresManager(IWatcherGenresRepository repo, IGenresManager genresManager): base(repo)
         {
-            this.repo = repo;
             this.genresManager = genresManager;
         }
 
@@ -131,15 +129,6 @@ namespace Movie4U.Managers
             updateWatcherGenre.Copy(watcherGenreModelParam);
 
             return await repo.UpdateAsync(updateWatcherGenre);
-        }
-
-        public async Task<bool> Delete(string watcher_name, int genre_id)
-        {
-            var delWatcherGenre = await repo.GetOneDbByIdAsync(watcher_name, genre_id);
-            if (delWatcherGenre == null)
-                return false;
-
-            return await repo.DeleteAsync(delWatcherGenre);
         }
 
     }

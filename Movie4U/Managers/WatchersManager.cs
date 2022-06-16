@@ -4,37 +4,24 @@ using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers
 {
-    public class WatchersManager: IWatchersManager
+    public class WatchersManager: GenericManager<Watcher, WatcherModel, IWatchersRepository>, IWatchersManager
     {
-        private readonly IWatchersRepository repo;
         private readonly UserManager<User> userManager;
         private readonly ITokensManager tokensManager;
 
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatchersManager(IWatchersRepository repo, UserManager<User> userManager, ITokensManager tokensManager)
+        public WatchersManager(IWatchersRepository repo, UserManager<User> userManager, ITokensManager tokensManager): base(repo)
         {
-            this.repo = repo;
             this.userManager = userManager;
             this.tokensManager = tokensManager;
         }
 
-
-        public async Task<List<WatcherModel>> GetAllFromPageAsync(GetAllConfig<Watcher> config = null)
-        {
-            return await repo.GetAllFromPageAsync(config);
-        }
-
-        public async Task<WatcherModel> GetOneByIdAsync(string name)
-        {
-            return await repo.GetOneByIdAsync(name);
-        }
 
         public async Task Create(string watcherName, string UserId)
         {
@@ -108,15 +95,6 @@ namespace Movie4U.Managers
 
             await repo.UpdateAsync(dbWatcher);
             return true;
-        }
-
-        public async Task<bool> Delete(string name)
-        {
-            var delWatcher = await repo.GetOneDbByIdAsync(name);
-            if (delWatcher == null)
-                return false;
-
-            return await repo.DeleteAsync(delWatcher);
         }
 
     }

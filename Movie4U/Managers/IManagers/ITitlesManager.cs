@@ -1,13 +1,14 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
+using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Movie4U.Managers.IManagers
 {
-    public interface ITitlesManager
+    public interface ITitlesManager: IGenericManager<Title, TitleModel, ITitlesRepository>
     {
-        Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null);
+        new Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null);
 
         Task<TitleModel> GetOneByIdAsync(int netflix_id);
 
@@ -18,7 +19,5 @@ namespace Movie4U.Managers.IManagers
         Task CreateOrUpdateMultiple(TitleModel[] models);
 
         Task<bool> Update(TitleModelParameter titleModelParam);
-
-        Task<bool> Delete(int netflix_id);
     }
 }

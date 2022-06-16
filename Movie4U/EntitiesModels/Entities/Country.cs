@@ -93,7 +93,7 @@ namespace Movie4U.EntitiesModels.Entities
 
         override public IdModel GetId()
         {
-            return new IdModel(1,  countrycode);
+            return new IdModel(1,  id);
         }
 
     }
