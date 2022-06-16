@@ -9,8 +9,6 @@ namespace Movie4U.EntitiesModels.Models
      * </summary> */
     public class WatcherTitleModelParameter
     {
-        public string watcher_name { get; set; }
-
         public int netflix_id { get; set; }
 
         public WatcherTitle.Preferences preference { get; set; }
@@ -22,9 +20,8 @@ namespace Movie4U.EntitiesModels.Models
         public DateTime watchLaterLastSetTime { get; set; }
 
 
-        public WatcherTitleModelParameter(string watcher_name, int netflix_id, WatcherTitle.Preferences prefference, DateTime prefLastSetTime, bool watchLater, DateTime watchLaterLastSetTime)
+        public WatcherTitleModelParameter(int netflix_id, WatcherTitle.Preferences prefference, DateTime prefLastSetTime, bool watchLater, DateTime watchLaterLastSetTime)
         {
-            this.watcher_name = watcher_name;
             this.netflix_id = netflix_id;
             this.preference = prefference;
             this.prefLastSetTime = prefLastSetTime;

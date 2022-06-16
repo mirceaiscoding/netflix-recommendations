@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ namespace Movie4U.Managers.IManagers
 
         Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, int netflix_id);
 
-        Task<bool> Update(WatcherTitleModelParameter watcherTitleModelParam);
+        Task<bool> Update(string watcherName, WatcherTitleModelParameter wtmParam);
 
-        Task Create(WatcherTitleModelParameter watcherTitleModelParam);
+        Task Create(string watcherName, WatcherTitleModelParameter wtmParam);
 
-        Task CreateOrUpdateMultiple(WatcherTitleModelParameter[] models);
+        Task CreateOrUpdateMultiple(string watcherName, WatcherTitleModelParameter[] wtmParams);
     }
 }

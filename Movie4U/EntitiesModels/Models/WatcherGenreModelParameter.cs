@@ -7,16 +7,13 @@ namespace Movie4U.EntitiesModels.Models
      * </summary> */
     public class WatcherGenreModelParameter
     {
-        public string watcher_name { get; set; }
-
         public int genre_id { get; set; }
 
         public double watcherGenreScore { get; set; }
 
 
-        public WatcherGenreModelParameter(string watcher_name, int genre_id, double watcherGenreScore = 0)
+        public WatcherGenreModelParameter(int genre_id, double watcherGenreScore = 0)
         {
-            this.watcher_name = watcher_name;
             this.genre_id = genre_id;
             this.watcherGenreScore = watcherGenreScore;
         }

@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
@@ -63,6 +64,7 @@ namespace Movie4U.Managers
                 config = new GetAllConfig<Title>();
 
             config.includers = includers;
+            config.asSplitQuery = true;
 
             return await repo.GetAllFromPageAsync(config, null, filler);
         }

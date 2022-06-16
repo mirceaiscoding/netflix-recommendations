@@ -1,5 +1,5 @@
-﻿using Movie4U.EntitiesModels;
-using Movie4U.EntitiesModels.Models;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;

@@ -33,9 +33,9 @@ namespace Movie4U.EntitiesModels.Entities
             Copy(source);
         }
 
-        public WatcherGenre(WatcherGenreModelParameter source)
+        public WatcherGenre(string watcherName, WatcherGenreModelParameter source)
         {
-            Copy(source);
+            Copy(watcherName, source);
         }
 
         /**<summary>
@@ -57,9 +57,9 @@ namespace Movie4U.EntitiesModels.Entities
             watcherGenreScore = source.watcherGenreScore;
         }
 
-        public void Copy(WatcherGenreModelParameter source)
+        public void Copy(string watcherName, WatcherGenreModelParameter source)
         {
-            watcher_name = source.watcher_name;
+            watcher_name = watcherName;
             genre_id = source.genre_id;
             watcherGenreScore = source.watcherGenreScore;
         }

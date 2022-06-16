@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Repositories.IRepositories;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace Movie4U.Managers.IManagers
 
         Task AddToScoreMultiple(string watcher_name, WatcherGenreChangeModel[] changeModels);
 
-        Task<bool> AddToScore(WatcherGenreModelParameter watcherGenreModelParam);
+        Task<bool> AddToScore(string watcherName, WatcherGenreModelParameter wgmParam);
 
-        Task<bool> Update(WatcherGenreModelParameter watcherGenreModelParam);
+        Task<bool> Update(string watcherName, WatcherGenreModelParameter wgmParam);
 
-        Task Create(WatcherGenreModelParameter watcherGenreModelParam);
+        Task Create(string watcherName, WatcherGenreModelParameter wgmParam);
     }
 }

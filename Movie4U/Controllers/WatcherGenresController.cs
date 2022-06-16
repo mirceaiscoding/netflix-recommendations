@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.Configurations;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers;
@@ -67,8 +68,7 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            watcherGenreModelParam.watcher_name = watcherName;
-            await manager.Create(watcherGenreModelParam);
+            await manager.Create(watcherName, watcherGenreModelParam);
             return Ok();
         }
 
@@ -82,8 +82,7 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            watcherGenreModelParam.watcher_name = watcherName;
-            await manager.AddToScore(watcherGenreModelParam);
+            await manager.AddToScore(watcherName, watcherGenreModelParam);
             return Ok();
         }
 
@@ -97,8 +96,7 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            watcherGenreModelParam.watcher_name = watcherName;
-            await manager.Update(watcherGenreModelParam);
+            await manager.Update(watcherName, watcherGenreModelParam);
             return Ok();
         }
 
@@ -114,8 +112,6 @@ namespace Movie4U.Controllers
                 return BadRequest("The watcher couldn not be found");
 
             await manager.AddToScoreMultiple(watcherName, changeModels);
-
-
             return Ok();
         }
 

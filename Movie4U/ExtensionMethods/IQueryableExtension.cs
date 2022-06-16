@@ -23,11 +23,17 @@ namespace Movie4U.ExtensionMethods
             return source.Where(lambda);
         }
 
-        public static IQueryable<TEntity> IncludeMultiple<TEntity>(this IQueryable<TEntity> source, params Expression<Func<TEntity, object>>[] includers)
+        public static IQueryable<TEntity> IncludeMultiple<TEntity>(this IQueryable<TEntity> source, bool asSplitQuery, params Expression<Func<TEntity, object>>[] includers)
             where TEntity : class
         {
             if (includers == null)
                 return source;
+
+            if(asSplitQuery)
+                return includers
+                    .Aggregate(
+                        source,
+                        (current, includer) => current.Include(includer).AsSplitQuery());
 
             return includers
                 .Aggregate(

@@ -8,9 +8,9 @@ using Movie4U.Utilities;
 using Movie4U.EntitiesModels;
 using System;
 using EFCore.BulkExtensions;
-using Movie4U.EntitiesModels.Models;
 using AutoMapper;
 using Movie4U.ExtensionMethods;
+using Movie4U.Configurations;
 
 namespace Movie4U.Repositories
 {
@@ -77,11 +77,15 @@ namespace Movie4U.Repositories
                 return result;
 
             return result
-                .IncludeMultiple(config.includers);
+                .IncludeMultiple(config.asSplitQuery, config.includers);
         }
 
         public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
         {
+            /*var got = await GetAllDbFilteredAsync(config, true);
+            foreach (var entity in got)
+                Console.WriteLine(entity.ToString());*/
+
             var result = mapper.Map(
                 await GetAllDbFilteredAsync(config, true),
                 optsAll);

@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Enums;
 using Movie4U.ExtensionMethods;
@@ -86,6 +87,7 @@ namespace Movie4U.Managers
                 config = new GetAllConfig<WatcherTitle>();
 
             config.includers = includers;
+            config.asSplitQuery = true;
 
             if (watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
                 return await repo.GetAllFromPageAsync(config, null, filler);
@@ -116,31 +118,31 @@ namespace Movie4U.Managers
             if(watcherTitleModel != null)
                 return watcherTitleModel;
 
-            await Create(new WatcherTitleModelParameter(watcher_name, netflix_id, WatcherTitle.Preferences.Null, DateTime.Now, false, DateTime.Now));
+            await Create(watcher_name, new WatcherTitleModelParameter(netflix_id, WatcherTitle.Preferences.Null, DateTime.Now, false, DateTime.Now));
             return await repo.GetOneByIdAsync(watcher_name, netflix_id, filler);
         }
 
-        public async Task Create(WatcherTitleModelParameter watcherTitleModelParam)
+        public async Task Create(string watcherName, WatcherTitleModelParameter wtmParam)
         {
-            var newWatcherTitle = new WatcherTitle(watcherTitleModelParam);
+            var newWatcherTitle = new WatcherTitle(watcherName, wtmParam);
 
             await repo.InsertAsync(newWatcherTitle);
         }
 
-        public async Task<bool> Update(WatcherTitleModelParameter watcherTitleModelParam)
+        public async Task<bool> Update(string watcherName, WatcherTitleModelParameter wtmParam)
         {
-            var updateWatcherTitle = await repo.GetOneDbByIdAsync(watcherTitleModelParam.watcher_name, watcherTitleModelParam.netflix_id);
+            var updateWatcherTitle = await repo.GetOneDbByIdAsync(watcherName, wtmParam.netflix_id);
             if (updateWatcherTitle == null)
                 return false;
 
-            updateWatcherTitle.Copy(watcherTitleModelParam);
+            updateWatcherTitle.Copy(watcherName, wtmParam);
 
             return await repo.UpdateAsync(updateWatcherTitle);
         }
 
-        public async Task CreateOrUpdateMultiple(WatcherTitleModelParameter[] models)
+        public async Task CreateOrUpdateMultiple(string watcherName, WatcherTitleModelParameter[] wtmParams)
         {
-            WatcherTitle[] titles = Array.ConvertAll(models, x => new WatcherTitle(x));
+            WatcherTitle[] titles = Array.ConvertAll(wtmParams, wtModelParam => new WatcherTitle(watcherName, wtModelParam));
 
             await repo.InsertOrUpdateMultipleAsync(titles);
         }

@@ -1,4 +1,5 @@
-﻿using Movie4U.EntitiesModels.Entities;
+﻿using Movie4U.Configurations;
+using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
@@ -80,24 +81,24 @@ namespace Movie4U.Managers
             if(watcherGenreModel != null)
                 return watcherGenreModel;
 
-            await Create(new WatcherGenreModelParameter(watcher_name, genre_id, 0));
+            await Create(watcher_name, new WatcherGenreModelParameter(genre_id, 0));
             return await repo.GetOneByIdAsync(watcher_name, genre_id, filler);
         }
 
-        public async Task Create(WatcherGenreModelParameter watcherGenreModelParameter)
+        public async Task Create(string watcherName, WatcherGenreModelParameter wgmParam)
         {
-            var newWatcherGenre = new WatcherGenre(watcherGenreModelParameter);
+            var newWatcherGenre = new WatcherGenre(watcherName, wgmParam);
 
             await repo.InsertAsync(newWatcherGenre);
         }
 
-        public async Task<bool> AddToScore(WatcherGenreModelParameter watcherGenreModelParam)
+        public async Task<bool> AddToScore(string watcherName, WatcherGenreModelParameter wgmParam)
         {
-            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherName, wgmParam.genre_id);
             if (updateWatcherGenre == null)
                 return false;
 
-            updateWatcherGenre.watcherGenreScore += watcherGenreModelParam.watcherGenreScore;
+            updateWatcherGenre.watcherGenreScore += wgmParam.watcherGenreScore;
 
             return await repo.UpdateAsync(updateWatcherGenre);
         }
@@ -120,13 +121,13 @@ namespace Movie4U.Managers
             await repo.InsertOrUpdateMultipleAsync(updatedWatcherGenres.ToArray());
         }
 
-        public async Task<bool> Update(WatcherGenreModelParameter watcherGenreModelParam)
+        public async Task<bool> Update(string watcherName, WatcherGenreModelParameter wgmParam)
         {
-            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherGenreModelParam.watcher_name, watcherGenreModelParam.genre_id);
+            var updateWatcherGenre = await repo.GetOneDbByIdAsync(watcherName, wgmParam.genre_id);
             if (updateWatcherGenre == null)
                 return false;
 
-            updateWatcherGenre.Copy(watcherGenreModelParam);
+            updateWatcherGenre.Copy(watcherName, wgmParam);
 
             return await repo.UpdateAsync(updateWatcherGenre);
         }

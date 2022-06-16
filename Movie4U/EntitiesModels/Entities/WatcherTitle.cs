@@ -68,9 +68,9 @@ namespace Movie4U.EntitiesModels.Entities
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitle(WatcherTitleModelParameter source)
+        public WatcherTitle(string watcherName, WatcherTitleModelParameter source)
         {
-            Copy(source);
+            Copy(watcherName, source);
         }
 
         /**<summary>
@@ -98,9 +98,9 @@ namespace Movie4U.EntitiesModels.Entities
             watchLaterLastSetTime = source.watchLaterLastSetTime;
         }
         
-        public void Copy(WatcherTitleModelParameter source)
+        public void Copy(string watcherName, WatcherTitleModelParameter source)
         {
-            watcher_name = source.watcher_name;
+            watcher_name = watcherName;
             netflix_id = source.netflix_id;
             preference = source.preference;
             prefLastSetTime = source.prefLastSetTime;

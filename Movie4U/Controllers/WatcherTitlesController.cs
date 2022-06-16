@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Movie4U.Configurations;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
 using Movie4U.Managers;
@@ -59,7 +60,7 @@ namespace Movie4U.Controllers
 
         [HttpPost]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> CreateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter watcherTitleModelParam)
+        public async Task<IActionResult> CreateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter wtmParam)
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
@@ -67,14 +68,13 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            watcherTitleModelParam.watcher_name = watcherName;
-            await manager.Create(watcherTitleModelParam);
+            await manager.Create(watcherName, wtmParam);
             return Ok();
         }
 
         [HttpPut]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> UpdateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter watcherTitleModelParam)
+        public async Task<IActionResult> UpdateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter wtmParam)
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
@@ -82,14 +82,13 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            watcherTitleModelParam.watcher_name = watcherName;
-            await manager.Update(watcherTitleModelParam);
+            await manager.Update(watcherName, wtmParam);
             return Ok();
         }
 
         [HttpPost("BatchCreateOrUpdate")]
         [Authorize(Policy = "BasicUserPolicy")]
-        public async Task<IActionResult> BatchCreateOrUpdateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter[] watcherTitleModels)
+        public async Task<IActionResult> BatchCreateOrUpdateWatcherTitleAsync([FromHeader] string Authorization, [FromBody] WatcherTitleModelParameter[] wtmParams)
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
@@ -97,7 +96,7 @@ namespace Movie4U.Controllers
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 
-            await manager.CreateOrUpdateMultiple(watcherTitleModels);
+            await manager.CreateOrUpdateMultiple(watcherName, wtmParams);
             return Ok();
         }
 
