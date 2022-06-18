@@ -1,9 +1,9 @@
 ﻿using Movie4U.Configurations;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,27 +26,23 @@ namespace Movie4U.Managers
 
         public async Task<List<TitleGenreModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleGenre> config = null)
         {
-            if (config == null)
-                config = new GetAllConfig<TitleGenre>();
-
-            config.extraEntityFilters = new List<Func<IQueryable<TitleGenre>, IQueryable<TitleGenre>>>();
-            config.extraEntityFilters.Add(source => source.PropertyFilter("netflix_id", netflixId));
-
-            return await repo.GetAllFromPageAsync(config);
+            return await repo.GetAllFromPageAsync(
+                NetflixIdDependentsUtility<TitleGenre>
+                .AddNetflixIdExtraEntityFilter(
+                    netflixId,
+                    config));
         }
 
         public async Task<List<GenreModel>> GetAllGenresByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleGenre> config = null)
         {
-            var titleGenres = await GetAllByNetflixIdFromPageAsync(netflixId, config);
+            var tasks =
+                (await GetAllByNetflixIdFromPageAsync(netflixId, config))
+                .Select(
+                    async tgm => new GenreModel(
+                        await genresManager.GetOneByIdAsync(tgm.genre_id)));
 
-            var genres = new List<GenreModel>();
-            foreach(var titleGenre in titleGenres)
-            {
-                var genre = await genresManager.GetOneByIdAsync(titleGenre.genre_id);
-                genres.Add(genre);
-            }
-
-            return genres;
+            return (await Task.WhenAll(tasks))
+                .ToList();
         }
 
         public async Task CreateOrUpdateMultiple(TitleGenreModel[] models)

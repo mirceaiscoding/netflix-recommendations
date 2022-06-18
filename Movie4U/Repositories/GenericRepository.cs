@@ -54,7 +54,7 @@ namespace Movie4U.Repositories
         }
 
 
-        public virtual async Task<IQueryable<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
+        public virtual IQueryable<TEntity> GetAllDbFiltered(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
             IQueryable<TEntity> result = entities;
             if (asNoTracking)
@@ -63,7 +63,7 @@ namespace Movie4U.Repositories
             if (config == null)
                 return result;
 
-            var filterList = await GetDynamicEntityFilterList(config.whereFlagsPacked);
+            var filterList = GetDynamicEntityFilterList(config.whereFlagsPacked);
             foreach (var filter in filterList)
                 result = filter(result);
 
@@ -71,17 +71,17 @@ namespace Movie4U.Repositories
                 foreach (var filter in config.extraEntityFilters)
                     result = filter(result);
 
-            if(config.includers == null || config.includers.Count() == 0)
+            if (config.includers == null || config.includers.Count() == 0)
                 return result;
 
             return result
                 .IncludeMultiple(config.asSplitQuery, config.includers);
         }
 
-        public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null)
+        public virtual List<TModel> GetAllOrdered(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null)
         {
             var result = mapper.Map(
-                await GetAllDbFilteredAsync(config, true),
+                GetAllDbFiltered(config, true),
                 optsAll);
 
             if (extraModelFilters != null)
@@ -93,7 +93,7 @@ namespace Movie4U.Repositories
             if (config == null)
                 return result;
 
-            var comparerList = await GetTModelComparerList(config.orderByFlagsPacked);
+            var comparerList = GetTModelComparerList(config.orderByFlagsPacked);
             if (comparerList.Count() == 0)
                 return result;
 
@@ -103,14 +103,14 @@ namespace Movie4U.Repositories
 
         public virtual async Task<List<TEntity>> GetAllDbOrderedAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false)
         {
-            var result = await (await GetAllDbFilteredAsync(
+            var result = await GetAllDbFiltered(
                 config,
-                asNoTracking)).ToListAsync();
+                asNoTracking).ToListAsync();
 
             if (config == null)
                 return result;
 
-            var comparerList = await GetTEntityComparerList(config.orderByFlagsPacked);
+            var comparerList = GetTEntityComparerList(config.orderByFlagsPacked);
             if (comparerList.Count() == 0)
                 return result;
 
@@ -122,7 +122,7 @@ namespace Movie4U.Repositories
         {
             return await PaginatedListFactory<TModel>
                 .Create(
-                    await GetAllOrderedAsync(
+                    GetAllOrdered(
                         config,
                         extraModelFilters),
                     (int)config.pageIndex, pageSize);
@@ -225,14 +225,13 @@ namespace Movie4U.Repositories
             return true;
         }
 
-        protected static Task<List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>> GetDynamicEntityFilterList(int whereFlagsPacked)
+        protected static List<Func<IQueryable<TEntity>, IQueryable<TEntity>>> GetDynamicEntityFilterList(int whereFlagsPacked)
         {
-            var filterList = new List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>();
-
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(whereFlagsPacked);
-            if (flagsUnpacked.Count < 1)
-                return Task.FromResult(filterList);
+            if (!flagsUnpacked.Any())
+                return new();
 
+            var filterList = new List<Func<IQueryable<TEntity>, IQueryable<TEntity>>>();
             foreach (int flag in flagsUnpacked)
             {
                 if (flag == 0)
@@ -245,17 +244,16 @@ namespace Movie4U.Repositories
                 filterList.Add(filter);
             }
 
-            return Task.FromResult(filterList);
+            return filterList;
         }
 
-        protected static Task<List<Func<TEntity, TEntity, int>>> GetTEntityComparerList(int orderByFlagsPacked)
+        protected static List<Func<TEntity, TEntity, int>> GetTEntityComparerList(int orderByFlagsPacked)
         {
-            var comparerList = new List<Func<TEntity, TEntity, int>>();
-
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
-            if (flagsUnpacked.Count < 1)
-                return Task.FromResult(comparerList);
+            if (!flagsUnpacked.Any())
+                return new();
 
+            var comparerList = new List<Func<TEntity, TEntity, int>>();
             foreach (int flag in flagsUnpacked)
             {
                 if (flag == 0)
@@ -268,19 +266,21 @@ namespace Movie4U.Repositories
                 comparerList.Add(comparer);
             }
 
-            comparerList.Add((e1, e2) => e1.GetIds().CompareTo(e2.GetIds()));
+            comparerList.Add((e1, e2) =>
+                EntityIdsUtility<TEntity>.Get(e1)
+                .CompareTo(
+                    EntityIdsUtility<TEntity>.Get(e2)));
 
-            return Task.FromResult(comparerList);
+            return comparerList;
         }
 
-        protected static Task<List<Func<TModel, TModel, int>>> GetTModelComparerList(int orderByFlagsPacked)
+        protected static List<Func<TModel, TModel, int>> GetTModelComparerList(int orderByFlagsPacked)
         {
-            var comparerList = new List<Func<TModel, TModel, int>>();
-
             var flagsUnpacked = FlagsUtility.GetFlagsUnpacked(orderByFlagsPacked);
-            if (flagsUnpacked.Count < 1)
-                return Task.FromResult(comparerList);
+            if (!flagsUnpacked.Any())
+                return new();
 
+            var comparerList = new List<Func<TModel, TModel, int>>();
             foreach (int flag in flagsUnpacked)
             {
                 if (flag == 0)
@@ -293,9 +293,12 @@ namespace Movie4U.Repositories
                 comparerList.Add(comparer);
             }
 
-            comparerList.Add((m1, m2) => m1.GetIds().CompareTo(m2.GetIds()));
+            comparerList.Add((m1, m2) =>
+                ModelIdsUtility<TModel>.Get(m1)
+                .CompareTo(
+                    ModelIdsUtility<TModel>.Get(m2)));
 
-            return Task.FromResult(comparerList);
+            return comparerList;
         }
 
     }

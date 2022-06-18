@@ -1,9 +1,9 @@
 ﻿using Movie4U.Configurations;
 using Movie4U.EntitiesModels.Entities;
 using Movie4U.EntitiesModels.Models;
-using Movie4U.ExtensionMethods;
 using Movie4U.Managers.IManagers;
 using Movie4U.Repositories.IRepositories;
+using Movie4U.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,28 +24,24 @@ namespace Movie4U.Managers
         }
 
         public async Task<List<TitleCountryModel>> GetAllByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleCountry> config = null)
-        {   
-            if (config == null)
-                config = new GetAllConfig<TitleCountry>();
-
-            config.extraEntityFilters = new List<Func<IQueryable<TitleCountry>, IQueryable<TitleCountry>>>();
-            config.extraEntityFilters.Add(source => source.PropertyFilter("netflix_id", netflixId));
-
-            return await repo.GetAllFromPageAsync(config);
+        {
+            return await repo.GetAllFromPageAsync(
+                NetflixIdDependentsUtility<TitleCountry>
+                .AddNetflixIdExtraEntityFilter(
+                    netflixId,
+                    config));
         }
 
         public async Task<List<CountryModel>> GetAllCountriesByNetflixIdFromPageAsync(int netflixId, GetAllConfig<TitleCountry> config = null)
         {
-            var titleCountries = await GetAllByNetflixIdFromPageAsync(netflixId, config);
+            var tasks =
+                (await GetAllByNetflixIdFromPageAsync(netflixId, config))
+                .Select(
+                    async tcm => new CountryModel(
+                        await countriesManager.GetOneByIdAsync(tcm.country_id)));
 
-            var countries = new List<CountryModel>();
-            foreach (var titleCountry in titleCountries)
-            {
-                var country = await countriesManager.GetOneByIdAsync(titleCountry.country_id);
-                countries.Add(country);
-            }
-
-            return countries;
+            return (await Task.WhenAll(tasks))
+                .ToList();
         }
 
         public async Task CreateOrUpdateMultiple(TitleCountryModel[] models)

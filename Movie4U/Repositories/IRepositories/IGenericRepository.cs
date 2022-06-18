@@ -11,9 +11,9 @@ namespace Movie4U.Repositories.IRepositories
         where TEntity : EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>
         where TModel : EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
     {
-        Task<IQueryable<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
+        IQueryable<TEntity> GetAllDbFiltered(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
         
-        Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null);
+        List<TModel> GetAllOrdered(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null);
         Task<List<TEntity>> GetAllDbOrderedAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
 
         Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null);

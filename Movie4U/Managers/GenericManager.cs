@@ -47,7 +47,7 @@ namespace Movie4U.Managers
             if (model == null)
                 return false;
 
-            var ids = model.GetIds();
+            var ids = ModelIdsUtility<TModel>.Get(model);
             if (ids == null)
                 return false;
 
