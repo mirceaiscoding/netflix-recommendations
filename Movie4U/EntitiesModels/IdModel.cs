@@ -37,7 +37,6 @@ namespace Movie4U.EntitiesModels
             this.ids = ids;
         }
 
-
         /// <summary>
         /// Compares the Ids of the given EntityModels.
         /// </summary>

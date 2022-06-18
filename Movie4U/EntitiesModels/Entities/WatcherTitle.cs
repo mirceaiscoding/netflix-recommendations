@@ -5,22 +5,27 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class WatcherTitle: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
+    public class WatcherTitle: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>, IEntity<WatcherTitle>
     {
-        static private Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>> dynamicEntityFilters;
+        static private Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>> dynamicFilters;
+        public static Expression<Func<WatcherTitle, object>>[] idSelectors;
 
         static WatcherTitle()
         {
-            dynamicEntityFilters = new Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            dynamicEntityFilters.Add((int)WhereEnum.InWatchLater, source => source.PropertyFilter("watchLater", true));
-            dynamicEntityFilters.Add((int)WhereEnum.NotInWatchLater, source => source.PropertyFilter("watchLater", false));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsMore, source => source.PropertyFilter("preference", Preferences.More));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.PropertyFilter("preference", Preferences.Less));
-            dynamicEntityFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.PropertyFilter("preference", Preferences.Null));
+            dynamicFilters = new Dictionary<int, Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
+            dynamicFilters.Add((int)WhereEnum.InWatchLater, source => source.PropertyFilter("watchLater", true));
+            dynamicFilters.Add((int)WhereEnum.NotInWatchLater, source => source.PropertyFilter("watchLater", false));
+            dynamicFilters.Add((int)WhereEnum.PrefferenceIsMore, source => source.PropertyFilter("preference", Preferences.More));
+            dynamicFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.PropertyFilter("preference", Preferences.Less));
+            dynamicFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.PropertyFilter("preference", Preferences.Null));
 
+            idSelectors = new Expression<Func<WatcherTitle, object>>[2];
+            idSelectors[0] = entity => entity.watcher_name;
+            idSelectors[1] = entity => entity.netflix_id;
         }
 
         public enum Preferences
@@ -108,17 +113,16 @@ namespace Movie4U.EntitiesModels.Entities
             watchLaterLastSetTime = source.watchLaterLastSetTime;
         }
 
-        override public IdModel GetIds()
+        public Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> GetDynamicFilter(int key)
         {
-            return new IdModel (watcher_name, netflix_id);
-        }
-
-        public override Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> GetDynamicEntityFilter(int key)
-        {
-            if (!dynamicEntityFilters.TryGetValue(key, out Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> filter))
+            if (!dynamicFilters.TryGetValue(key, out Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>> filter))
                 return null;
             return filter;
         }
 
+        public Expression<Func<WatcherTitle, object>>[] GetIdSelectors()
+        {
+            return idSelectors;
+        }
     }
 }

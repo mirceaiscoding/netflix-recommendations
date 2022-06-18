@@ -35,7 +35,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetTitleCountryByIdAsync([FromRoute] int country_id, int netflix_id)
         {
-            var titleCountry = await manager.GetOneByIdAsync(null, country_id, netflix_id);
+            var titleCountry = await manager.GetOneByIdAsync(country_id, netflix_id);
 
             if (titleCountry == null)
                 return NotFound("There is no title country with the given id stored in the database");

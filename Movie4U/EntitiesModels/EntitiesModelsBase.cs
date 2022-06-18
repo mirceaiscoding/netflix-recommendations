@@ -1,14 +1,12 @@
 ﻿
-using Movie4U.Enums;
-using System;
-using System.Linq;
-
 namespace Movie4U.EntitiesModels
 {
     /**<summary>
      * Abstract base class for pairs of Entities and Models.
      * </summary>>*/
     abstract public class EntitiesModelsBase<TEntity, TModel>
+        where TEntity : IEntity<TEntity>
+        where TModel : IModel<TModel>
     {        
         /**<summary>
         * Copies data from source Entity. 
@@ -31,32 +29,6 @@ namespace Movie4U.EntitiesModels
         virtual public void ShallowCopy(TModel source) 
         {
             Copy(source);
-        }
-
-        /**<summary>
-         * Gets an object containing the count of ids that form the primary key of the entity/model.
-         * If the count is not 0, it is followed by the ids, named id1, id2... .
-         * </summary>*/
-        abstract public IdModel GetIds();
-
-        virtual public Func<IQueryable<TEntity>, IQueryable<TEntity>> GetDynamicEntityFilter(int key)
-        {
-            return null;
-        }
-
-        virtual public Func<IQueryable<TModel>, IQueryable<TModel>> GetDynamicModelSorter(int key)
-        {
-            return null;
-        }
-
-        virtual public Func<TEntity, TEntity, int> GetEntityComparer(int key)
-        {
-            return null;
-        }
-
-        virtual public Func<TModel, TModel, int> GetModelComparer(int key)
-        {
-            return null;
         }
 
     }

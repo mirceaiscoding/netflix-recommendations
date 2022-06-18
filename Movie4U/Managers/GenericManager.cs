@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Movie4U.Managers
 {
     public class GenericManager<TEntity, TModel, IRepository> : IGenericManager<TEntity, TModel, IRepository>
-        where TEntity : EntitiesModelsBase<TEntity, TModel>, new()
-        where TModel : EntitiesModelsBase<TEntity, TModel>, new()
+        where TEntity : EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>, new()
+        where TModel : EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
         where IRepository : IGenericRepository<TEntity, TModel>
     {
         protected readonly IRepository repo;

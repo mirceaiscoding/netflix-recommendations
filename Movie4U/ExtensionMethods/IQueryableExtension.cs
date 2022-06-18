@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,22 +30,24 @@ namespace Movie4U.ExtensionMethods
             if (valuesToMatch.Length < propertySelectors.Length)
                 return default(TEntity);
 
-            var entityTypeParam = Expression.Constant(typeof(TEntity));
-
-            var propertyNames = GetPropertyNames(propertySelectors);
+            var entityParam = Expression.Parameter(typeof(TEntity));
 
             Expression conditions = Expression.Constant(true);
             for(int i = 0; i < propertySelectors.Length; i++)
-                conditions = Expression.AndAlso(
-                    conditions,
-                    Expression.Equal(
-                        Expression.PropertyOrField(
-                            entityTypeParam,
-                            propertyNames[i]),
-                        Expression.Constant(
-                            valuesToMatch[i])));
-            
-            var lambda = Expression.Lambda<Func<TEntity, bool>>(conditions, false);
+                        conditions = Expression.AndAlso(
+                            conditions,
+                            Expression.Equal(
+                                Expression.Convert(
+                                    Expression.Invoke(propertySelectors[i], entityParam),
+                                    typeof(object)),
+                                Expression.Constant(
+                                    Expression.Convert(
+                                        Expression.Constant(valuesToMatch[i]),
+                                        typeof(object)),
+                                    typeof(object)
+                                )));
+
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(conditions, false, entityParam);
             
             return await source.FirstOrDefaultAsync(lambda);
         }
@@ -73,7 +76,7 @@ namespace Movie4U.ExtensionMethods
             
             for(int i = 0; i < result.Length; i++)
             {
-                var body = (MemberExpression)propertySelectors[i].Body;
+                var body = propertySelectors[i].Body;
 
                 if (body is MemberExpression me)
                     result[i] = me.Member.Name;
@@ -84,6 +87,38 @@ namespace Movie4U.ExtensionMethods
             }
 
             return result;
+        }
+
+        private static Type[] GetPropertyTypes<TEntity>(Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            var result = new Type[propertySelectors.Length];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                var body = propertySelectors[i].Body;
+
+                if (body is MemberExpression me)
+                    result[i] = (me.Member as PropertyInfo).PropertyType;
+                else if (body is UnaryExpression ue)
+                    result[i] = (((MemberExpression)ue.Operand).Member as PropertyInfo).PropertyType;
+                else
+                    throw new ArgumentNullException("IQueryableExtension.GetPropertyTypes: method retrieved at least one null value");
+            }
+
+            return result;
+        }
+
+        private static MemberInfo GetProperty<TEntity>(Expression<Func<TEntity, object>> propertySelector)
+        {
+            var body = propertySelector.Body;
+
+            if (body is MemberExpression me)
+                return me.Member;
+
+            if (body is UnaryExpression ue)
+                return ((MemberExpression)ue.Operand).Member;
+
+            return null;
         }
 
     }

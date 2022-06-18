@@ -1,10 +1,22 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class WatcherGenre: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>
+    public class WatcherGenre: EntitiesModelsBase<WatcherGenre, WatcherGenreModel>, IEntity<WatcherGenre>
     {
+        public static Expression<Func<WatcherGenre, object>>[] idSelectors;
+
+        static WatcherGenre()
+        {
+            idSelectors = new Expression<Func<WatcherGenre, object>>[2];
+            idSelectors[0] = entity => entity.watcher_name;
+            idSelectors[1] = entity => entity.genre_id;
+        }
+
+
         [Required]
         public string watcher_name { get; set; }
 
@@ -64,10 +76,9 @@ namespace Movie4U.EntitiesModels.Entities
             watcherGenreScore = source.watcherGenreScore;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<WatcherGenre, object>>[] GetIdSelectors()
         {
-            return new IdModel (watcher_name, genre_id);
+            return idSelectors;
         }
-
     }
 }

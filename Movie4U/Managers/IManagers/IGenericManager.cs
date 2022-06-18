@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Movie4U.Managers.IManagers
 {
     public interface IGenericManager<TEntity, TModel, IRepository>
-        where TEntity: EntitiesModelsBase<TEntity, TModel>, new()
-        where TModel: EntitiesModelsBase<TEntity, TModel>, new()
+        where TEntity: EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>, new()
+        where TModel: EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
         where IRepository: IGenericRepository<TEntity, TModel>
     {
         Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null);

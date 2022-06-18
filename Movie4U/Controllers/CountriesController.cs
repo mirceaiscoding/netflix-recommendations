@@ -35,7 +35,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetCountryByIdAsync([FromRoute] int id)
         {
-            var country = await manager.GetOneByIdAsync(null, id);
+            var country = await manager.GetOneByIdAsync(id);
 
             if (country == null)
                 return NotFound("There is no country with the given code stored in the database");

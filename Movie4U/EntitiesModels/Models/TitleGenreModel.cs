@@ -1,9 +1,21 @@
 ﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class TitleGenreModel: EntitiesModelsBase<TitleGenre, TitleGenreModel>
+    public class TitleGenreModel: EntitiesModelsBase<TitleGenre, TitleGenreModel>, IModel<TitleGenreModel>
     {
+        public static Expression<Func<TitleGenreModel, object>>[] idSelectors;
+
+        static TitleGenreModel()
+        {
+            idSelectors = new Expression<Func<TitleGenreModel, object>>[2];
+            idSelectors[0] = model => model.genre_id;
+            idSelectors[1] = model => model.netflix_id;
+        }
+
+
         public string genre { get; set; }
 
         public int genre_id { get; set; }
@@ -46,10 +58,9 @@ namespace Movie4U.EntitiesModels.Models
             this.netflix_id = source.netflix_id;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<TitleGenreModel, object>>[] GetIdSelectors()
         {
-            return new IdModel(genre_id, netflix_id);
+            return idSelectors;
         }
-
     }
 }

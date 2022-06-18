@@ -1,13 +1,24 @@
 ﻿using Movie4U.EntitiesModels.Models;
 using Movie4U.EntitiesModels.Models.uNoGS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class Genre: EntitiesModelsBase<Genre, GenreModel>
+    public class Genre: EntitiesModelsBase<Genre, GenreModel>, IEntity<Genre>
     {
+        public static Expression<Func<Genre, object>>[] idSelectors;
+
+        static Genre()
+        {
+            idSelectors = new Expression<Func<Genre, object>>[1];
+            idSelectors[0] = entity => entity.genre_id;
+        }
+
+
         public string genre { get; set; }
 
         [Required, Key]
@@ -57,9 +68,9 @@ namespace Movie4U.EntitiesModels.Entities
             genre_id = source.genre_id;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<Genre, object>>[] GetIdSelectors()
         {
-            return new IdModel(genre_id);
+            return idSelectors;
         }
 
     }

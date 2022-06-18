@@ -28,7 +28,7 @@ namespace Movie4U.Controllers
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
-            var watcherModel = await watchersManager.GetOneByIdAsync(null, watcherName);
+            var watcherModel = await watchersManager.GetOneByIdAsync(watcherName);
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 

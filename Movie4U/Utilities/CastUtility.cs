@@ -6,8 +6,8 @@ namespace Movie4U.Utilities
     public static class CastUtility
     {
         public static TModel ToModel<TEntity, TModel>(TEntity entity)
-            where TEntity: EntitiesModelsBase<TEntity, TModel>
-            where TModel: EntitiesModelsBase<TEntity, TModel>, new()
+            where TEntity: EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>
+            where TModel: EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
         {
             if (entity == null)
                 return null;
@@ -19,8 +19,8 @@ namespace Movie4U.Utilities
         }
 
         public static List<TModel> ToModelsList<TEntity, TModel> (List<TEntity> entities) 
-            where TEntity: EntitiesModelsBase<TEntity, TModel>
-            where TModel: EntitiesModelsBase<TEntity, TModel>, new()
+            where TEntity: EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>
+            where TModel: EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
         { 
             var models = new List<TModel>();
             foreach (var entity in entities)

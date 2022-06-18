@@ -35,7 +35,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetTitleByIdAsync([FromRoute] int netflix_id)
         {
-            var title = await manager.GetOneByIdAsync(null, netflix_id);
+            var title = await manager.GetOneByIdAsync(netflix_id);
 
             if (title == null)
                 return NotFound("There is no title with the given id stored in the database");

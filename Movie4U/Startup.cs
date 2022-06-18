@@ -74,7 +74,6 @@ namespace Movie4U
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))  
             .UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
 
-
             // since we have added IdentityDbContext, we add this to specify we use the user and role defined by us
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<Movie4UContext>();
@@ -195,7 +194,7 @@ namespace Movie4U
                     app.UseDeveloperExceptionPage();
                     app.UseSwagger();
                     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Movie4U v1"));
-                }
+            }
             else
             {
                 app.UseExceptionHandler("/Error");
@@ -212,10 +211,7 @@ namespace Movie4U
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

@@ -1,10 +1,20 @@
 ﻿using Movie4U.EntitiesModels.Entities;
 using System;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class WatcherModel: EntitiesModelsBase<Watcher,WatcherModel>
+    public class WatcherModel: EntitiesModelsBase<Watcher,WatcherModel>, IModel<WatcherModel>
     {
+        public static Expression<Func<WatcherModel, object>>[] idSelectors;
+
+        static WatcherModel()
+        {
+            idSelectors = new Expression<Func<WatcherModel, object>>[1];
+            idSelectors[0] = model => model.watcher_name;
+        }
+
+
         public string watcher_name { get; set; }
 
         public DateTime register_date { get; set; }
@@ -63,10 +73,9 @@ namespace Movie4U.EntitiesModels.Models
             this.nextPageIndex = source.nextPageIndex;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<WatcherModel, object>>[] GetIdSelectors()
         {
-            return new IdModel (watcher_name);
+            return idSelectors;
         }
-
     }
 }

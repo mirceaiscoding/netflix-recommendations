@@ -35,7 +35,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetGenreByIdAsync([FromRoute] int genre_id)
         {
-            var genre = await manager.GetOneByIdAsync(null, genre_id);
+            var genre = await manager.GetOneByIdAsync(genre_id);
 
             if (genre == null)
                 return NotFound("There is no genre with the given id stored in the database");

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Movie4U.Repositories.IRepositories
 {
     public interface IGenericRepository<TEntity, TModel>
-        where TEntity : EntitiesModelsBase<TEntity, TModel>
-        where TModel : EntitiesModelsBase<TEntity, TModel>, new()
+        where TEntity : EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>
+        where TModel : EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
     {
         Task<IQueryable<TEntity>> GetAllDbFilteredAsync(GetAllConfig<TEntity> config = null, bool asNoTracking = false);
         

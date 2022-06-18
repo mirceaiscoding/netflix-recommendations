@@ -1,9 +1,20 @@
 ﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class TitleImageModel : EntitiesModelsBase<TitleImage, TitleImageModel>
+    public class TitleImageModel : EntitiesModelsBase<TitleImage, TitleImageModel>, IModel<TitleImageModel>
     {
+        public static Expression<Func<TitleImageModel, object>>[] idSelectors;
+
+        static TitleImageModel()
+        {
+            idSelectors = new Expression<Func<TitleImageModel, object>>[1];
+            idSelectors[0] = model => model.url;
+        }
+
+
         public string image_type { get; set; }
         public int netflix_id { get; set; }
         public string url { get; set; }        // "filmid as netflixid,url,itype"
@@ -45,10 +56,9 @@ namespace Movie4U.EntitiesModels.Models
             url = source.url;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<TitleImageModel, object>>[] GetIdSelectors()
         {
-            return new IdModel(url);
+            return idSelectors;
         }
-
     }
 }

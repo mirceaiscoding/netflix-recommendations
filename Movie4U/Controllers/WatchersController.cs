@@ -38,7 +38,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetWatcherByNameAsync([FromRoute] string name)
         {
-            var watcher = await manager.GetOneByIdAsync(null, name);
+            var watcher = await manager.GetOneByIdAsync(name);
 
             if (watcher == null)
                 return NotFound("There is no watcher with the given name stored in the database");
@@ -52,7 +52,7 @@ namespace Movie4U.Controllers
         {
             var watcherName = TokensManager.ExtractUserName(Authorization);
 
-            var watcherModel = await manager.GetOneByIdAsync(null, watcherName);
+            var watcherModel = await manager.GetOneByIdAsync(watcherName);
             if (watcherModel == null)
                 return BadRequest("The watcher couldn not be found");
 

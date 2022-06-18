@@ -43,7 +43,7 @@ namespace Movie4U.Mappers
                     dest => dest.titleImageModels,
                     memberOptions => memberOptions.MapFrom(
                         src => src.titleImages.Select(
-                            ti => new TitleImageModel(ti))));
+                            ti => new TitleImageModel(ti)).ToList()));
 
             CreateMap<WatcherGenre, WatcherGenreModel>()
                 .ForMember(
@@ -82,12 +82,20 @@ namespace Movie4U.Mappers
                     dest => dest.watcherGenreModels,
                     memberOptions => memberOptions.MapFrom(
                         (src, dest, destMember, context) =>
-                        destMember = 
-                            src.title.titleGenres.Join(
-                                ((IEnumerable<WatcherGenre>)context.Items["WatcherGenres"]).Where(wg => String.Equals(wg.watcher_name, src.watcher_name, StringComparison.CurrentCulture)),
+                        destMember =
+                            src.title.titleGenres
+                            .Join(
+                                ((IEnumerable<WatcherGenre>)context.Items["WatcherGenres"]).Where(wg => string.Equals(wg.watcher_name, src.watcher_name, StringComparison.CurrentCulture)),
                                 tg => tg.genre_id,
                                 wg => wg.genre_id,
-                                (tg, wg) => new WatcherGenreModel(wg)).ToList()));
+                                (tg, wg) => new List<WatcherGenre>{wg}
+                                .Join(
+                                    (IEnumerable<Genre>)context.Items["Genres"],
+                                    wg => wg.genre_id,
+                                    genre => genre.genre_id,
+                                    (wg, genre) => new WatcherGenreModel(wg, genre))
+                                .ElementAt(0))
+                            .ToList()));
         }
     }
 }

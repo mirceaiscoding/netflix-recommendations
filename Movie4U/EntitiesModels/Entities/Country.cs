@@ -1,13 +1,24 @@
 ﻿using Movie4U.EntitiesModels.Models;
 using Movie4U.EntitiesModels.Models.uNoGS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class Country: EntitiesModelsBase<Country, CountryModel>
+    public class Country: EntitiesModelsBase<Country, CountryModel>, IEntity<Country>
     {
+        public static Expression<Func<Country, object>>[]  idSelectors;
+
+        static Country()
+        {
+            idSelectors = new Expression<Func<Country, object>>[1];
+            idSelectors[0] = entity => entity.id;
+        }
+
+
         [Required, Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
@@ -91,9 +102,9 @@ namespace Movie4U.EntitiesModels.Entities
             tvids = source.tvids;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<Country, object>>[] GetIdSelectors()
         {
-            return new IdModel(id);
+            return idSelectors;
         }
 
     }

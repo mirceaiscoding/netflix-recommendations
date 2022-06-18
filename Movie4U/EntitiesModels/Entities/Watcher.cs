@@ -2,11 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class Watcher: EntitiesModelsBase<Watcher,WatcherModel>
+    public class Watcher: EntitiesModelsBase<Watcher,WatcherModel>, IEntity<Watcher>
     {
+        public static Expression<Func<Watcher, object>>[] idSelectors;
+
+        static Watcher()
+        {
+            idSelectors = new Expression<Func<Watcher, object>>[1];
+            idSelectors[0] = entity => entity.watcher_name;
+        }
+
+
         [Required, Key]
         public string watcher_name { get; set; }
 
@@ -70,10 +80,9 @@ namespace Movie4U.EntitiesModels.Entities
             this.nextPageIndex = source.nextPageIndex;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<Watcher, object>>[] GetIdSelectors()
         {
-            return new IdModel (watcher_name);
+            return idSelectors;
         }
-
     }
 }

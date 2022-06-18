@@ -1,10 +1,21 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class TitleImage: EntitiesModelsBase<TitleImage, TitleImageModel>
+    public class TitleImage: EntitiesModelsBase<TitleImage, TitleImageModel>, IEntity<TitleImage>
     {
+        public static Expression<Func<TitleImage, object>>[] idSelectors;
+
+        static TitleImage()
+        {
+            idSelectors = new Expression<Func<TitleImage, object>>[1];
+            idSelectors[0] = entity => entity.url;
+        }
+
+
         public string image_type { get; set; }
 
         [Required]
@@ -51,10 +62,9 @@ namespace Movie4U.EntitiesModels.Entities
             url = source.url;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<TitleImage, object>>[] GetIdSelectors()
         {
-            return new IdModel (url);
+            return idSelectors;
         }
-
     }
 }

@@ -8,11 +8,11 @@ using Movie4U.Enums;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class WatcherTitleModel: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>
+    public class WatcherTitleModel: EntitiesModelsBase<WatcherTitle,WatcherTitleModel>, IModel<WatcherTitleModel>
     {
-
         static private Dictionary<int, Func<WatcherTitleModel, WatcherTitleModel, int>> modelComparers;
         static private Dictionary<int, Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>>> dynamicModelSorters;
+        public static Expression<Func<WatcherTitleModel, object>>[] idSelectors;
 
         static WatcherTitleModel()
         {
@@ -22,29 +22,11 @@ namespace Movie4U.EntitiesModels.Models
             dynamicModelSorters = new Dictionary<int, Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>>>();
             dynamicModelSorters.Add((int)OrderByEnum.Score, query => scoreSorter(query));
 
+            idSelectors = new Expression<Func<WatcherTitleModel, object>>[2];
+            idSelectors[0] = model => model.watcher_name;
+            idSelectors[1] = model => model.netflix_id;
         }
-        
-        public static IQueryable<TModel> scoreSorter<TModel>(IQueryable<TModel> source)
-            where TModel : WatcherTitleModel
-        {
-            Type thisType = typeof(TModel);
-            ParameterExpression wtm = Expression.Parameter(thisType, "wtm");
-            MethodInfo getScoreMethodInfo = thisType.GetMethod("GetScore");
 
-            var call = Expression.Call(wtm, getScoreMethodInfo);
-
-            var accessor1 = Expression.PropertyOrField(wtm, "watcher_name");
-            var accessor2 = Expression.PropertyOrField(wtm, "netflix_id");
-
-            var lambda = Expression.Lambda < Func < TModel, double>>(call, false, new[] {wtm});
-            var lambda1 = Expression.Lambda<Func<TModel, string>>(accessor1, false, new[] { wtm });
-            var lambda2 = Expression.Lambda<Func<TModel, string>>(accessor2, false, new[] { wtm });
-
-            return source
-                .OrderBy(lambda)
-                .ThenBy(lambda1)    // ordering by composite key in order to generate fully unique ordering (see https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries)
-                .ThenBy(lambda2);
-        }
 
         public string watcher_name { get; set; }
 
@@ -127,23 +109,45 @@ namespace Movie4U.EntitiesModels.Models
             watcherGenreModels = source.watcherGenreModels;
         }
 
-        override public IdModel GetIds()
-        {
-            return new IdModel(watcher_name, netflix_id);
-        }
-
-        public override Func<WatcherTitleModel, WatcherTitleModel, int> GetModelComparer(int key)
+        public Func<WatcherTitleModel, WatcherTitleModel, int> GetComparer(int key)
         {
             if (!modelComparers.TryGetValue(key, out Func<WatcherTitleModel, WatcherTitleModel, int> comparer))
                 return null;
             return comparer;
         }
 
-        public override Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>> GetDynamicModelSorter(int key)
+        public Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>> GetDynamicSorter(int key)
         {
             if (!dynamicModelSorters.TryGetValue(key, out Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>> sorter))
                 return null;
             return sorter;
+        }
+
+        public Expression<Func<WatcherTitleModel, object>>[] GetIdSelectors()
+        {
+            return idSelectors;
+        }
+
+        public static IQueryable<TModel> scoreSorter<TModel>(IQueryable<TModel> source)
+            where TModel : WatcherTitleModel
+        {
+            Type thisType = typeof(TModel);
+            ParameterExpression wtm = Expression.Parameter(thisType, "wtm");
+            MethodInfo getScoreMethodInfo = thisType.GetMethod("GetScore");
+
+            var call = Expression.Call(wtm, getScoreMethodInfo);
+
+            var accessor1 = Expression.PropertyOrField(wtm, "watcher_name");
+            var accessor2 = Expression.PropertyOrField(wtm, "netflix_id");
+
+            var lambda = Expression.Lambda<Func<TModel, double>>(call, false, new[] { wtm });
+            var lambda1 = Expression.Lambda<Func<TModel, string>>(accessor1, false, new[] { wtm });
+            var lambda2 = Expression.Lambda<Func<TModel, string>>(accessor2, false, new[] { wtm });
+
+            return source
+                .OrderBy(lambda)
+                .ThenBy(lambda1)    // ordering by composite key in order to generate fully unique ordering (see https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries)
+                .ThenBy(lambda2);
         }
 
         public double GetScore()
@@ -167,6 +171,5 @@ namespace Movie4U.EntitiesModels.Models
 
             return score;
         }
-
     }
 }

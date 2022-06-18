@@ -1,9 +1,20 @@
 ﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class GenreModel: EntitiesModelsBase<Genre, GenreModel>
+    public class GenreModel: EntitiesModelsBase<Genre, GenreModel>, IModel<GenreModel>
     {
+        public static Expression<Func<GenreModel, object>>[] idSelectors;
+
+        static GenreModel()
+        {
+            idSelectors = new Expression<Func<GenreModel, object>>[1];
+            idSelectors[0] = model => model.genre_id;
+        }
+
+
         public string genre { get; set; }
 
         public int genre_id { get; set; }
@@ -42,10 +53,9 @@ namespace Movie4U.EntitiesModels.Models
             genre_id = source.genre_id;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<GenreModel, object>>[] GetIdSelectors()
         {
-            return new IdModel(genre_id);
+            return idSelectors;
         }
-
     }
 }

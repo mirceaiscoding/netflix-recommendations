@@ -1,10 +1,22 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class TitleCountry: EntitiesModelsBase<TitleCountry, TitleCountryModel>
+    public class TitleCountry: EntitiesModelsBase<TitleCountry, TitleCountryModel>, IEntity<TitleCountry>
     {
+        public static Expression<Func<TitleCountry, object>>[] idSelectors;
+
+        static TitleCountry()
+        {
+            idSelectors = new Expression<Func<TitleCountry, object>>[2];
+            idSelectors[0] = entity => entity.country_id;
+            idSelectors[1] = entity => entity.netflix_id;
+        }
+
+
         [Required]
         public int country_id { get; set; }
 
@@ -48,9 +60,9 @@ namespace Movie4U.EntitiesModels.Entities
             netflix_id = source.netflix_id;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<TitleCountry, object>>[] GetIdSelectors()
         {
-            return new IdModel (country_id, netflix_id);
+            return idSelectors;
         }
 
     }

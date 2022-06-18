@@ -35,7 +35,7 @@ namespace Movie4U.Controllers
         [Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> GetTitleImageByIdAsync([FromRoute] string imgurl)
         {
-            var titleImage = await manager.GetOneByIdAsync(null, imgurl);
+            var titleImage = await manager.GetOneByIdAsync(imgurl);
 
             if (titleImage == null)
                 return NotFound("There is no title image with the given id stored in the database");

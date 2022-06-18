@@ -1,9 +1,20 @@
 ﻿using Movie4U.EntitiesModels.Entities;
+using System;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Models
 {
-    public class CountryModel : EntitiesModelsBase<Country, CountryModel>
+    public class CountryModel : EntitiesModelsBase<Country, CountryModel>, IModel<CountryModel>
     {
+        public static Expression<Func<CountryModel, object>>[] idSelectors;
+
+        static CountryModel()
+        {
+            idSelectors = new Expression<Func<CountryModel, object>>[1];
+            idSelectors[0] = model => model.id;
+        }
+
+
         public int id { get; set; }
 
         public string country { get; set; }
@@ -66,9 +77,9 @@ namespace Movie4U.EntitiesModels.Models
             tvids = source.tvids;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<CountryModel, object>>[] GetIdSelectors()
         {
-            return new IdModel(id);
+            return idSelectors;
         }
 
     }

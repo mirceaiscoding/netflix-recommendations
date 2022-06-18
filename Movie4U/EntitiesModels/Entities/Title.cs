@@ -1,11 +1,21 @@
 ﻿using Movie4U.EntitiesModels.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Movie4U.EntitiesModels.Entities
 {
-    public class Title: EntitiesModelsBase<Title,TitleModel>
+    public class Title: EntitiesModelsBase<Title,TitleModel>, IEntity<Title>
     {
+        public static Expression<Func<Title, object>>[] idSelectors;
+
+        static Title()
+        {
+            idSelectors = new Expression<Func<Title, object>>[1];
+            idSelectors[0] = entity => entity.netflix_id;
+        }
+
 
         public string title { get; set; }
 
@@ -118,9 +128,9 @@ namespace Movie4U.EntitiesModels.Entities
             this.year = source.year;
         }
 
-        override public IdModel GetIds()
+        public Expression<Func<Title, object>>[] GetIdSelectors()
         {
-            return new IdModel(netflix_id);
+            return idSelectors;
         }
 
     }

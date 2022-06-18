@@ -15,8 +15,8 @@ using Movie4U.Configurations;
 namespace Movie4U.Repositories
 {
     public class GenericRepository<TEntity, TModel> : IGenericRepository<TEntity, TModel>
-        where TEntity : EntitiesModelsBase<TEntity, TModel>, new()
-        where TModel : EntitiesModelsBase<TEntity, TModel>, new()
+        where TEntity : EntitiesModelsBase<TEntity, TModel>, IEntity<TEntity>, new()
+        where TModel : EntitiesModelsBase<TEntity, TModel>, IModel<TModel>, new()
     {
         readonly static int pageSize = 10;
         protected Action<IMappingOperationOptions<IQueryable<TEntity>, List<TModel>>> optsAll;
@@ -250,7 +250,7 @@ namespace Movie4U.Repositories
                 if (flag == 0)
                     continue;
 
-                var filter = new TEntity().GetDynamicEntityFilter(flag);
+                var filter = new TEntity().GetDynamicFilter(flag);
                 if (filter == null)
                     continue;
 
@@ -273,14 +273,14 @@ namespace Movie4U.Repositories
                 if (flag == 0)
                     continue;
 
-                var comparer = new TEntity().GetEntityComparer(flag);
+                var comparer = new TEntity().GetComparer(flag);
                 if (comparer == null)
                     continue;
 
                 comparerList.Add(comparer);
             }
 
-            comparerList.Add((m1, m2) => m1.GetIds().CompareTo(m2.GetIds()));
+            comparerList.Add((e1, e2) => e1.GetIds().CompareTo(e2.GetIds()));
 
             return Task.FromResult(comparerList);
         }
@@ -298,7 +298,7 @@ namespace Movie4U.Repositories
                 if (flag == 0)
                     continue;
 
-                var comparer = new TModel().GetModelComparer(flag);
+                var comparer = new TModel().GetComparer(flag);
                 if (comparer == null)
                     continue;
 
