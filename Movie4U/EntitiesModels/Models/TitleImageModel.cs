@@ -10,8 +10,10 @@ namespace Movie4U.EntitiesModels.Models
 
         static TitleImageModel()
         {
-            idSelectors = new Expression<Func<TitleImageModel, object>>[1];
-            idSelectors[0] = model => model.url;
+            idSelectors = new Expression<Func<TitleImageModel, object>>[]
+            {
+                entity => entity.url
+            };
         }
 
 

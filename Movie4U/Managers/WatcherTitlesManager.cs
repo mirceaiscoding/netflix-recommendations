@@ -27,63 +27,14 @@ namespace Movie4U.Managers
             };
         }
 
-        private readonly ITitlesManager titlesManager;
-        private readonly IWatcherGenresManager watcherGenresManager;
-
         /**<summary>
          * Constructor.
          * </summary>*/
-        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager): base(repo)
-        {
-            this.titlesManager = titlesManager;
-            this.watcherGenresManager = watcherGenresManager;
-        }
+        public WatcherTitlesManager(IWatcherTitlesRepository repo, ITitlesManager titlesManager, IWatcherGenresManager watcherGenresManager) : base(repo) { }
 
-
-        private async Task<bool> FillModelsLists(WatcherTitleModel watcherTitleModel)
-        {
-            if (watcherTitleModel == null)
-                return false;
-
-            var titleModel = await titlesManager.GetOneByIdAsync(watcherTitleModel.netflix_id);
-            if(titleModel == null)
-            {
-                Console.WriteLine(String.Format("WatcherTitlesManager.FillModelsLists:  titlesManager.GetOneByIdAsync({0}, {1}) method retrieved a null result.", watcherTitleModel.netflix_id));
-                return false;
-            }
-
-            watcherTitleModel.synopsis = titleModel.synopsis;
-            watcherTitleModel.year = titleModel.year;
-            watcherTitleModel.poster = titleModel.poster;
-            watcherTitleModel.rating = titleModel.rating;
-            watcherTitleModel.countryModels = titleModel.countryModels;
-            watcherTitleModel.title = titleModel.title;
-
-            var watcherGenreModels = new List<WatcherGenreModel>();
-            foreach(var genreModel in titleModel.genreModels)
-            {
-                var watcherGenreModel = await watcherGenresManager.GetOneByIdAsync(watcherTitleModel.watcher_name, genreModel.genre_id);
-                if(watcherGenreModel == null)
-                {
-                    Console.WriteLine(String.Format("WatcherTitlesManager.FillModelsLists:  watcherGenresManager.GetOneByIdAsync({0}, {1}) method retrieved a null result.", watcherTitleModel.watcher_name, genreModel.genre_id));
-                    continue;
-                }
-
-                watcherGenreModels.Add(watcherGenreModel);
-            }
-
-            watcherTitleModel.watcherGenreModels = watcherGenreModels;
-            return true;
-        }
 
         public async Task<List<WatcherTitleModel>> GetAllFromPageAsync(GetAllConfig<WatcherTitle> config = null, WatcherModel watcherModel = null)
         {
-            Func<List<WatcherTitleModel>, Task> filler = async watcherTitleModels =>
-            {
-                foreach (var watcherTitleModel in watcherTitleModels)
-                    await FillModelsLists(watcherTitleModel);
-            };
-
             if (config == null)
                 config = new GetAllConfig<WatcherTitle>();
 
@@ -91,30 +42,30 @@ namespace Movie4U.Managers
             config.asSplitQuery = true;
 
             if (watcherModel == null)    // If there is no watcher specified, we retrieve all the WatcherTitles of all watchers (AdminPolicy only).
-                return await repo.GetAllFromPageAsync(config, null, filler);
+                return await repo.GetAllFromPageAsync(config);
 
-            config.extraEntityFilters = new List<Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>();
-            config.extraEntityFilters.Add(source => source.PropertyFilter("watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters = new List<Func<IQueryable<WatcherTitle>, IQueryable<WatcherTitle>>>()
+            {
+                source => source.PropertyFilter("watcher_name", watcherModel.watcher_name)
+            };
 
             if ((config.whereFlagsPacked & (int)WhereEnum.WatcherCountryOnly) == 0  ||  watcherModel.countryId == null)
-                return await repo.GetAllFromPageAsync(config, null, filler);
+                return await repo.GetAllFromPageAsync(config);
 
-            List<Func<WatcherTitleModel, bool>> extraModelFilters = new List<Func<WatcherTitleModel, bool>>();
-            extraModelFilters.Add(wt =>
-                wt
+            List<Func<WatcherTitleModel, bool>> extraModelFilters = new List<Func<WatcherTitleModel, bool>>()
+            {
+                wt => wt
                 .countryModels
-                .Where(cm =>cm.id == watcherModel.countryId)
-                .Count() > 0 );
+                .Where(countryModel => countryModel.id == watcherModel.countryId)
+                .Any()
+            };
             config.whereFlagsPacked ^= (int)WhereEnum.WatcherCountryOnly;      // We created the extraModelFilter for this flag, so we do not need to evaluate it furher.
 
-            return await repo.GetAllFromPageAsync(config, extraModelFilters, filler);
+            return await repo.GetAllFromPageAsync(config, extraModelFilters);
         }
 
         public async Task<WatcherTitleModel> GetOneByIdAsync(string watcher_name, int netflix_id)
         {
-            Func<WatcherTitleModel, Task> filler = async watcherTitleModel =>
-                await FillModelsLists(watcherTitleModel);
-
             var watcherTitleModel = await repo
                 .GetOneByIdAsync(
                     GetOneConfigFactory<WatcherTitle, WatcherTitleModel>.New(

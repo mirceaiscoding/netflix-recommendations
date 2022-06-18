@@ -22,9 +22,11 @@ namespace Movie4U.EntitiesModels.Models
             dynamicModelSorters = new Dictionary<int, Func<IQueryable<WatcherTitleModel>, IQueryable<WatcherTitleModel>>>();
             dynamicModelSorters.Add((int)OrderByEnum.Score, query => scoreSorter(query));
 
-            idSelectors = new Expression<Func<WatcherTitleModel, object>>[2];
-            idSelectors[0] = model => model.watcher_name;
-            idSelectors[1] = model => model.netflix_id;
+            idSelectors = new Expression<Func<WatcherTitleModel, object>>[]
+            {
+                entity => entity.watcher_name,
+                entity => entity.netflix_id
+            };
         }
 
 

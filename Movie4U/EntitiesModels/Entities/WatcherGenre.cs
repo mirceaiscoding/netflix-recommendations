@@ -11,9 +11,11 @@ namespace Movie4U.EntitiesModels.Entities
 
         static WatcherGenre()
         {
-            idSelectors = new Expression<Func<WatcherGenre, object>>[2];
-            idSelectors[0] = entity => entity.watcher_name;
-            idSelectors[1] = entity => entity.genre_id;
+            idSelectors = new Expression<Func<WatcherGenre, object>>[]
+            {
+                entity => entity.watcher_name,
+                entity => entity.genre_id
+            };
         }
 
 

@@ -14,8 +14,10 @@ namespace Movie4U.EntitiesModels.Entities
 
         static Country()
         {
-            idSelectors = new Expression<Func<Country, object>>[1];
-            idSelectors[0] = entity => entity.id;
+            idSelectors = new Expression<Func<Country, object>>[]
+            {
+                entity => entity.id
+            };
         }
 
 

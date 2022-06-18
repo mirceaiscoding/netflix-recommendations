@@ -10,9 +10,11 @@ namespace Movie4U.EntitiesModels.Models
 
         static TitleCountryModel()
         {
-            idSelectors = new Expression<Func<TitleCountryModel, object>>[2];
-            idSelectors[0] = model => model.country_id;
-            idSelectors[1] = model => model.netflix_id;
+            idSelectors = new Expression<Func<TitleCountryModel, object>>[]
+            {
+                entity => entity.country_id,
+                entity => entity.netflix_id
+            };
         }
 
 

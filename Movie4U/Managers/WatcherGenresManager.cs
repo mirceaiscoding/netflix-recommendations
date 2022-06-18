@@ -36,48 +36,26 @@ namespace Movie4U.Managers
         }
 
 
-        private async Task<bool> FillModelsLists(WatcherGenreModel watcherGenreModel)
-        {
-            if (watcherGenreModel == null)
-                return false;
-
-            watcherGenreModel.genreModel = await genresManager.GetOneByIdAsync(watcherGenreModel.genre_id);
-            if (watcherGenreModel.genreModel == null)
-            {
-                Console.WriteLine(String.Format("WatcherGenresManager.FillModelsList:  genresManager.GetOneById({0}) retrieved a null result.", watcherGenreModel.genre_id));
-                return false;
-            }
-
-            return true;
-        }
-
         public async Task<List<WatcherGenreModel>> GetAllFromPageAsync(GetAllConfig<WatcherGenre> config = null, WatcherModel watcherModel = null)
         {
-            Func<List<WatcherGenreModel>, Task> filler = async watcherGenreModels =>
-            {
-                foreach (var watcherGenreModel in watcherGenreModels)
-                    await FillModelsLists(watcherGenreModel);
-            };
-
             if (config == null)
                 config = new GetAllConfig<WatcherGenre>();
 
             config.includers = includers;
 
             if (watcherModel == null)
-                return await repo.GetAllFromPageAsync(config, null, filler);
+                return await repo.GetAllFromPageAsync(config);
 
-            config.extraEntityFilters = new List<Func<IQueryable<WatcherGenre>, IQueryable<WatcherGenre>>>();
-            config.extraEntityFilters.Add(source => source.PropertyFilter("watcher_name", watcherModel.watcher_name));
+            config.extraEntityFilters = new List<Func<IQueryable<WatcherGenre>, IQueryable<WatcherGenre>>>()
+            {
+                source => source.PropertyFilter("watcher_name", watcherModel.watcher_name)
+            };
 
-            return await repo.GetAllFromPageAsync(config, null, filler);
+            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<WatcherGenreModel> GetOneByIdAsync(string watcher_name, int genre_id)
         {
-            Func<WatcherGenreModel, Task> filler = async watcherGenreModel =>
-                await FillModelsLists(watcherGenreModel);
-
             var watcherGenreModel = await repo
                 .GetOneByIdAsync(
                     GetOneConfigFactory<WatcherGenre, WatcherGenreModel>.New(

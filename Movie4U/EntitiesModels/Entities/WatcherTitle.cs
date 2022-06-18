@@ -23,9 +23,11 @@ namespace Movie4U.EntitiesModels.Entities
             dynamicFilters.Add((int)WhereEnum.PrefferenceIsLess, source => source.PropertyFilter("preference", Preferences.Less));
             dynamicFilters.Add((int)WhereEnum.PrefferenceIsNull, source => source.PropertyFilter("preference", Preferences.Null));
 
-            idSelectors = new Expression<Func<WatcherTitle, object>>[2];
-            idSelectors[0] = entity => entity.watcher_name;
-            idSelectors[1] = entity => entity.netflix_id;
+            idSelectors = new Expression<Func<WatcherTitle, object>>[]
+            {
+                entity => entity.watcher_name,
+                entity => entity.netflix_id
+            };
         }
 
         public enum Preferences

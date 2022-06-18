@@ -40,41 +40,19 @@ namespace Movie4U.Managers
         }
 
 
-        private async Task<bool> FillModelsLists(TitleModel titleModel)
-        {
-            if(titleModel == null)
-                return false;
-
-            var netflixId = titleModel.netflix_id;
-            titleModel.countryModels = await titleCountriesManager.GetAllCountriesByNetflixIdFromPageAsync(netflixId);
-            titleModel.genreModels = await titleGenresManager.GetAllGenresByNetflixIdFromPageAsync(netflixId);
-            titleModel.titleImageModels = await titleImagesManager.GetAllByNetflixIdFromPageAsync(netflixId);
-
-            return true;
-        }
-
         public new async Task<List<TitleModel>> GetAllFromPageAsync(GetAllConfig<Title> config = null)
         {
-            Func<List<TitleModel>, Task> filler = async titleModels =>
-            {
-                foreach (var titleModel in titleModels)
-                    await FillModelsLists(titleModel);
-            };
-
             if (config == null)
                 config = new GetAllConfig<Title>();
 
             config.includers = includers;
             config.asSplitQuery = true;
 
-            return await repo.GetAllFromPageAsync(config, null, filler);
+            return await repo.GetAllFromPageAsync(config);
         }
 
         public async Task<TitleModel> GetOneByIdAsync(int netflix_id)
         {
-            Func<TitleModel, Task> filler = async titleModel =>
-                await FillModelsLists(titleModel);
-
             return await repo
                 .GetOneByIdAsync(
                     GetOneConfigFactory<Title, TitleModel>.New(

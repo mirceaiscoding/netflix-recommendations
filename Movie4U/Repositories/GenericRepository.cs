@@ -67,11 +67,9 @@ namespace Movie4U.Repositories
             foreach (var filter in filterList)
                 result = filter(result);
 
-            if (config.extraEntityFilters == null)
-                return result;
-
-            foreach (var filter in config.extraEntityFilters)
-                result = filter(result);
+            if (config.extraEntityFilters != null)
+                foreach (var filter in config.extraEntityFilters)
+                    result = filter(result);
 
             if(config.includers == null || config.includers.Count() == 0)
                 return result;
@@ -80,18 +78,11 @@ namespace Movie4U.Repositories
                 .IncludeMultiple(config.asSplitQuery, config.includers);
         }
 
-        public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
+        public virtual async Task<List<TModel>> GetAllOrderedAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null)
         {
-            /*var got = await GetAllDbFilteredAsync(config, true);
-            foreach (var entity in got)
-                Console.WriteLine(entity.ToString());*/
-
             var result = mapper.Map(
                 await GetAllDbFilteredAsync(config, true),
                 optsAll);
-
-/*            if (filler != null)
-                await filler(result);*/
 
             if (extraModelFilters != null)
                 foreach (var filter in extraModelFilters)
@@ -127,14 +118,13 @@ namespace Movie4U.Repositories
             return result;
         }
 
-        public virtual async Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null, Func<List<TModel>, Task> filler = null)
+        public virtual async Task<List<TModel>> GetAllFromPageAsync(GetAllConfig<TEntity> config = null, List<Func<TModel, bool>> extraModelFilters = null)
         {
             return await PaginatedListFactory<TModel>
                 .Create(
                     await GetAllOrderedAsync(
                         config,
-                        extraModelFilters,
-                        filler),
+                        extraModelFilters),
                     (int)config.pageIndex, pageSize);
         }
 
@@ -160,8 +150,6 @@ namespace Movie4U.Repositories
                 return null;
 
             var model = mapper.Map(entity, optsOne);
-/*            if (filler != null)
-                await filler(model);*/
 
             return model;
         }

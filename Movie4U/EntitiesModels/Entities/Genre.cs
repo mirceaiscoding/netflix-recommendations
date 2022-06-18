@@ -14,8 +14,10 @@ namespace Movie4U.EntitiesModels.Entities
 
         static Genre()
         {
-            idSelectors = new Expression<Func<Genre, object>>[1];
-            idSelectors[0] = entity => entity.genre_id;
+            idSelectors = new Expression<Func<Genre, object>>[]
+            {
+                entity => entity.genre_id
+            };
         }
 
 

@@ -10,8 +10,10 @@ namespace Movie4U.EntitiesModels.Models
 
         static WatcherModel()
         {
-            idSelectors = new Expression<Func<WatcherModel, object>>[1];
-            idSelectors[0] = model => model.watcher_name;
+            idSelectors = new Expression<Func<WatcherModel, object>>[]
+            {
+                entity => entity.watcher_name
+            };
         }
 
 
